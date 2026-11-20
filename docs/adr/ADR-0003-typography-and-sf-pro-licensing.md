@@ -1,0 +1,125 @@
+# ADR-0003: Typography — the system font stack, not self-hosted SF Pro
+
+**Status:** Accepted
+**Date:** 2026-11-20
+**Deciders:** Darya
+
+---
+
+## Context
+
+The design goal is for the site to read as an Apple product page, and typography carries most of that impression. apple.com is set in SF Pro, and the brief's reference CSS names `SF Pro Display` and `SF Pro Icons` directly in its font stack.
+
+The obvious move is to download SF Pro from Apple's developer site and serve it as a webfont, guaranteeing identical rendering for every visitor on every platform. There are two reasons not to, one legal and one technical, and they point the same way.
+
+### The legal constraint
+
+Apple distributes SF Pro under the *License Agreement for the Apple San Francisco Font*, headed "For iOS, OS X and tvOS application uses only." Two provisions are decisive:
+
+- The grant is limited to creating mock-ups of user interfaces for software running on Apple's own operating systems.
+- The licence states that you <cite index="51-1">may not embed the Apple Font in any software programs or other products</cite>, and separately forbids using it to create, develop, display or distribute website content.
+
+Serving SF Pro as a webfont from this portfolio is squarely outside that grant. It is not a grey area and it is not a technicality — a portfolio is a public website, and the restriction on website content is explicit.
+
+Apple's own guidance for the web case is to use the system-font keywords, which render San Francisco on devices where San Francisco is the system font and fall back elsewhere. That is the sanctioned path.
+
+Note also that the reference CSS names `SF Pro Icons`. That font supplies Apple glyphs, and SF Symbols are under the same kind of restriction: licensed for native Apple-platform software built with Xcode, not for extraction into web fonts or inline SVG. It is dropped from our stack entirely.
+
+### The technical constraint
+
+Even setting the licence aside, self-hosting would be the wrong call:
+
+- SF Pro's full family is large. A variable-font subset would still add 40–120 KB of blocking resource to a site whose entire JS budget is 15 KB.
+- Any webfont introduces a FOIT/FOUT decision, and either choice costs something measurable in Largest Contentful Paint.
+- On an Apple device — which is where a meaningful share of this audience will be, and where the design is aimed — the system already has SF Pro. Downloading it again is paying to ship a font the device owns.
+
+## Decision
+
+Use one system font stack for all text, and serve no Apple font file:
+
+```css
+--font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+             "Inter", Roboto, Helvetica, Arial, sans-serif;
+--font-mono: ui-monospace, "SF Mono", Menlo, Consolas,
+             "Liberation Mono", monospace;
+```
+
+On Apple hardware this resolves to genuine SF Pro, selected by the OS. On Windows it reaches Segoe UI or Inter; on Android, Roboto.
+
+Design fidelity on non-Apple platforms is recovered not by shipping the typeface but by matching its *metrics*: the type scale, line heights and letter-spacing in [docs/02-design-tokens.md](../02-design-tokens.md) replicate apple.com's typographic rhythm regardless of which family renders it. Spacing and proportion carry more of the "Apple feel" than glyph shapes do.
+
+### Why `"SF Pro Display"` is not in the stack
+
+SF has an optical-size threshold at 20pt: below it the system uses SF Pro Text, with looser tracking tuned for body copy; at or above it, SF Pro Display, which is tighter and tuned for headings. `system-ui` and `-apple-system` pick the right variant automatically for the rendered size.
+
+Naming `"SF Pro Display"` explicitly in a single shared stack would force display metrics onto 14px captions and 17px body text, producing text that is subtly too tight to read comfortably — the exact problem the optical threshold exists to prevent. It would also only match on machines that happen to have the font installed locally, giving inconsistent rendering between two Macs. So it is left out, and the system is allowed to choose.
+
+### `SF Mono` in the mono stack
+
+`"SF Mono"` *is* named in the monospace stack. This is not a contradiction: naming a font family in CSS asks the user's device for a font it may already have installed, which is ordinary CSS and involves no distribution by us. What the licence forbids is embedding and serving the file. We never do that for any Apple font.
+
+## Options considered
+
+### Option A — System font stack (chosen)
+
+**Pros:** licence-compliant; zero font bytes; zero FOUT; instant first paint; real SF Pro on Apple devices where it matters most; no font-loading code at all.
+
+**Cons:** non-Apple visitors see a different typeface, so the design is not pixel-identical across platforms. Letter-spacing values tuned for SF are approximations on Segoe UI or Roboto — a tracking value that looks right on SF can look slightly loose on Roboto.
+
+### Option B — Self-host SF Pro
+
+**Pros:** identical rendering everywhere; exact match to the reference CSS.
+
+**Cons:** outside the licence grant, which by itself ends the discussion for a public portfolio. Additionally: 40–120 KB of blocking download, a FOUT/FOIT trade-off, and a slower LCP. A portfolio that demonstrates competence should not open with a licence violation.
+
+### Option C — Inter, self-hosted, for everyone
+
+Inter is SIL Open Font License, free to self-host, and designed for UI with metrics close to SF.
+
+**Pros:** fully consistent cross-platform rendering; legally unambiguous; genuinely good typeface.
+
+**Cons:** overrides real SF Pro on Apple devices with a lookalike, which is a worse result for the primary audience. Still a webfont download with its loading cost. Ignores a font the device already has.
+
+### Option D — Hybrid: system stack, with Inter as a self-hosted fallback
+
+System font first, with Inter served only where the system stack would reach a weaker fallback.
+
+**Pros:** best of both — real SF on Apple, consistent Inter elsewhere.
+
+**Cons:** CSS cannot express "only download this font if the earlier families are unavailable" — a `@font-face` family named in the stack is fetched when it is the first match, and there is no conditional mechanism. Achieving it properly needs the Font Loading API and a JS branch, which means shipping script to decide a font. For v1 the cost outweighs the benefit; `"Inter"` sits in the stack as a locally-installed match only.
+
+Whether to self-host an Inter subset for non-Apple visitors is open question 4 in [docs/00-spec.md](../00-spec.md). If it is taken up, it is a `@font-face` with `font-display: swap`, a Latin subset, and `size-adjust` tuned so the swap does not shift layout.
+
+## Trade-off analysis
+
+The licence removes Option B, which is the only option that delivers true cross-platform fidelity. Among the rest, the question is whether consistency across platforms matters more than authenticity on Apple platforms.
+
+For this site, authenticity wins. The audience skews toward Apple hardware, the design is explicitly an Apple homage, and the system stack is both the fastest option and the one Apple itself points web developers toward. A visitor on Windows sees a well-proportioned site in Segoe UI rather than a slightly-off imitation in a downloaded lookalike — and they were never going to see SF Pro anyway without a licence breach.
+
+## Consequences
+
+**Easier**
+
+- No font files, no `@font-face`, no preload hints, no font-loading flash.
+- First paint is immediate, which protects the LCP budget.
+- Nothing to review legally.
+
+**Harder**
+
+- The design must be checked on a non-Apple platform, because letter-spacing tuned for SF can read loose on Roboto. This goes in the test plan.
+- "Looks exactly like apple.com" is only true on Apple devices. That expectation is set here rather than discovered later.
+- Font-size tokens must be in `rem` so the stack respects the reader's browser preference — see [docs/02-design-tokens.md](../02-design-tokens.md) §2.
+
+**To revisit**
+
+- If cross-platform consistency becomes a real complaint, revisit Option D with a self-hosted Inter subset and `size-adjust`.
+- If a heading-only display face is ever wanted for personality, that is a separate decision and a new ADR — and it must be an openly-licensed typeface.
+
+## Action items
+
+1. [ ] Declare `--font-sans` and `--font-mono` in the `@theme` block exactly as above
+2. [ ] Confirm no `@font-face` rule and no font file exists anywhere in the repo
+3. [ ] Remove `SF Pro Icons` from any stack copied from the reference CSS
+4. [ ] Record the no-Apple-fonts rule in the spec's "Never" list — done
+5. [ ] Add a non-Apple-platform typography check to the test plan — done
+6. [ ] Resolve open question 4 (self-hosted Inter) before Phase 2 ends
