@@ -1,6 +1,6 @@
 # ADR-0003: Typography — the system font stack, not self-hosted SF Pro
 
-**Status:** Accepted
+**Status:** Accepted — amended 2026-11-21 (Option D adopted: Inter self-hosted as the non-Apple fallback)
 **Date:** 2026-11-20
 **Deciders:** Darya
 
@@ -35,16 +35,44 @@ Even setting the licence aside, self-hosting would be the wrong call:
 
 ## Decision
 
-Use one system font stack for all text, and serve no Apple font file:
+Use one font stack for all text: the Apple system font first, then a self-hosted Inter for everyone else. Serve no Apple font file.
 
 ```css
---font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-             "Inter", Roboto, Helvetica, Arial, sans-serif;
+--font-sans: -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui,
+             "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 --font-mono: ui-monospace, "SF Mono", Menlo, Consolas,
              "Liberation Mono", monospace;
 ```
 
-On Apple hardware this resolves to genuine SF Pro, selected by the OS. On Windows it reaches Segoe UI or Inter; on Android, Roboto.
+On Apple hardware this resolves to genuine SF Pro, selected by the OS, and Inter is never downloaded. On Windows, Android and Linux it resolves to Inter. Why the order is exactly this is set out in [docs/02-design-tokens.md](../02-design-tokens.md) §2.
+
+Inter is loaded through Astro's Fonts API (stable since Astro 6) from a pinned npm package, so builds are reproducible and need no network access to a font CDN:
+
+```js
+// astro.config.mjs — confirm option names against the Astro 7 docs in Phase 2
+import { defineConfig, fontProviders } from "astro/config";
+
+export default defineConfig({
+  fonts: [
+    {
+      provider: fontProviders.npm(),     // resolves @fontsource-variable/inter from package.json
+      name: "Inter",
+      cssVariable: "--font-inter",
+      weights: ["100 900"],              // one variable file, not one file per weight
+      styles: ["normal"],
+      subsets: ["latin"],
+      fallbacks: ["sans-serif"],         // Astro generates a metric-matched fallback from this
+    },
+  ],
+});
+```
+
+```astro
+<!-- BaseLayout.astro <head> — note: no `preload` prop -->
+<Font cssVariable="--font-inter" />
+```
+
+Inter is licensed under the SIL Open Font License 1.1, which permits self-hosting; the licence text ships with the package and is kept in the build output.
 
 Design fidelity on non-Apple platforms is recovered not by shipping the typeface but by matching its *metrics*: the type scale, line heights and letter-spacing in [docs/02-design-tokens.md](../02-design-tokens.md) replicate apple.com's typographic rhythm regardless of which family renders it. Spacing and proportion carry more of the "Apple feel" than glyph shapes do.
 
@@ -60,7 +88,7 @@ Naming `"SF Pro Display"` explicitly in a single shared stack would force displa
 
 ## Options considered
 
-### Option A — System font stack (chosen)
+### Option A — System font stack only (original decision, superseded by D)
 
 **Pros:** licence-compliant; zero font bytes; zero FOUT; instant first paint; real SF Pro on Apple devices where it matters most; no font-loading code at all.
 
@@ -80,46 +108,50 @@ Inter is SIL Open Font License, free to self-host, and designed for UI with metr
 
 **Cons:** overrides real SF Pro on Apple devices with a lookalike, which is a worse result for the primary audience. Still a webfont download with its loading cost. Ignores a font the device already has.
 
-### Option D — Hybrid: system stack, with Inter as a self-hosted fallback
+### Option D — Hybrid: system stack, with Inter as a self-hosted fallback (chosen, 2026-11-21)
 
 System font first, with Inter served only where the system stack would reach a weaker fallback.
 
 **Pros:** best of both — real SF on Apple, consistent Inter elsewhere.
 
-**Cons:** CSS cannot express "only download this font if the earlier families are unavailable" — a `@font-face` family named in the stack is fetched when it is the first match, and there is no conditional mechanism. Achieving it properly needs the Font Loading API and a JS branch, which means shipping script to decide a font. For v1 the cost outweighs the benefit; `"Inter"` sits in the stack as a locally-installed match only.
+**Cons:** a font download and a brief swap on first visit — paid only by non-Apple visitors. Letter-spacing tuned for SF is an approximation on Inter.
 
-Whether to self-host an Inter subset for non-Apple visitors is open question 4 in [docs/00-spec.md](../00-spec.md). If it is taken up, it is a `@font-face` with `font-display: swap`, a Latin subset, and `size-adjust` tuned so the swap does not shift layout.
+**Correction to the first draft of this ADR.** It claimed CSS cannot load a font "only if the earlier families are unavailable" without JavaScript. That was wrong. Browsers download a web font only when it is needed to render a character, so a family placed *after* `-apple-system` is never fetched on Apple devices. The condition is expressed by the stack order itself. Two things can break it, and both are rules now: putting `system-ui` before Inter (which makes Inter unreachable on Windows and Android), and preloading Inter (which forces the download everywhere).
 
 ## Trade-off analysis
 
 The licence removes Option B, which is the only option that delivers true cross-platform fidelity. Among the rest, the question is whether consistency across platforms matters more than authenticity on Apple platforms.
 
-For this site, authenticity wins. The audience skews toward Apple hardware, the design is explicitly an Apple homage, and the system stack is both the fastest option and the one Apple itself points web developers toward. A visitor on Windows sees a well-proportioned site in Segoe UI rather than a slightly-off imitation in a downloaded lookalike — and they were never going to see SF Pro anyway without a licence breach.
+For this site, authenticity on Apple platforms is non-negotiable: the audience skews toward Apple hardware and the design is explicitly an Apple homage. That rules out Option C. Option D keeps that authenticity intact — Apple visitors get real SF Pro and zero font bytes — and adds a consistent, SF-adjacent face everywhere else, at a cost that only non-Apple visitors pay. Once the claim that D needed JavaScript turned out to be false, D dominates A.
 
 ## Consequences
 
 **Easier**
 
-- No font files, no `@font-face`, no preload hints, no font-loading flash.
-- First paint is immediate, which protects the LCP budget.
+- Apple visitors: no font bytes, no preload hints, no font-loading flash.
+- Non-Apple visitors see one consistent typeface instead of whatever their platform's sans happens to be.
+- Astro's Fonts API generates the fallback metrics, so there is no hand-tuned `size-adjust` to maintain.
 - Nothing to review legally.
 
 **Harder**
 
-- The design must be checked on a non-Apple platform, because letter-spacing tuned for SF can read loose on Roboto. This goes in the test plan.
+- The design must be checked on a non-Apple platform, because letter-spacing tuned for SF is approximate on Inter. This goes in the test plan.
+- The stack order and the no-preload rule must survive future edits. A test asserts both ([docs/07-test-plan.md](../07-test-plan.md) §4, `fonts.spec.ts`).
+- One more dependency, and its OFL licence notice, to keep.
 - "Looks exactly like apple.com" is only true on Apple devices. That expectation is set here rather than discovered later.
 - Font-size tokens must be in `rem` so the stack respects the reader's browser preference — see [docs/02-design-tokens.md](../02-design-tokens.md) §2.
 
 **To revisit**
 
-- If cross-platform consistency becomes a real complaint, revisit Option D with a self-hosted Inter subset and `size-adjust`.
 - If a heading-only display face is ever wanted for personality, that is a separate decision and a new ADR — and it must be an openly-licensed typeface.
 
 ## Action items
 
 1. [ ] Declare `--font-sans` and `--font-mono` in the `@theme` block exactly as above
-2. [ ] Confirm no `@font-face` rule and no font file exists anywhere in the repo
+2. [ ] Confirm no Apple font file exists anywhere in the repo, and the only `@font-face` rules are the ones Astro generates for Inter
 3. [ ] Remove `SF Pro Icons` from any stack copied from the reference CSS
 4. [ ] Record the no-Apple-fonts rule in the spec's "Never" list — done
 5. [ ] Add a non-Apple-platform typography check to the test plan — done
-6. [ ] Resolve open question 4 (self-hosted Inter) before Phase 2 ends
+6. [x] Resolve open question 4 (self-hosted Inter) — Option D adopted 2026-11-21
+7. [ ] Configure Inter through the Fonts API with no `preload` (roadmap task 2.12)
+8. [ ] On a real Mac and iPhone, confirm the Network panel shows no Inter request

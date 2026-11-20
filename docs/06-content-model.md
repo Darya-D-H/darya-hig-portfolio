@@ -99,6 +99,8 @@ const projects = defineCollection({
 
 **`order` rather than sorting by date.** Explained in [docs/01-information-architecture.md](01-information-architecture.md) §3: the newest project is rarely the best one, and a portfolio should lead with its strongest work.
 
+**`order` values must be unique.** `order` drives the Projects grid, the featured row and the prev/next pair, so a tie would make neighbours ambiguous. `src/lib/projects.ts` throws at build time if two non-draft projects share an `order`, naming both files — the same approach as the featured invariant below.
+
 ### The `featured` invariant
 
 Home shows exactly three featured projects. Rather than silently slicing the array, the Home page asserts:

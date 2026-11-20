@@ -33,6 +33,7 @@ The state list is not boilerplate. The most common failure in a portfolio build 
 | `Timeline` | sections | no | experience |
 | `TimelineNode` | sections | no | experience |
 | `ProjectMeta` | sections | no | project detail |
+| `ProjectPager` | sections | no | project detail |
 | `Gallery` | sections | yes (lightbox) | project detail |
 | `Lightbox` | sections | yes | project detail |
 | `ContactPanel` | sections | no | contact |
@@ -282,6 +283,52 @@ The gallery is a grid of 2–6 thumbnails; each is a `<button>` that opens the l
 ### 4.4 `ContactPanel`
 
 Eyebrow, `h1`, body, one `filled` Button to the `mailto:`, and a row of `plain` links for social. Centred, `max-width: 680px`.
+
+### 4.5 `ProjectPager`
+
+Previous / next links at the end of a project detail page. Rules for which neighbours appear are in [docs/01-information-architecture.md](01-information-architecture.md) §4.
+
+**Props**
+
+| Prop | Type | Notes |
+|---|---|---|
+| `prev` | `{ slug: string; title: string } \| undefined` | Absent on the first project |
+| `next` | `{ slug: string; title: string } \| undefined` | Absent on the last project |
+
+Neighbours are computed at build time in `[slug].astro` by `getAdjacent()` in `src/lib/projects.ts` — a pure function, unit-tested. The component ships no JavaScript.
+
+**Structure**
+
+```html
+<nav aria-label="More projects">
+  <a href="/projects/alpha" rel="prev">
+    <span class="eyebrow"><span aria-hidden="true">‹ </span>Previous project</span>
+    <span class="title">Alpha Dashboard</span>
+  </a>
+  <a href="/projects/gamma" rel="next">
+    <span class="eyebrow">Next project<span aria-hidden="true"> ›</span></span>
+    <span class="title">Gamma CLI</span>
+  </a>
+</nav>
+```
+
+| Element | Token | Notes |
+|---|---|---|
+| Eyebrow | `--text-caption`, secondary ink | Direction label |
+| Title | `--text-body`, weight 600, `--color-link` | Underlines on hover, per `TextLink` |
+| Gap between the two | `--space-6` | |
+
+**Layout:** two equal columns at ≥ 735px — *Previous* left-aligned in the left column, *Next* right-aligned in the right column. When one side is absent its column stays empty, so *Next* never drifts to the left. Below 735px the links stack full-width, *Previous* first, matching DOM order.
+
+**Accessibility contract**
+
+- A second `<nav>` landmark, distinguished from the site nav by `aria-label="More projects"`.
+- The accessible name is the visible text ("Previous project Alpha Dashboard"), so no `aria-label` overrides it and WCAG 2.5.3 Label in Name holds.
+- Chevrons are `aria-hidden`; the word carries the meaning.
+- Each link's hit area is the whole tile, at least 44px tall.
+- Not wrapped in `Reveal`: it is navigation, and navigation is never hidden waiting for a scroll.
+
+**Empty state:** if a project has no neighbours at all (a collection of one), the component renders nothing — no empty `<nav>`.
 
 ---
 

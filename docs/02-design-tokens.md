@@ -83,13 +83,23 @@ Components reference the semantic name, never the raw palette entry. This is wha
 ### Font stack
 
 ```css
---font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-             "Inter", Roboto, Helvetica, Arial, sans-serif;
+--font-sans: -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui,
+             "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 --font-mono: ui-monospace, "SF Mono", Menlo, Consolas,
              "Liberation Mono", monospace;
 ```
 
-One stack, used for everything. On Apple hardware this resolves to genuine SF Pro through the system. Everywhere else it falls to Inter if self-hosted, then to the platform sans. **No SF Pro file is ever served from this site** — see [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md) for the licensing reason and the fallback-metrics problem.
+One stack, used for everything. On Apple hardware it resolves to genuine SF Pro through the system. Everywhere else it resolves to Inter, self-hosted. **No SF Pro file is ever served from this site** — see [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md) for the licensing reason.
+
+`--font-inter` is defined by Astro's Fonts API, not by hand: it expands to the hashed Inter family plus a metric-matched local fallback, so the swap from fallback to Inter on first visit does not shift layout. Configuration is in [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md) § Decision.
+
+**The order of the first four families is load-bearing.** Three rules follow from it:
+
+1. **Inter must come before `system-ui`.** On Windows `system-ui` *is* Segoe UI and on Android it *is* Roboto, so anything after it is unreachable. (The first draft of this doc put `system-ui` first, which would have made Inter dead code.)
+2. **Apple visitors never download Inter.** Browsers fetch a web font only when it is actually needed to render a character. On macOS and iOS, `-apple-system` (Safari, Firefox) or `BlinkMacSystemFont` (Chrome) matches first and covers every glyph, so the Inter request is never made. No JavaScript is involved.
+3. **Inter is never preloaded.** A `<link rel="preload">` forces the download for every visitor, which would charge Apple visitors for a font they never render and undo rule 2. The `<Font />` component is used without its `preload` prop.
+
+**Tracking on Inter.** The letter-spacing values below are tuned to SF. Inter is close but not identical, so typography gets a visual check on a non-Apple platform before release ([docs/07-test-plan.md](07-test-plan.md) §9). Note that CI screenshots come from Linux, where all three engines render Inter — CI never shows SF, so SF rendering is checked by hand on a Mac and an iPhone.
 
 **Why `"SF Pro Display"` is deliberately *not* named in the stack.** SF has an optical-size threshold at 20pt: below it the system uses SF Pro Text, which has looser tracking tuned for body copy, and at or above it SF Pro Display, which is tighter and tuned for headings. `-apple-system` and `system-ui` select the correct optical variant automatically based on the rendered size. Naming `"SF Pro Display"` explicitly in a single shared stack would force display metrics onto 14px captions and 17px body text, which is precisely the mistake the threshold exists to prevent. Let the system choose.
 
@@ -364,8 +374,9 @@ This is the implementation target. `src/styles/global.css` begins:
   --color-overlay: rgb(0 0 0 / 0.48);
 
   /* ---- type ---- */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Inter", Roboto, Helvetica, Arial, sans-serif;
+  /* --font-inter is injected by Astro's <Font /> component — see §2 */
+  --font-sans: -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* mobile-first values; breakpoint overrides live in the base layer */

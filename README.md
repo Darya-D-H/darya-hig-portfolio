@@ -30,6 +30,12 @@ Read in this order:
 
 Astro 7 · Tailwind CSS v4 · TypeScript (strict) · ESLint · Prettier · no runtime framework, no backend.
 
-## Licensing note
+## Licence
 
-Apple's SF Pro font files are **not** redistributable on a public website. This project uses the system font stack, which resolves to real SF Pro on Apple devices and to a licensed fallback elsewhere. See [ADR-0003](docs/adr/ADR-0003-typography-and-sf-pro-licensing.md). No Apple logos, product imagery, marketing copy, or SF Symbols artwork is used.
+- **Code** — everything under `src/` except `src/content/` and `src/assets/`, plus config, scripts and tests — is released under the [MIT licence](LICENSE).
+- **Content** — the written copy in `src/content/`, and the images in `src/assets/` and `public/` — is © Darya, all rights reserved. It is not covered by the MIT licence and may not be reused without permission.
+- **Inter** is © The Inter Project Authors, used under the SIL Open Font License 1.1.
+
+## Font licensing note
+
+Apple's SF Pro font files are **not** redistributable on a public website. This project uses the system font stack, which resolves to real SF Pro on Apple devices, and self-hosts Inter (OFL) for everyone else. See [ADR-0003](docs/adr/ADR-0003-typography-and-sf-pro-licensing.md). No Apple logos, product imagery, marketing copy, or SF Symbols artwork is used.

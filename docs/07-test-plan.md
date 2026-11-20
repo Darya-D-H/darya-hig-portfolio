@@ -57,6 +57,7 @@ Lives in `tests/unit/`. There are only a handful of pure functions, and each get
 | `lib/reveal.ts` | Stagger delay is `min(index, 4) * 80`; index 0 → 0ms; index 5 and index 9 both → 320ms (the cap) |
 | `lib/menu.ts` | Focus-trap index arithmetic: wrapping forward from the last element, wrapping backward from the first, behaviour with a single focusable element |
 | `lib/lightbox.ts` | Index clamping at both ends; `next` at the last index does not advance; the announcement string is 1-based (`Image 1 of 6`, never `Image 0 of 6`) |
+| `lib/projects.ts` | `getAdjacent`: first project has no `prev`, last has no `next`, a middle one has both; a single-project list has neither; drafts are skipped as neighbours; an unknown slug throws. Duplicate `order` values throw and name both files |
 
 The off-by-one cases are listed explicitly because they are the bugs that actually occur in focus traps and carousels.
 
@@ -131,6 +132,13 @@ Running reduced motion as a Playwright project rather than a manual toggle is wh
 - A project without a live link renders no live link, and no stray separator.
 - A project without `designSystem` renders no design-system heading.
 - The sparse project (`cli-toolkit`) renders without a meta strip and without visual gaps.
+- Prev/next: the first project in grid order has only a *Next* link, the last only a *Previous* link, and following *Next* from the first project visits all six in grid order.
+- The pager sits inside `nav[aria-label="More projects"]`, and each link's text includes the neighbour's title.
+
+**`fonts.spec.ts`** — guards the rules in [docs/02-design-tokens.md](02-design-tokens.md) §2:
+- No page contains `<link rel="preload">` for a font.
+- In every engine in the matrix (all Linux, so none has SF), `document.fonts.check('16px Inter')` resolves true after load and `body`'s computed `font-family` is not a serif.
+- The computed `font-family` lists `-apple-system` before the Inter family, and the Inter family before `system-ui`.
 
 **`responsive.spec.ts`** — at each viewport in the matrix:
 - `document.scrollWidth` does not exceed the viewport width, on every page. This single assertion catches most horizontal-overflow bugs.
@@ -290,7 +298,10 @@ Run in order before any deploy:
 - [ ] Reduced-motion pass complete
 - [ ] 200% zoom, 400% reflow, and 20px default font size all pass
 - [ ] Tested on a physical iPhone in Safari
-- [ ] Tested on a non-Apple platform for typography
+- [ ] Tested on a non-Apple platform for typography (Inter tracking reads correctly)
+- [ ] On a real Mac and iPhone, the Network panel shows **no** Inter font request
+- [ ] Tested in the last two major versions of each supported browser (spec §3)
+- [ ] `LICENSE` present; Inter's OFL notice included in the build
 - [ ] `site` is set to the real origin; sitemap and canonical URLs are correct
 - [ ] `base` resolved for the chosen host, and the deployed site re-verified ([ADR-0005](adr/ADR-0005-defer-hosting-decision.md))
 - [ ] Real email and social URLs in place, no `#` placeholders

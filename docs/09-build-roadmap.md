@@ -17,7 +17,7 @@ No task touches more than about five files.
 | # | Task | Acceptance | Verify |
 |---|---|---|---|
 | 0.1 | Darya reads the doc set | Every doc read | — |
-| 0.2 | Resolve open questions 3 and 4 in the spec | Social URLs and the Inter decision settled | Spec updated |
+| 0.2 | Resolve open questions 3 and 4 in the spec | Social URLs and the Inter decision settled | Spec updated — **4 resolved 2026-11-21; 3 defaults to placeholders** |
 | 0.3 | Confirm or correct placeholder content shape | Sitemap, skill categories and project list agreed | Docs updated |
 | 0.4 | Approve or amend the token values | Darya has seen the type scale and colour table | Docs updated |
 | 0.5 | Tag the approval | `git tag docs-approved` | `git tag -l` |
@@ -65,6 +65,7 @@ No task touches more than about five files.
 | 2.9 | Verify the token doc against the CSS, line by line | No token in the doc is missing, and none in the CSS is undocumented | Manual diff |
 | 2.10 | `scripts/contrast.mjs`, run over the final palette | Output matches the doc's ratio table | `node scripts/contrast.mjs` |
 | 2.11 | `npm run check:tokens` script | Fails on a deliberately planted `text-[23px]` | Command |
+| 2.12 | Inter via Astro's Fonts API from `@fontsource-variable/inter`, `<Font />` in `BaseLayout` **without** `preload`, stack order per the token doc | Linux browsers render Inter; no font preload in the HTML; the Inter file size is recorded in the token doc | Devtools Network panel + `fonts.spec.ts` |
 
 **Gate:** the `/_tokens` page shows the full system; contrast output matches the doc; `check:tokens` works. Delete `/_tokens` before Phase 7.
 
@@ -136,7 +137,8 @@ Ordered simplest-first so the patterns are established on easy pages before the 
 | 5.8 | `ProjectGrid`, 3/2/1 columns | Correct at each breakpoint | Resize |
 | 5.9 | `projects/index.astro` | All six cards | Browser |
 | 5.10 | `Gallery` + `Lightbox` + `lib/lightbox.ts` using native `<dialog>` | Every row of the lightbox spec | `lightbox.spec.ts` |
-| 5.11 | `ProjectLayout` + `[slug].astro`: back link, header, meta strip, hero, challenge/solution/outcome, stack, design system, gallery, links, footer CTA | All ten sections in order | Browser |
+| 5.11 | `ProjectLayout` + `[slug].astro`: back link, header, meta strip, hero, challenge/solution/outcome, stack, design system, gallery, links, prev/next, footer CTA | All eleven sections in order | Browser |
+| 5.11a | `src/lib/projects.ts` (`getAdjacent`, unique-`order` check) + `ProjectPager` | First and last projects show one link each; unit tests pass | `npm test`, browser |
 | 5.12 | Verify optional sections omit cleanly on projects 3 and 5 | No empty bands, no stray dividers | `content.spec.ts` |
 | 5.13 | `Hero`: no reveal, renders at final state | Full opacity on load | `reveal.spec.ts` |
 | 5.14 | `AboutSection` | Two columns desktop, stacked mobile | Resize |

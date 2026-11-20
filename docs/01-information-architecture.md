@@ -139,9 +139,14 @@ Generated from the `projects` collection. Content model in [docs/06-content-mode
 7. **Design system notes** — prose plus an optional small swatch and type-sample block, for projects where the design system is worth describing. Omitted entirely when the front matter field is absent.
 8. **Gallery** — 2–6 screenshots in a grid, each opening a lightbox. Full interaction spec in [docs/03-components.md](03-components.md).
 9. **External links** — `View live site ›` and `View source ›` as text links with chevrons. Rendered only when the URL exists.
-10. **Footer CTA, `#f5f5f7` band** — `See all projects ›` and `Get in touch ›`.
+10. **Previous / next projects** — a two-up pair of links to the neighbouring projects, separated from the links above by a divider. Component spec in [docs/03-components.md](03-components.md) §4.5.
+11. **Footer CTA, `#f5f5f7` band** — `See all projects ›` and `Get in touch ›`.
 
-There is no prev/next pair in v1 (open question 5 in the spec).
+**Prev/next rules:**
+
+- Neighbours follow the Projects grid order (`order` ascending, drafts excluded), so the pair walks the same sequence a recruiter sees on `/projects`.
+- No wraparound. The first project shows only *Next*, the last only *Previous*. Jumping from the last project back to the first without saying so is disorienting, for the same reason the lightbox does not wrap.
+- Each link shows its direction and the neighbouring project's title — never a bare arrow.
 
 ### Band rhythm
 

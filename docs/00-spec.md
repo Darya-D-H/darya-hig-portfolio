@@ -56,6 +56,7 @@ These were confirmed during planning. If any is wrong, the spec changes before c
 | Language | TypeScript | strict mode | Typed content schemas and component props |
 | Content | Astro content collections | built in | One Markdown file per project, validated by a Zod schema. See [ADR-0004](adr/ADR-0004-project-detail-pages-via-content-collections.md) |
 | Images | `astro:assets` + `sharp` | 0.35.x | Automatic responsive `srcset`, AVIF/WebP, intrinsic sizing to prevent layout shift |
+| Fallback font | Inter via Astro's Fonts API (`fontProviders.npm()`) + `@fontsource-variable/inter` | 5.3.x | Served from this site to visitors without SF Pro; Apple visitors never download it. Never preloaded. See [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md) |
 | Interactivity | Vanilla TypeScript | — | Mobile menu, scroll reveal, lightbox. No React, Vue or Svelte island is needed |
 | Lint | ESLint + `eslint-plugin-astro` + `eslint-plugin-jsx-a11y` | latest | Catches a11y mistakes in markup |
 | Format | Prettier + `prettier-plugin-astro` + `prettier-plugin-tailwindcss` | latest | Consistent class ordering |
@@ -64,6 +65,21 @@ These were confirmed during planning. If any is wrong, the spec changes before c
 | Sitemap | `@astrojs/sitemap` | 3.x | SEO |
 
 **Environment requirement:** Astro 7 requires Node.js 22 or newer. The repo pins this in `package.json` `engines` and in `.nvmrc`.
+
+### Browser support
+
+Supported: **the last two major versions** of Safari on macOS, Safari on iOS/iPadOS, Chrome, Edge and Firefox. "Supported" means it is tested in the Playwright matrix ([docs/07-test-plan.md](07-test-plan.md) §4) and any visual or functional defect there is a bug.
+
+Older browsers are not blocked. They get a page that works and reads correctly, and may lose polish. Tailwind v4's own floor (Safari 16.4, Chrome 111, Firefox 128) sits well below this policy, so the two never conflict.
+
+Features with a defined fallback rather than an assumption of support:
+
+| Feature | Without it |
+|---|---|
+| `backdrop-filter` (nav material) | Opaque nav background via `@supports` — [docs/02-design-tokens.md](02-design-tokens.md) |
+| View Transition API | `<ClientRouter />` uses its built-in fallback; navigation still works |
+| `IntersectionObserver` | Every reveal element is shown immediately — [docs/04-motion.md](04-motion.md) |
+| JavaScript entirely | All content visible; lightbox thumbnails link to the full image; mobile menu falls back to a plain link list |
 
 ### Astro 7 notes that affect how we write code
 
@@ -132,7 +148,7 @@ darya-hig-portfolio/
 │   │   ├── layout/                # Nav, MobileMenu, Footer, Container, Section
 │   │   ├── ui/                    # Button, Card, Tag, Eyebrow, Divider, Reveal
 │   │   └── sections/              # Hero, AboutSection, FeaturedProjects, SkillsGrid,
-│   │                              # Timeline, ContactPanel, Gallery, ProjectMeta
+│   │                              # Timeline, ContactPanel, Gallery, ProjectMeta, ProjectPager
 │   ├── content.config.ts          # collection schemas (Zod) — note: src/ root, not src/content/
 │   ├── content/
 │   │   ├── projects/              # 6 markdown files, one per project
@@ -145,6 +161,7 @@ darya-hig-portfolio/
 │   │   ├── reveal.ts              # IntersectionObserver scroll reveal
 │   │   ├── menu.ts                # mobile menu open/close + focus trap
 │   │   ├── lightbox.ts            # gallery lightbox
+│   │   ├── projects.ts            # build-time only: sorting, featured and prev/next helpers
 │   │   └── seo.ts                 # title/description/og helpers
 │   ├── pages/
 │   │   ├── index.astro            # Home
@@ -161,6 +178,7 @@ darya-hig-portfolio/
 │   ├── unit/                      # Vitest
 │   └── e2e/                       # Playwright specs, including a11y scans
 ├── .github/workflows/ci.yml       # verify on push and PR
+├── LICENSE                        # MIT — covers code only; content is reserved (see README)
 ├── astro.config.mjs
 ├── tsconfig.json
 ├── eslint.config.js
@@ -338,6 +356,13 @@ These do not block the documentation phase, but need answers before the phases t
 | 1 | Which host? | Phase 7, deployment | Build stays host-agnostic; nothing is deployed |
 | 2 | Custom domain, or a platform subdomain? | Phase 7 | Platform subdomain |
 | 3 | Is there a real GitHub and LinkedIn URL to use, or do placeholders ship? | Phase 5, Contact | Placeholder `#` links marked `TODO` |
-| 4 | Non-Apple fallback typeface: Inter, or the generic sans stack? | Phase 2 | Inter, self-hosted as a variable font subset |
-| 5 | Should project detail pages show a prev/next pair? It was not selected, so currently they do not. | Phase 4 | Omitted |
 | 6 | Is a 404 page's copy worth writing properly, or is a one-liner fine? | Phase 6 | One line plus a link home |
+
+### Resolved
+
+| # | Question | Decision | Recorded in |
+|---|---|---|---|
+| 4 | Non-Apple fallback typeface | Self-host Inter, loaded only where SF Pro is unavailable, never preloaded (2026-11-21) | [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md), [docs/02-design-tokens.md](02-design-tokens.md) §2 |
+| 5 | Prev/next on project detail pages | Yes, following grid order, no wraparound (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §4, [docs/03-components.md](03-components.md) §4.5 |
+| 7 | Browser support | Last two major versions of Safari, iOS Safari, Chrome, Edge, Firefox (2026-11-21) | §3 above |
+| 8 | Repository licence | MIT for code; written content and images all rights reserved (2026-11-21) | `LICENSE`, `README.md` |
