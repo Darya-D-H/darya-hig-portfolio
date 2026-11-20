@@ -148,8 +148,9 @@ darya-hig-portfolio/
 │   │   ├── layout/                # Nav, MobileMenu, Footer, Container, Section
 │   │   ├── ui/                    # Button, Card, Tag, Eyebrow, Divider, Reveal
 │   │   └── sections/              # Hero, AboutSection, FeaturedProjects, SkillsGrid,
-│   │                              # Timeline, ContactPanel, Gallery, ProjectMeta, ProjectPager
+│   │                              # Timeline, ContactPanel, Gallery, ProjectMeta, ProjectPager, ErrorPage
 │   ├── content.config.ts          # collection schemas (Zod) — note: src/ root, not src/content/
+│   ├── site.config.ts             # name, email, GitHub and LinkedIn URLs — the only place they are written
 │   ├── content/
 │   │   ├── projects/              # 6 markdown files, one per project
 │   │   ├── experience/            # one markdown file per role
@@ -334,7 +335,7 @@ A page that cannot hit the JS budget is a design problem, not a budget problem.
 
 The build is done when all of these are true and demonstrable:
 
-1. All six page types render with placeholder content: Home, Projects index, Project detail, Skills, Experience, Contact. Plus a styled 404.
+1. All six page types render with placeholder content: Home, Projects index, Project detail, Skills, Experience, Contact. Plus a 404 built from `ErrorPage`.
 2. `npm run verify` passes from a clean clone on Node 22.
 3. Lighthouse mobile meets every budget in section 7.
 4. `npm run test:a11y` reports zero violations across all pages.
@@ -355,14 +356,14 @@ These do not block the documentation phase, but need answers before the phases t
 |---|---|---|---|
 | 1 | Which host? | Phase 7, deployment | Build stays host-agnostic; nothing is deployed |
 | 2 | Custom domain, or a platform subdomain? | Phase 7 | Platform subdomain |
-| 3 | Is there a real GitHub and LinkedIn URL to use, or do placeholders ship? | Phase 5, Contact | Placeholder `#` links marked `TODO` |
-| 6 | Is a 404 page's copy worth writing properly, or is a one-liner fine? | Phase 6 | One line plus a link home |
 
 ### Resolved
 
 | # | Question | Decision | Recorded in |
 |---|---|---|---|
+| 3 | GitHub and LinkedIn URLs | `https://github.com/Darya-D-H` and `https://www.linkedin.com/in/darya-dler-hussein`, held in `src/site.config.ts` (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §7 |
 | 4 | Non-Apple fallback typeface | Self-host Inter, loaded only where SF Pro is unavailable, never preloaded (2026-11-21) | [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md), [docs/02-design-tokens.md](02-design-tokens.md) §2 |
 | 5 | Prev/next on project detail pages | Yes, following grid order, no wraparound (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §4, [docs/03-components.md](03-components.md) §4.5 |
 | 7 | Browser support | Last two major versions of Safari, iOS Safari, Chrome, Edge, Firefox (2026-11-21) | §3 above |
+| 6 | Error page copy | Plain-language message as the h1, a `Go to Home` button, and the status code small in secondary ink at the bottom (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §8 |
 | 8 | Repository licence | MIT for code; written content and images all rights reserved (2026-11-21) | `LICENSE`, `README.md` |

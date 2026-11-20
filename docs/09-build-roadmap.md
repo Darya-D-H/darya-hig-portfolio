@@ -17,7 +17,7 @@ No task touches more than about five files.
 | # | Task | Acceptance | Verify |
 |---|---|---|---|
 | 0.1 | Darya reads the doc set | Every doc read | — |
-| 0.2 | Resolve open questions 3 and 4 in the spec | Social URLs and the Inter decision settled | Spec updated — **4 resolved 2026-11-21; 3 defaults to placeholders** |
+| 0.2 | Resolve open questions 3 and 4 in the spec | Social URLs and the Inter decision settled | Spec updated — **both resolved 2026-11-21** |
 | 0.3 | Confirm or correct placeholder content shape | Sitemap, skill categories and project list agreed | Docs updated |
 | 0.4 | Approve or amend the token values | Darya has seen the type scale and colour table | Docs updated |
 | 0.5 | Tag the approval | `git tag docs-approved` | `git tag -l` |
@@ -127,7 +127,8 @@ Ordered simplest-first so the patterns are established on easy pages before the 
 
 | # | Task | Acceptance | Verify |
 |---|---|---|---|
-| 5.1 | `404.astro` | Renders with nav and footer | Browser |
+| 5.0 | `src/site.config.ts` with name, email placeholder, and the real GitHub and LinkedIn URLs | Typed export; nothing else in `src/` contains either URL | `grep -r linkedin.com src/` returns only this file |
+| 5.1 | `ErrorPage` + `404.astro`: message h1, `Go to Home` button, `Error 404` caption in secondary ink, `noindex` | Renders with nav and footer; matches IA §8 | Browser, `content.spec.ts` |
 | 5.2 | `contact.astro`: eyebrow, h1, body, mailto button, social links with new-tab announcement | Renders; mailto opens a client | Browser, VoiceOver |
 | 5.3 | `skills.astro`: page header + four category cards, staggered | Renders; stagger caps correctly | Browser |
 | 5.4 | `Timeline` + `TimelineNode`, desktop | `<ol>`, `<article>`, `<time>`; line and dots decorative | VoiceOver |
@@ -212,7 +213,7 @@ Ordered simplest-first so the patterns are established on easy pages before the 
 | 8.5 | Real alt text on every image | Describes content, not medium | VoiceOver |
 | 8.6 | Real experience entries | Accurate dates and bullets | Read |
 | 8.7 | Confirmed skill categories | Accurate | Read |
-| 8.8 | Real email and social URLs | No `#` placeholders | Click each |
+| 8.8 | Real email address | No `TODO@example.com` remains | Click it |
 | 8.9 | Re-run the full release checklist | All green | All suites |
 | 8.10 | Tag `v1.1` | Tag pushed | `git tag -l` |
 

@@ -34,6 +34,7 @@ The state list is not boilerplate. The most common failure in a portfolio build 
 | `TimelineNode` | sections | no | experience |
 | `ProjectMeta` | sections | no | project detail |
 | `ProjectPager` | sections | no | project detail |
+| `ErrorPage` | sections | no | 404 |
 | `Gallery` | sections | yes (lightbox) | project detail |
 | `Lightbox` | sections | yes | project detail |
 | `ContactPanel` | sections | no | contact |
@@ -329,6 +330,31 @@ Neighbours are computed at build time in `[slug].astro` by `getAdjacent()` in `s
 - Not wrapped in `Reveal`: it is navigation, and navigation is never hidden waiting for a scroll.
 
 **Empty state:** if a project has no neighbours at all (a collection of one), the component renders nothing — no empty `<nav>`.
+
+### 4.6 `ErrorPage`
+
+The body of an HTTP error page. Content rules and copy are in [docs/01-information-architecture.md](01-information-architecture.md) §8.
+
+| Prop | Type | Example |
+|---|---|---|
+| `code` | `number` | `404` |
+| `message` | `string` | `The page you're looking for can't be found.` |
+| `cta` | `{ label: string; href: string }`, optional | defaults to `{ label: "Go to Home", href: "/" }` |
+
+**Structure**
+
+```html
+<section aria-labelledby="error-title" class="error-page">
+  <h1 id="error-title">The page you're looking for can't be found.</h1>
+  <a class="button button--filled" href="/">Go to Home</a>
+  <p class="error-code">Error 404</p>
+</section>
+```
+
+- The message is the `<h1>`. The status code is a plain `<p>` after the button, and is never a heading. Screen readers hear the explanation first and the code last, matching the visual order.
+- `Go to Home` is a link styled as a button, because it navigates. Using `<button>` with a click handler would break middle-click and "open in new tab", and it would need JavaScript.
+- Focus is not moved programmatically. On a client-side navigation, the router's normal focus handling applies.
+- No `Reveal` and no entrance animation. The message is the whole page and the LCP element.
 
 ---
 
