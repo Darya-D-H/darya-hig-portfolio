@@ -88,7 +88,7 @@ Running reduced motion as a Playwright project rather than a manual toggle is wh
 - The wordmark returns to Home from every page.
 - The active page's nav link carries `aria-current="page"`.
 - The footer nav matches the header nav.
-- The 404 page renders with nav and footer intact. Its `h1` is the plain-language message, not the code. `Go to Home` is an `<a href="/">` that reaches Home. `Error 404` comes after the button in DOM order. The page carries `noindex` and is absent from the sitemap.
+- The 404 page renders with nav and footer intact. Its `h1` is the plain-language message, not the code. `Go to Home` is an `<a href="/">` (not a `<button>`, and not styled with the `Button` component) that reaches Home and is at least 44px tall. `Error 404` comes after the button in DOM order. The page carries `noindex` and is absent from the sitemap.
 - Contact and Footer social links point at exactly the URLs in `src/site.config.ts`, so neither page hardcodes them.
 
 **`mobile-menu.spec.ts`** — at 390px:
@@ -305,7 +305,7 @@ Run in order before any deploy:
 - [ ] `LICENSE` present; Inter's OFL notice included in the build
 - [ ] `site` is set to the real origin; sitemap and canonical URLs are correct
 - [ ] `base` resolved for the chosen host, and the deployed site re-verified ([ADR-0005](adr/ADR-0005-defer-hosting-decision.md))
-- [ ] Real email in place; GitHub and LinkedIn URLs resolve (not a 404 on either site)
+- [ ] The `mailto:` opens a message to darya.dler.contact@gmail.com; GitHub and LinkedIn URLs resolve (not a 404 on either site)
 - [ ] The host returns status `404`, not `200`, for an unknown path (`curl -I <site>/nope`)
 - [ ] `robots.txt` and `og-image.png` present
 - [ ] `docs/accessibility-report.md` written with date, tools and findings

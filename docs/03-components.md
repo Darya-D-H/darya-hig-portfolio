@@ -346,13 +346,13 @@ The body of an HTTP error page. Content rules and copy are in [docs/01-informati
 ```html
 <section aria-labelledby="error-title" class="error-page">
   <h1 id="error-title">The page you're looking for can't be found.</h1>
-  <a class="button button--filled" href="/">Go to Home</a>
+  <a class="text-link text-link--standalone" href="/">Go to Home<span aria-hidden="true"> ›</span></a>
   <p class="error-code">Error 404</p>
 </section>
 ```
 
 - The message is the `<h1>`. The status code is a plain `<p>` after the button, and is never a heading. Screen readers hear the explanation first and the code last, matching the visual order.
-- `Go to Home` is a link styled as a button, because it navigates. Using `<button>` with a click handler would break middle-click and "open in new tab", and it would need JavaScript.
+- `Go to Home` is a standalone `TextLink` in `--color-link`, not a `Button`. It is a real `<a>`, so middle-click and "open in new tab" work without JavaScript. The chevron is `aria-hidden`, so the accessible name is just "Go to Home". Vertical padding brings the hit area to at least 44px.
 - Focus is not moved programmatically. On a client-side navigation, the router's normal focus handling applies.
 - No `Reveal` and no entrance animation. The message is the whole page and the LCP element.
 

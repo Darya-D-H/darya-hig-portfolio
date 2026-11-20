@@ -127,8 +127,8 @@ Ordered simplest-first so the patterns are established on easy pages before the 
 
 | # | Task | Acceptance | Verify |
 |---|---|---|---|
-| 5.0 | `src/site.config.ts` with name, email placeholder, and the real GitHub and LinkedIn URLs | Typed export; nothing else in `src/` contains either URL | `grep -r linkedin.com src/` returns only this file |
-| 5.1 | `ErrorPage` + `404.astro`: message h1, `Go to Home` button, `Error 404` caption in secondary ink, `noindex` | Renders with nav and footer; matches IA §8 | Browser, `content.spec.ts` |
+| 5.0 | `src/site.config.ts` with name, email, and the GitHub and LinkedIn URLs | Typed export; nothing else in `src/` contains either URL | `grep -r linkedin.com src/` returns only this file |
+| 5.1 | `ErrorPage` + `404.astro`: message h1, `Go to Home ›` text link, `Error 404` caption in secondary ink, `noindex` | Renders with nav and footer; matches IA §8 | Browser, `content.spec.ts` |
 | 5.2 | `contact.astro`: eyebrow, h1, body, mailto button, social links with new-tab announcement | Renders; mailto opens a client | Browser, VoiceOver |
 | 5.3 | `skills.astro`: page header + four category cards, staggered | Renders; stagger caps correctly | Browser |
 | 5.4 | `Timeline` + `TimelineNode`, desktop | `<ol>`, `<article>`, `<time>`; line and dots decorative | VoiceOver |
@@ -213,7 +213,7 @@ Ordered simplest-first so the patterns are established on easy pages before the 
 | 8.5 | Real alt text on every image | Describes content, not medium | VoiceOver |
 | 8.6 | Real experience entries | Accurate dates and bullets | Read |
 | 8.7 | Confirmed skill categories | Accurate | Read |
-| 8.8 | Real email address | No `TODO@example.com` remains | Click it |
+| 8.8 | Contact details | Email, GitHub and LinkedIn all open the right destination | Click each |
 | 8.9 | Re-run the full release checklist | All green | All suites |
 | 8.10 | Tag `v1.1` | Tag pushed | `git tag -l` |
 

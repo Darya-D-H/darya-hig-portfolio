@@ -232,7 +232,7 @@ Short page, no form. One white band, vertically centred, generous padding.
 | Eyebrow | `Contact` |
 | Heading (h1) | `Let's talk.` |
 | Body | `TODO: The best way to reach me is email. I usually reply within a day.` |
-| Primary CTA | Filled pill button, `Email me` → `mailto:TODO@example.com` |
+| Primary CTA | Filled pill button, `Email me` → `mailto:darya.dler.contact@gmail.com` |
 | Social links | `GitHub ›` → `https://github.com/Darya-D-H`, `LinkedIn ›` → `https://www.linkedin.com/in/darya-dler-hussein` — text links with chevrons, `rel="me noopener"`, opening in a new tab |
 
 **On the mailto link:** a plain `mailto:` href is visible to scrapers. The alternatives are worse — assembling the address in JavaScript breaks it for anyone without JS and for a crawler that should find it, and a form adds a third-party dependency for a site that has none. The address ships in plain text, and modern mail providers filter the resulting spam adequately. Recorded here so the trade-off is explicit.
@@ -252,8 +252,10 @@ One white band, centred vertically and horizontally, and the same layout as ever
 | Element | Content | Style |
 |---|---|---|
 | Heading (h1) | `The page you're looking for can't be found.` | `--text-headline`, `--color-ink` |
-| Primary CTA | Filled pill button, `Go to Home` → `/` | `Button` variant `filled` |
+| Link home | `Go to Home ›` → `/` | Standalone `TextLink`: `--text-body-lg`, `--color-link` (`#0066cc`), no underline at rest, underline on hover and focus. Not a button |
 | Status code | `Error 404` | `--text-caption`, `--color-ink-secondary`, placed last with `--space-16` above it |
+
+**Why a link and not a button.** The page has one job, getting the visitor home, and a single blue link does it without competing with the message. It stands alone, with no body text around it, so the rule in [docs/03-components.md](03-components.md) §3.2 applies: colour is enough to mark it as a link, and the underline appears on hover and focus. Its hit area is padded to 44px tall even though the text is shorter.
 
 **Why secondary ink and not tertiary.** The code is meant to look quiet, but at caption size `--color-ink-tertiary` fails WCAG contrast, and the token rules in [docs/02-design-tokens.md](02-design-tokens.md) forbid it below 24px. `--color-ink-secondary` (`#6e6e73`) is the quietest colour that stays readable.
 

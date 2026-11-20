@@ -361,9 +361,9 @@ These do not block the documentation phase, but need answers before the phases t
 
 | # | Question | Decision | Recorded in |
 |---|---|---|---|
-| 3 | GitHub and LinkedIn URLs | `https://github.com/Darya-D-H` and `https://www.linkedin.com/in/darya-dler-hussein`, held in `src/site.config.ts` (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §7 |
+| 3 | GitHub, LinkedIn and email | `https://github.com/Darya-D-H` and `https://www.linkedin.com/in/darya-dler-hussein`, plus email `darya.dler.contact@gmail.com`, all held in `src/site.config.ts` (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §7 |
 | 4 | Non-Apple fallback typeface | Self-host Inter, loaded only where SF Pro is unavailable, never preloaded (2026-11-21) | [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md), [docs/02-design-tokens.md](02-design-tokens.md) §2 |
 | 5 | Prev/next on project detail pages | Yes, following grid order, no wraparound (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §4, [docs/03-components.md](03-components.md) §4.5 |
 | 7 | Browser support | Last two major versions of Safari, iOS Safari, Chrome, Edge, Firefox (2026-11-21) | §3 above |
-| 6 | Error page copy | Plain-language message as the h1, a `Go to Home` button, and the status code small in secondary ink at the bottom (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §8 |
+| 6 | Error page copy | Plain-language message as the h1, a blue `Go to Home ›` text link (not a button), and the status code small in secondary ink at the bottom (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §8 |
 | 8 | Repository licence | MIT for code; written content and images all rights reserved (2026-11-21) | `LICENSE`, `README.md` |
