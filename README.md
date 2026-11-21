@@ -4,10 +4,6 @@ A static personal portfolio built with Astro, styled with Tailwind CSS v4, and d
 
 **Status:** documentation phase. No application code has been written yet. Everything in `/docs` is reviewed and approved before the build starts.
 
-## Why this repo exists
-
-A portfolio aimed at recruiters and hiring managers: it has to load fast, read clearly on a phone, and look deliberate. The design target is Apple's — generous whitespace, a tight type scale, white cards on `#f5f5f7`, 28px corner radii, and motion that is felt rather than noticed.
-
 ## Documentation
 
 Read in this order:
