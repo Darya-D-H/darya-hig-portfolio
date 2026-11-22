@@ -129,6 +129,9 @@ npm run test:a11y          # playwright test --grep @a11y
 
 # everything CI runs, in order
 npm run verify             # format:check && lint && typecheck && test && build
+
+# no arbitrary or raw values in src/ (also run in CI)
+npm run check:tokens
 ```
 
 `npm run verify` is the single gate. If it passes, the change is committable.

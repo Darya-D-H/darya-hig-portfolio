@@ -29,4 +29,6 @@ jobs:
 
       - run: npm run verify
 
+      - run: npm run check:tokens
+
       # No deploy step until a host is chosen in Phase 7 (ADR-0005).
