@@ -1,27 +1,8 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+import { follow } from "./helpers";
 
 // docs/07-test-plan.md §4: Home → Projects → a project → back, by the links
 // a visitor would click, with the client router doing the navigation.
-
-/** Clicks a link and waits for the router's page-load, not a load event. */
-async function follow(page: Page, link: Locator) {
-  await page.evaluate(() => {
-    const w = window as Window & { pageLoaded?: boolean };
-    w.pageLoaded = false;
-    document.addEventListener(
-      "astro:page-load",
-      () => {
-        w.pageLoaded = true;
-      },
-      { once: true },
-    );
-  });
-  await link.scrollIntoViewIfNeeded();
-  await link.click();
-  await page.waitForFunction(
-    () => (window as Window & { pageLoaded?: boolean }).pageLoaded === true,
-  );
-}
 
 const seeAllProjects = (page: Page) =>
   page.getByRole("main").getByRole("link", { name: "See all projects" });

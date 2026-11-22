@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { follow } from "./helpers";
 
 // docs/07-test-plan.md §4. The Home "exactly three featured" row lands with
 // the Home page in the next part.
@@ -98,11 +99,14 @@ test.describe("prev and next", () => {
     await page.goto(`/projects/${GRID_ORDER[0]}`);
     const visited = [GRID_ORDER[0]];
     for (let i = 1; i < GRID_ORDER.length; i += 1) {
-      await page
-        .getByRole("navigation", { name: "More projects" })
-        .getByRole("link", { name: /Next project/ })
-        .click();
-      // Client-side navigation fires no load event: poll the URL instead.
+      // Wait for the router's page-load, not the URL: the URL changes
+      // before the swap, and clicking "Next" then can hit the old page.
+      await follow(
+        page,
+        page
+          .getByRole("navigation", { name: "More projects" })
+          .getByRole("link", { name: /Next project/ }),
+      );
       await expect(page).toHaveURL(new RegExp(`/projects/${GRID_ORDER[i]}/?$`));
       visited.push(new URL(page.url()).pathname.split("/").pop() ?? "");
     }
