@@ -2,18 +2,25 @@
 /**
  * Chevron
  *
- * The trailing › on plain buttons and standalone links, drawn as an inline
- * SVG so a screen reader never reads "greater than". Hidden from assistive
- * tech; sized in em so it scales with the text beside it.
+ * The › after plain buttons and standalone links, or the ‹ before a back
+ * link, drawn as an inline SVG so a screen reader never reads "greater
+ * than". Hidden from assistive tech; sized in em so it scales with the text
+ * beside it.
  *
  * @example
  * <a href="/projects">See all projects<Chevron /></a>
+ * <a href="/projects"><Chevron direction="back" />Projects</a>
  */
+interface Props {
+  direction?: "forward" | "back";
+}
+
+const { direction = "forward" } = Astro.props;
 ---
 
 <svg
   aria-hidden="true"
-  class="chevron"
+  class:list={["chevron", direction]}
   viewBox="0 0 8 14"
   fill="none"
   stroke="currentColor"
@@ -29,6 +36,14 @@
     flex-shrink: 0;
     height: 0.7em;
     width: auto;
+  }
+
+  .forward {
     margin-inline-start: 0.25em;
+  }
+
+  .back {
+    margin-inline-end: 0.25em;
+    transform: scaleX(-1);
   }
 </style>
