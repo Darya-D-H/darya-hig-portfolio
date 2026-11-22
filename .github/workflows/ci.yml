@@ -59,4 +59,29 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
+  # Lighthouse, mobile profile, three runs per page with the median taken,
+  # against the budgets in docs/00-spec.md §7 (lighthouserc.json). Reports
+  # stay in this run's artifacts; nothing is uploaded to public storage.
+  lighthouse:
+    name: lighthouse
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: false
+
   # No deploy step until a host is chosen in Phase 7 (ADR-0005).

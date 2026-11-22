@@ -258,7 +258,9 @@ The 1068px shot matters most: it is exactly the breakpoint named in the brief, a
 
 ## 7. Performance
 
-Lighthouse CI against the built site, mobile profile, three runs with the median taken.
+Lighthouse CI against the built site, mobile profile, three runs with the median taken. The `lighthouse` CI job runs it on every pull request and push to `main` with `lighthouserc.json`, over seven representative pages: Home, Projects, a full and a sparse project, Skills, Experience and Contact. Reports are kept as a CI artifact, never uploaded to public storage. It cannot run on the Windows development machine, where the browser it needs is blocked, so CI is where it is measured.
+
+The JS budget is checked against what is actually transferred (`resource-summary:script:size`), and the page-weight budget against everything a page loads (`resource-summary:total:size`). Lazy images below the fold do not count until they load, which is the point of making them lazy.
 
 | Metric                | Budget   | Fails if        |
 | --------------------- | -------- | --------------- |
