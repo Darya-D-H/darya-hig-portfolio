@@ -18,8 +18,9 @@ All three collections are declared in **`src/content.config.ts`** — a file at 
 
 ```ts
 // src/content.config.ts
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
+import { z } from "astro/zod"; // Astro 7 ships Zod 4 here
 
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
@@ -77,8 +78,8 @@ const projects = defineCollection({
       // --- external links (rendered only when present) ---
       links: z
         .object({
-          live: z.string().url().optional(),
-          source: z.string().url().optional(),
+          live: z.url().optional(),
+          source: z.url().optional(),
         })
         .default({}),
 
@@ -185,17 +186,19 @@ challenge / solution / outcome structure goes here and renders after it.
 One file per role at `src/content/experience/<slug>.md`.
 
 ```ts
+/** "2024-03": the precision a role date really has. */
+const yearMonth = z
+  .string()
+  .regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Use YYYY-MM, for example 2024-03");
+
 const experience = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/experience" }),
   schema: z.object({
     role: z.string(),
     company: z.string(),
-    companyUrl: z.string().url().optional(),
-    startDate: z.string().regex(/^\d{4}-\d{2}$/), // "2024-03", for <time datetime>
-    endDate: z
-      .string()
-      .regex(/^\d{4}-\d{2}$/)
-      .optional(), // absent means current
+    companyUrl: z.url().optional(),
+    startDate: yearMonth, // "2024-03", for <time datetime>
+    endDate: yearMonth.optional(), // absent means current
     location: z.string().optional(),
     bullets: z.array(z.string()).min(2).max(4),
     order: z.number().int().positive(),
