@@ -1,0 +1,15 @@
+---
+import { getCollection } from "astro:content";
+import PageHeader from "@/components/sections/PageHeader.astro";
+import Timeline from "@/components/sections/Timeline.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const roles = await getCollection("experience");
+---
+
+<BaseLayout title="Experience — Darya">
+  <PageHeader eyebrow="Career" title="Experience">
+    TODO: One line on the kind of teams and products you have worked on.
+  </PageHeader>
+  <Timeline roles={roles} />
+</BaseLayout>

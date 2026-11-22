@@ -1,0 +1,52 @@
+---
+/**
+ * ContactPanel
+ *
+ * The whole Contact page: eyebrow, h1, a line of body copy, one filled
+ * button to the mailto address, and the social links. Every address comes
+ * from site.config, never from here. Centred in a 680px column.
+ * See docs/03-components.md §4.4 and docs/01-information-architecture.md §7.
+ *
+ * @example
+ * <ContactPanel>The best way to reach me is email.</ContactPanel>
+ */
+import Section from "@/components/layout/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import Eyebrow from "@/components/ui/Eyebrow.astro";
+import TextLink from "@/components/ui/TextLink.astro";
+import { site } from "@/site.config";
+---
+
+<Section
+  labelledBy="contact-title"
+  padding="hero"
+  class="flex flex-1 flex-col justify-center"
+>
+  <div class="mx-auto max-w-narrow text-center">
+    <Eyebrow>Contact</Eyebrow>
+    <h1 id="contact-title" class="mt-2 text-title">
+      Let's talk.
+    </h1>
+    <p class="mt-4 text-body-lg text-text-secondary">
+      <slot />
+    </p>
+    <div class="mt-8">
+      <Button href={`mailto:${site.email}`}>Email me</Button>
+    </div>
+    <ul
+      class="mt-6 flex flex-wrap justify-center gap-x-8"
+      aria-label="Elsewhere"
+    >
+      <li>
+        <TextLink href={site.github} standalone external chevron>
+          GitHub
+        </TextLink>
+      </li>
+      <li>
+        <TextLink href={site.linkedin} standalone external chevron>
+          LinkedIn
+        </TextLink>
+      </li>
+    </ul>
+  </div>
+</Section>

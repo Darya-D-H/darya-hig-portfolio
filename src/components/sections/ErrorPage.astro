@@ -1,0 +1,38 @@
+---
+/**
+ * ErrorPage
+ *
+ * The body of an HTTP error page. It leads with what happened in plain
+ * language as the h1, offers one blue text link home (not a button), and
+ * puts the status code last as a small caption, never as the headline.
+ * No reveal: the message is the whole page. See docs/03-components.md §4.6
+ * and docs/01-information-architecture.md §8.
+ *
+ * @example
+ * <ErrorPage code={404} message="The page you're looking for can't be found." />
+ */
+import Section from "@/components/layout/Section.astro";
+import TextLink from "@/components/ui/TextLink.astro";
+
+interface Props {
+  code: number;
+  message: string;
+  cta?: { label: string; href: string };
+}
+
+const { code, message, cta = { label: "Go to Home", href: "/" } } = Astro.props;
+---
+
+<Section
+  labelledBy="error-title"
+  padding="hero"
+  class="flex flex-1 flex-col justify-center text-center"
+>
+  <h1 id="error-title" class="text-headline text-text-primary">
+    {message}
+  </h1>
+  <TextLink href={cta.href} standalone chevron class="mt-6 text-body-lg">
+    {cta.label}
+  </TextLink>
+  <p class="mt-16 text-caption text-text-secondary">Error {code}</p>
+</Section>

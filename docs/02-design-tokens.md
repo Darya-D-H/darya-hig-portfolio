@@ -180,24 +180,25 @@ A `clamp()` on `vw` means a user who zooms gets nothing, because the viewport wi
 
 Base unit 4px. The scale is the subset actually needed; adding an entry requires a reason.
 
-| Token            | Value | Typical use                              |
-| ---------------- | ----- | ---------------------------------------- |
-| `--space-1`      | 4px   | Icon-to-label gap                        |
-| `--space-2`      | 8px   | Tag chip padding, tight stacks           |
-| `--space-3`      | 12px  | Inside small components                  |
-| `--space-4`      | 16px  | Default gap in a stack                   |
-| `--space-5`      | 20px  | —                                        |
-| `--space-6`      | 24px  | Card inner padding, mobile               |
-| `--space-8`      | 32px  | Card inner padding, desktop; grid gutter |
-| `--space-10`     | 40px  | Heading to content                       |
-| `--space-12`     | 48px  | Sub-section spacing                      |
-| `--space-16`     | 64px  | Section padding, mobile                  |
-| `--space-20`     | 80px  | Section padding, tablet                  |
-| `--space-25`     | 100px | Section padding, desktop                 |
-| `--space-18`     | 72px  | Hero padding, mobile                     |
-| `--space-24`     | 96px  | Hero padding, tablet                     |
-| `--space-32`     | 128px | Hero padding, desktop                    |
-| `--space-gutter` | 22px  | Container side gutter, every width (§4)  |
+| Token            | Value | Typical use                                                                                 |
+| ---------------- | ----- | ------------------------------------------------------------------------------------------- |
+| `--space-1`      | 4px   | Icon-to-label gap                                                                           |
+| `--space-2`      | 8px   | Tag chip padding, tight stacks                                                              |
+| `--space-3`      | 12px  | Inside small components                                                                     |
+| `--space-4`      | 16px  | Default gap in a stack                                                                      |
+| `--space-5`      | 20px  | —                                                                                           |
+| `--space-6`      | 24px  | Card inner padding, mobile                                                                  |
+| `--space-7`      | 28px  | Timeline card offset from the line, mobile ([docs/03-components.md](03-components.md) §4.2) |
+| `--space-8`      | 32px  | Card inner padding, desktop; grid gutter                                                    |
+| `--space-10`     | 40px  | Heading to content                                                                          |
+| `--space-12`     | 48px  | Sub-section spacing                                                                         |
+| `--space-16`     | 64px  | Section padding, mobile                                                                     |
+| `--space-20`     | 80px  | Section padding, tablet                                                                     |
+| `--space-25`     | 100px | Section padding, desktop                                                                    |
+| `--space-18`     | 72px  | Hero padding, mobile                                                                        |
+| `--space-24`     | 96px  | Hero padding, tablet                                                                        |
+| `--space-32`     | 128px | Hero padding, desktop                                                                       |
+| `--space-gutter` | 22px  | Container side gutter, every width (§4)                                                     |
 
 ### Section vertical rhythm
 
@@ -227,7 +228,7 @@ Modelled directly on apple.com's content column.
 | 735–1068px | 692px             | 22px        |
 | ≤ 734px    | 100%              | 22px        |
 
-A `--container-wide` of 1280px exists for the project gallery and the hero image, which are allowed to exceed the text column.
+A `--container-wide` of 1280px exists for the project gallery and the hero image, which are allowed to exceed the text column. A `--container-narrow` of 680px holds the contact panel ([docs/03-components.md](03-components.md) §4.4).
 
 ### Breakpoints
 
@@ -362,13 +363,15 @@ Values and rationale in [docs/04-motion.md](04-motion.md). Listed here because t
 
 ## 9. Sizing
 
-| Token                 | Value | Use                                               |
-| --------------------- | ----- | ------------------------------------------------- |
-| `--size-nav-height`   | 44px  | Nav bar height; also the HIG minimum touch target |
-| `--size-touch-min`    | 44px  | Minimum hit area on every interactive element     |
-| `--size-focus-ring`   | 2px   | Focus outline width                               |
-| `--size-focus-offset` | 2px   | Focus outline offset                              |
-| `--size-hairline`     | 1px   | Dividers                                          |
+| Token                    | Value | Use                                               |
+| ------------------------ | ----- | ------------------------------------------------- |
+| `--size-nav-height`      | 44px  | Nav bar height; also the HIG minimum touch target |
+| `--size-touch-min`       | 44px  | Minimum hit area on every interactive element     |
+| `--size-focus-ring`      | 2px   | Focus outline width                               |
+| `--size-focus-offset`    | 2px   | Focus outline offset                              |
+| `--size-hairline`        | 1px   | Dividers                                          |
+| `--size-timeline-dot`    | 9px   | Timeline node dot, from 735px                     |
+| `--size-timeline-dot-sm` | 7px   | Timeline node dot, below 735px                    |
 
 The 44px nav height is not a coincidence: it is the HIG's minimum comfortable touch target, and apple.com's global nav is the same height. Where a link's text is shorter than 44px tall, padding brings the hit area up to 44px even though the visible text is smaller.
 

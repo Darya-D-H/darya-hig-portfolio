@@ -1,0 +1,31 @@
+---
+/**
+ * PageHeader
+ *
+ * The block every page except Home and the 404 opens with: eyebrow, h1 and
+ * a one-line intro on a white band. One component, so the pages read as one
+ * product. See docs/01-information-architecture.md §9.
+ *
+ * @example
+ * <PageHeader eyebrow="Toolkit" title="Skills">One line about them.</PageHeader>
+ */
+import Section from "@/components/layout/Section.astro";
+import Eyebrow from "@/components/ui/Eyebrow.astro";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+}
+
+const { eyebrow, title } = Astro.props;
+---
+
+<Section labelledBy="page-title">
+  <Eyebrow>{eyebrow}</Eyebrow>
+  <h1 id="page-title" class="mt-2 text-title">
+    {title}
+  </h1>
+  <p class="mt-4 max-w-content-md text-body-lg text-text-secondary">
+    <slot />
+  </p>
+</Section>

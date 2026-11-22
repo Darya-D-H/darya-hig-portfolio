@@ -1,0 +1,75 @@
+---
+/**
+ * SkillsGrid
+ *
+ * Skill categories as cards on a grey band: an h3 name, an optional line of
+ * description, and the items as tags. No proficiency levels, by decision
+ * (docs/01-information-architecture.md §5). Cards reveal with the capped
+ * stagger. The Skills page hides the band's h2 (the page h1 already names
+ * it); Home shows it.
+ *
+ * @example
+ * <SkillsGrid heading="Skill categories" headingHidden categories={skills} />
+ */
+import type { CollectionEntry } from "astro:content";
+import Section from "@/components/layout/Section.astro";
+import Card from "@/components/ui/Card.astro";
+import Reveal from "@/components/ui/Reveal.astro";
+import Tag from "@/components/ui/Tag.astro";
+import { staggerDelay } from "@/lib/reveal";
+
+interface Props {
+  /** Rendered as the band's h2. */
+  heading: string;
+  /** Keeps the h2 for the outline but hides it visually. */
+  headingHidden?: boolean;
+  categories: CollectionEntry<"skills">[];
+  tone?: "grey" | "white";
+}
+
+const {
+  heading,
+  headingHidden = false,
+  categories,
+  tone = "grey",
+} = Astro.props;
+const sorted = [...categories].sort((a, b) => a.data.order - b.data.order);
+---
+
+<Section tone={tone} labelledBy="skills-heading">
+  <h2
+    id="skills-heading"
+    class:list={["text-headline", headingHidden && "sr-only"]}
+  >
+    {heading}
+  </h2>
+  <ul
+    class:list={[
+      "grid grid-cols-1 gap-6 md:grid-cols-2",
+      !headingHidden && "mt-12",
+    ]}
+  >
+    {sorted.map(({ data }, index) => (
+      <li>
+        <Reveal delay={staggerDelay(index)} class="h-full">
+          <Card tone={tone === "grey" ? "onGrey" : "onWhite"} class="h-full">
+            <h3 class="text-card-title">{data.name}</h3>
+            {data.description && (
+              <p class="mt-2 text-body-sm text-text-secondary">
+                {data.description}
+              </p>
+            )}
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {data.items.map((item) => (
+                <li>
+                  <Tag>{item}</Tag>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </Reveal>
+      </li>
+    ))}
+  </ul>
+  <slot />
+</Section>

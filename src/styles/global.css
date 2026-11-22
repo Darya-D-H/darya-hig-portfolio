@@ -128,6 +128,7 @@
   --space-4: 16px;
   --space-5: 20px;
   --space-6: 24px;
+  --space-7: 28px;
   --space-8: 32px;
   --space-10: 40px;
   --space-12: 48px;
@@ -147,6 +148,7 @@
   --spacing-4: var(--space-4);
   --spacing-5: var(--space-5);
   --spacing-6: var(--space-6);
+  --spacing-7: var(--space-7);
   --spacing-8: var(--space-8);
   --spacing-10: var(--space-10);
   --spacing-12: var(--space-12);
@@ -164,6 +166,7 @@
   /* ---- layout: containers and breakpoints (§4) ---- */
   --container-content: 980px;
   --container-content-md: 692px;
+  --container-narrow: 680px;
   --container-wide: 1280px;
 
   --breakpoint-sm: 480px;
@@ -230,6 +233,8 @@
   --size-focus-ring: 2px;
   --size-focus-offset: 2px;
   --size-hairline: 1px;
+  --size-timeline-dot: 9px;
+  --size-timeline-dot-sm: 7px;
 }
 
 @layer base {

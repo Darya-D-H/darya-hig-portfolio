@@ -21,6 +21,8 @@ interface Props {
   /** `div` for a band with no heading of its own. */
   as?: "section" | "div";
   padding?: "default" | "hero" | "none";
+  /** Layout classes for the band itself, such as flex-1 to fill the page. */
+  class?: string;
 }
 
 const {
@@ -29,6 +31,7 @@ const {
   width = "content",
   as: Tag = "section",
   padding = "default",
+  class: className,
 } = Astro.props;
 
 // A <section> with no accessible name is just a <div> to assistive tech.
@@ -50,6 +53,7 @@ const paddingClass = {
   class:list={[
     tone === "grey" ? "bg-surface-sunken" : "bg-surface",
     paddingClass,
+    className,
   ]}
   aria-labelledby={labelledBy}
 >
