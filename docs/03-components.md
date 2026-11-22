@@ -10,35 +10,36 @@ The state list is not boilerplate. The most common failure in a portfolio build 
 
 ## 1. Component inventory
 
-| Component      | Folder   | Ships JS            | Used on                      |
-| -------------- | -------- | ------------------- | ---------------------------- |
-| `Nav`          | layout   | no                  | all                          |
-| `MobileMenu`   | layout   | yes                 | all, below 735px             |
-| `Footer`       | layout   | no                  | all                          |
-| `Container`    | layout   | no                  | all                          |
-| `Section`      | layout   | no                  | all                          |
-| `SkipLink`     | layout   | no                  | all                          |
-| `Button`       | ui       | no                  | most                         |
-| `TextLink`     | ui       | no                  | most                         |
-| `Card`         | ui       | no                  | projects, skills, experience |
-| `Tag`          | ui       | no                  | projects, skills             |
-| `Eyebrow`      | ui       | no                  | most                         |
-| `Divider`      | ui       | no                  | project detail               |
-| `Reveal`       | ui       | yes (shared module) | all below the fold           |
-| `Hero`         | sections | no                  | home                         |
-| `AboutSection` | sections | no                  | home                         |
-| `ProjectCard`  | sections | no                  | home, projects               |
-| `ProjectGrid`  | sections | no                  | home, projects               |
-| `SkillsGrid`   | sections | no                  | home, skills                 |
-| `Timeline`     | sections | no                  | experience                   |
-| `TimelineNode` | sections | no                  | experience                   |
-| `ProjectMeta`  | sections | no                  | project detail               |
-| `ProjectPager` | sections | no                  | project detail               |
-| `ErrorPage`    | sections | no                  | 404                          |
-| `Gallery`      | sections | yes (lightbox)      | project detail               |
-| `Lightbox`     | sections | yes                 | project detail               |
-| `ContactPanel` | sections | no                  | contact                      |
-| `BackToTop`    | ui       | yes                 | all (in footer)              |
+| Component      | Folder   | Ships JS            | Used on                        |
+| -------------- | -------- | ------------------- | ------------------------------ |
+| `Nav`          | layout   | no                  | all                            |
+| `MobileMenu`   | layout   | yes                 | all, below 735px               |
+| `Footer`       | layout   | no                  | all                            |
+| `Container`    | layout   | no                  | all                            |
+| `Section`      | layout   | no                  | all                            |
+| `SkipLink`     | layout   | no                  | all                            |
+| `Button`       | ui       | no                  | most                           |
+| `TextLink`     | ui       | no                  | most                           |
+| `Card`         | ui       | no                  | projects, skills, experience   |
+| `Tag`          | ui       | no                  | projects, skills               |
+| `Eyebrow`      | ui       | no                  | most                           |
+| `Divider`      | ui       | no                  | project detail                 |
+| `Chevron`      | ui       | no                  | inside `Button` and `TextLink` |
+| `Reveal`       | ui       | yes (shared module) | all below the fold             |
+| `Hero`         | sections | no                  | home                           |
+| `AboutSection` | sections | no                  | home                           |
+| `ProjectCard`  | sections | no                  | home, projects                 |
+| `ProjectGrid`  | sections | no                  | home, projects                 |
+| `SkillsGrid`   | sections | no                  | home, skills                   |
+| `Timeline`     | sections | no                  | experience                     |
+| `TimelineNode` | sections | no                  | experience                     |
+| `ProjectMeta`  | sections | no                  | project detail                 |
+| `ProjectPager` | sections | no                  | project detail                 |
+| `ErrorPage`    | sections | no                  | 404                            |
+| `Gallery`      | sections | yes (lightbox)      | project detail                 |
+| `Lightbox`     | sections | yes                 | project detail                 |
+| `ContactPanel` | sections | no                  | contact                        |
+| `BackToTop`    | ui       | no                  | all (in footer)                |
 
 Three client-side modules in total: `menu.ts`, `reveal.ts`, `lightbox.ts`. `BackToTop` is a plain anchor to `#main` with `scroll-behavior: smooth` in CSS, so it needs no JavaScript. That keeps the site inside the 15 KB JS budget with room to spare.
 
@@ -167,7 +168,7 @@ Grey band. Four nav links in a `<nav aria-label="Footer">`, social links, `BackT
 | State         | filled                                                      | tinted                     | plain                           |
 | ------------- | ----------------------------------------------------------- | -------------------------- | ------------------------------- |
 | Default       | accent bg                                                   | tinted bg                  | link colour                     |
-| Hover         | `--color-accent-hover`                                      | tint deepens to 0.16 alpha | chevron slides 2px right, 200ms |
+| Hover         | `--color-accent-hover`                                      | tint deepens to 0.14 alpha | chevron slides 2px right, 200ms |
 | Active        | scale 0.97, 100ms                                           | scale 0.97                 | —                               |
 | Focus-visible | 2px accent outline, 2px offset                              | same                       | same                            |
 | Disabled      | 40% opacity, `pointer-events: none`, `aria-disabled="true"` | same                       | same                            |
@@ -189,7 +190,7 @@ Inline link within prose. `--color-link`, no underline at rest, underline on hov
 
 ### 3.3 `Card`
 
-**Props:** `tone` (`"onGrey"` | `"onWhite"`), `interactive` (boolean), `href` (optional), `padding`.
+**Props:** `tone` (`"onGrey"` | `"onWhite"`), `interactive` (boolean), `padding`. An interactive card contains exactly one link marked `data-card-link`, normally the title; the card has no `href` of its own.
 
 **States**
 

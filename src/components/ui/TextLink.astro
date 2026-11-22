@@ -1,0 +1,51 @@
+---
+/**
+ * TextLink
+ *
+ * A link in --color-link. Inside prose it is always underlined, because
+ * colour alone cannot mark it against body text (WCAG 1.4.1). Standalone
+ * (nav rows, CTA rows, "Go to Home ›") it is underlined only on hover and
+ * focus, and padded to a 44px hit area. External links open a new tab and
+ * say so to screen readers. See docs/03-components.md §3.2.
+ *
+ * @example
+ * <p>Read the <TextLink href="/projects">project list</TextLink>.</p>
+ * <TextLink href={site.github} standalone external chevron>GitHub</TextLink>
+ */
+import Chevron from "@/components/ui/Chevron.astro";
+
+interface Props {
+  href: string;
+  /** Not inside running text: no underline at rest, 44px hit area. */
+  standalone?: boolean;
+  /** Opens in a new tab, with rel="me noopener" and an announcement. */
+  external?: boolean;
+  chevron?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  standalone = false,
+  external = false,
+  chevron = false,
+  class: className,
+} = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={[
+    "text-link underline-offset-2",
+    standalone
+      ? "inline-flex min-h-touch items-center hover:underline focus-visible:underline"
+      : "underline",
+    className,
+  ]}
+  target={external ? "_blank" : undefined}
+  rel={external ? "me noopener" : undefined}
+>
+  <slot />
+  {external && <span class="sr-only"> (opens in a new tab)</span>}
+  {chevron && <Chevron />}
+</a>

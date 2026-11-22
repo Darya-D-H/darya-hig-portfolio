@@ -1,0 +1,85 @@
+---
+/**
+ * Button
+ *
+ * Renders an <a> when given an href and a <button> otherwise, because a link
+ * that navigates must never be a button and an action must never be
+ * <a href="#">. Three variants: filled (the one primary action per view),
+ * tinted (secondary, on white) and plain (apple.com's "Learn more ›").
+ * See docs/03-components.md §3.1.
+ *
+ * @example
+ * <Button href="/projects">View projects</Button>
+ * <Button variant="plain" href="/contact">Get in touch</Button>
+ */
+import Chevron from "@/components/ui/Chevron.astro";
+
+interface Props {
+  variant?: "filled" | "tinted" | "plain";
+  href?: string;
+  type?: "button" | "submit";
+  /**
+   * Rendered as a <button aria-disabled="true">, so it stays discoverable
+   * to screen readers but does nothing.
+   */
+  disabled?: boolean;
+}
+
+const { variant = "filled", href, type = "button", disabled } = Astro.props;
+
+const classes = [
+  "button inline-flex min-h-touch items-center justify-center text-body",
+  variant === "filled" &&
+    "rounded-pill bg-accent px-6 py-3 text-surface hover:bg-accent-hover",
+  variant === "tinted" &&
+    "rounded-pill bg-accent/10 px-6 py-3 text-link hover:bg-accent/14",
+  variant === "plain" && "plain text-link",
+  disabled && "pointer-events-none opacity-40",
+];
+---
+
+{/* A disabled control navigates nowhere, so it is a button even with an href. */}
+{href && !disabled ? (
+  <a href={href} class:list={classes}>
+    <slot />
+    {variant === "plain" && <Chevron />}
+  </a>
+) : (
+  <button
+    type={type}
+    aria-disabled={disabled ? "true" : undefined}
+    class:list={classes}
+  >
+    <slot />
+    {variant === "plain" && <Chevron />}
+  </button>
+)}
+
+<style>
+  /* Colour eases on hover; the press is quicker and compositor-only. */
+  .button {
+    transition:
+      background-color var(--duration-fast) var(--ease-in-out),
+      color var(--duration-fast) var(--ease-in-out),
+      transform var(--duration-instant) var(--ease-out);
+  }
+
+  .button:not(.plain):active {
+    transform: scale(0.97);
+  }
+
+  .plain :global(.chevron) {
+    transition: transform var(--duration-fast) var(--ease-in-out);
+  }
+
+  .plain:hover :global(.chevron) {
+    transform: translateX(calc(var(--space-1) / 2));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .button:not(.plain):active,
+    .plain:hover :global(.chevron) {
+      transform: none;
+    }
+  }
+</style>
