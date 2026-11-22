@@ -1,0 +1,40 @@
+---
+/**
+ * ProjectGrid
+ *
+ * Project cards in three columns above 1068px, two from 735px and one
+ * below. Cards reveal row by row: the stagger runs across a row and starts
+ * again on the next, so a long grid never reads as one slow cascade
+ * (docs/01-information-architecture.md §3). The first row loads eagerly.
+ *
+ * @example
+ * <ProjectGrid projects={sorted} />
+ */
+import type { CollectionEntry } from "astro:content";
+import ProjectCard from "@/components/sections/ProjectCard.astro";
+import Reveal from "@/components/ui/Reveal.astro";
+import { staggerDelay } from "@/lib/reveal";
+
+interface Props {
+  /** Already in grid order. */
+  projects: CollectionEntry<"projects">[];
+  headingLevel?: "h2" | "h3";
+}
+
+const { projects, headingLevel = "h3" } = Astro.props;
+const COLUMNS = 3;
+---
+
+<ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+  {projects.map((project, index) => (
+    <li>
+      <Reveal delay={staggerDelay(index % COLUMNS)} class="h-full">
+        <ProjectCard
+          project={project}
+          eager={index < COLUMNS}
+          headingLevel={headingLevel}
+        />
+      </Reveal>
+    </li>
+  ))}
+</ul>

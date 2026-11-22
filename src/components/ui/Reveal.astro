@@ -12,21 +12,23 @@
  * @example
  * {items.map((item, i) => <Reveal delay={staggerDelay(i)}>…</Reveal>)}
  */
-import type { HTMLTag } from "astro/types";
+import type { HTMLAttributes, HTMLTag } from "astro/types";
 
-interface Props {
+/** Extra attributes, such as aria-labelledby, pass through to the element. */
+interface Props extends Omit<HTMLAttributes<"div">, "style"> {
   /** Milliseconds; use staggerDelay(index) from @/lib/reveal for groups. */
   delay?: number;
   as?: HTMLTag;
   class?: string;
 }
 
-const { delay = 0, as: Tag = "div", class: className } = Astro.props;
+const { delay = 0, as: Tag = "div", class: className, ...rest } = Astro.props;
 ---
 
 <Tag
   data-reveal
   class={className}
+  {...rest}
   style={delay > 0 ? `--reveal-delay: ${delay}ms` : undefined}
 >
   <slot />

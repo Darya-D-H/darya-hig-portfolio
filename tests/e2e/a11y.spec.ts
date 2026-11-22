@@ -15,6 +15,9 @@ for (const path of [
   "/experience",
   "/contact",
   "/no-such-page",
+  "/projects",
+  "/projects/invoice-tracker",
+  "/projects/cli-toolkit",
 ]) {
   test(`${path} has no axe violations`, { tag: "@a11y" }, async ({ page }) => {
     await page.goto(path);
@@ -44,3 +47,22 @@ test.describe("on a phone", () => {
     },
   );
 });
+
+test(
+  "a project page with the lightbox open has no axe violations",
+  { tag: "@a11y" },
+  async ({ page }) => {
+    await page.goto("/projects/invoice-tracker");
+    const thumb = page
+      .getByRole("region", { name: "Gallery" })
+      .getByRole("button")
+      .first();
+    await thumb.scrollIntoViewIfNeeded();
+    await thumb.click();
+    await expect(
+      page.getByRole("dialog", { name: "Image viewer" }),
+    ).toBeVisible();
+    await page.waitForTimeout(500);
+    expect((await scan(page)).violations).toEqual([]);
+  },
+);

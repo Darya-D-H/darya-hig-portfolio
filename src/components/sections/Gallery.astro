@@ -1,0 +1,188 @@
+---
+/**
+ * Gallery
+ *
+ * Two to six screenshots in a grid, each opening the lightbox at that image.
+ * Rendered as links to the full image, so without JavaScript you still see
+ * the image; lib/lightbox.ts upgrades them to buttons and wires up the
+ * native <dialog>. The dialog's controls sit on material (the control layer)
+ * and use a white focus ring, because the blue one measures about 1.2:1
+ * against the grey scrim. See docs/03-components.md §4.3.
+ *
+ * @example
+ * <Gallery images={project.data.gallery} />
+ */
+import type { ImageMetadata } from "astro";
+import { getImage, Image } from "astro:assets";
+import Chevron from "@/components/ui/Chevron.astro";
+
+interface Props {
+  images: { src: ImageMetadata; alt: string }[];
+}
+
+const { images } = Astro.props;
+const slides = await Promise.all(
+  images.map(async ({ src, alt }) => ({
+    src,
+    alt,
+    full: await getImage({ src, width: 1600, format: "webp" }),
+  })),
+);
+---
+
+<div data-gallery>
+  <ul class="grid grid-cols-2 gap-4 md:grid-cols-3">
+    {slides.map(({ src, alt, full }) => (
+      <li>
+        <a
+          href={full.src}
+          data-lightbox-trigger
+          class="trigger block overflow-hidden rounded-sm"
+        >
+          <Image
+            src={src}
+            alt={alt}
+            widths={[320, 480, 640]}
+            sizes="(min-width: 735px) 320px, 50vw"
+            class="aspect-16/10 w-full object-cover"
+          />
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <dialog data-lightbox aria-label="Image viewer" class="lightbox">
+    <div class="frame">
+      <button type="button" data-lightbox-close class="control close">
+        <span class="sr-only">Close</span>
+        <svg
+          aria-hidden="true"
+          class="glyph"
+          viewBox="0 0 18 18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        >
+          <path d="M4 4l10 10M14 4L4 14"></path>
+        </svg>
+      </button>
+      <img data-lightbox-image alt="" class="image" />
+      <div class="nav">
+        <button type="button" data-lightbox-prev class="control">
+          <span class="sr-only">Previous image</span>
+          <Chevron direction="back" />
+        </button>
+        <button type="button" data-lightbox-next class="control">
+          <span class="sr-only">Next image</span>
+          <Chevron />
+        </button>
+      </div>
+      <p data-lightbox-status class="sr-only" aria-live="polite"></p>
+    </div>
+  </dialog>
+</div>
+
+<style>
+  .trigger {
+    transition: opacity var(--duration-fast) var(--ease-in-out);
+  }
+
+  .trigger:hover {
+    opacity: 0.9;
+  }
+
+  /* The dialog box is the whole viewport; its own area is the scrim. */
+  .lightbox {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: calc(var(--space-6) + var(--inset-top)) var(--space-4)
+      calc(var(--space-6) + var(--inset-bottom));
+    border: 0;
+    background: transparent;
+  }
+
+  .lightbox::backdrop {
+    background-color: var(--color-overlay);
+  }
+
+  .lightbox[open],
+  .lightbox[open]::backdrop {
+    animation: lightbox-fade var(--duration-base) var(--ease-out);
+  }
+
+  .lightbox[open] .image {
+    animation: lightbox-scale var(--duration-base) var(--ease-out);
+  }
+
+  .frame {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .image {
+    max-width: 100%;
+    max-height: calc(100% - 2 * var(--size-touch-min) - 2 * var(--space-4));
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-lightbox);
+    transition: opacity var(--duration-fast) var(--ease-in-out);
+  }
+
+  .image[data-swapping] {
+    opacity: 0;
+  }
+
+  .close {
+    align-self: flex-end;
+  }
+
+  .nav {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  /* Controls sit on material, the control layer (docs/05 §1.3). */
+  .control {
+    display: grid;
+    place-items: center;
+    width: var(--size-touch-min);
+    height: var(--size-touch-min);
+    border-radius: var(--radius-pill);
+    color: var(--color-text-primary);
+    background-color: var(--color-nav-bg-fallback);
+    -webkit-backdrop-filter: var(--blur-nav);
+    backdrop-filter: var(--blur-nav);
+  }
+
+  .control:disabled {
+    opacity: 0.4;
+  }
+
+  .control:focus-visible {
+    outline-color: var(--color-surface);
+  }
+
+  .glyph {
+    width: var(--space-5);
+    height: var(--space-5);
+  }
+
+  @keyframes lightbox-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes lightbox-scale {
+    from {
+      transform: scale(0.98);
+    }
+  }
+</style>

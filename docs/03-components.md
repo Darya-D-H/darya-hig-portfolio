@@ -10,37 +10,37 @@ The state list is not boilerplate. The most common failure in a portfolio build 
 
 ## 1. Component inventory
 
-| Component      | Folder   | Ships JS            | Used on                        |
-| -------------- | -------- | ------------------- | ------------------------------ |
-| `Nav`          | layout   | no                  | all                            |
-| `MobileMenu`   | layout   | yes                 | all, below 735px               |
-| `Footer`       | layout   | no                  | all                            |
-| `Container`    | layout   | no                  | all                            |
-| `Section`      | layout   | no                  | all                            |
-| `SkipLink`     | layout   | no                  | all                            |
-| `Button`       | ui       | no                  | most                           |
-| `TextLink`     | ui       | no                  | most                           |
-| `Card`         | ui       | no                  | projects, skills, experience   |
-| `Tag`          | ui       | no                  | projects, skills               |
-| `Eyebrow`      | ui       | no                  | most                           |
-| `Divider`      | ui       | no                  | project detail                 |
-| `Chevron`      | ui       | no                  | inside `Button` and `TextLink` |
-| `Reveal`       | ui       | yes (shared module) | all below the fold             |
-| `Hero`         | sections | no                  | home                           |
-| `AboutSection` | sections | no                  | home                           |
-| `ProjectCard`  | sections | no                  | home, projects                 |
-| `ProjectGrid`  | sections | no                  | home, projects                 |
-| `SkillsGrid`   | sections | no                  | home, skills                   |
-| `Timeline`     | sections | no                  | experience                     |
-| `TimelineNode` | sections | no                  | experience                     |
-| `ProjectMeta`  | sections | no                  | project detail                 |
-| `ProjectPager` | sections | no                  | project detail                 |
-| `ErrorPage`    | sections | no                  | 404                            |
-| `PageHeader`   | sections | no                  | projects, skills, experience   |
-| `Gallery`      | sections | yes (lightbox)      | project detail                 |
-| `Lightbox`     | sections | yes                 | project detail                 |
-| `ContactPanel` | sections | no                  | contact                        |
-| `BackToTop`    | ui       | no                  | all (in footer)                |
+| Component      | Folder   | Ships JS            | Used on                                          |
+| -------------- | -------- | ------------------- | ------------------------------------------------ |
+| `Nav`          | layout   | no                  | all                                              |
+| `MobileMenu`   | layout   | yes                 | all, below 735px                                 |
+| `Footer`       | layout   | no                  | all                                              |
+| `Container`    | layout   | no                  | all                                              |
+| `Section`      | layout   | no                  | all                                              |
+| `SkipLink`     | layout   | no                  | all                                              |
+| `Button`       | ui       | no                  | most                                             |
+| `TextLink`     | ui       | no                  | most                                             |
+| `Card`         | ui       | no                  | projects, skills, experience                     |
+| `Tag`          | ui       | no                  | projects, skills                                 |
+| `Eyebrow`      | ui       | no                  | most                                             |
+| `Divider`      | ui       | no                  | project detail                                   |
+| `Chevron`      | ui       | no                  | `Button`, `TextLink`, back link, pager, lightbox |
+| `Reveal`       | ui       | yes (shared module) | all below the fold                               |
+| `Hero`         | sections | no                  | home                                             |
+| `AboutSection` | sections | no                  | home                                             |
+| `ProjectCard`  | sections | no                  | home, projects                                   |
+| `ProjectGrid`  | sections | no                  | home, projects                                   |
+| `SkillsGrid`   | sections | no                  | home, skills                                     |
+| `Timeline`     | sections | no                  | experience                                       |
+| `TimelineNode` | sections | no                  | experience                                       |
+| `ProjectMeta`  | sections | no                  | project detail                                   |
+| `ProjectPager` | sections | no                  | project detail                                   |
+| `ErrorPage`    | sections | no                  | 404                                              |
+| `PageHeader`   | sections | no                  | projects, skills, experience                     |
+| `Gallery`      | sections | yes (lightbox)      | project detail                                   |
+| `Lightbox`     | sections | yes                 | project detail                                   |
+| `ContactPanel` | sections | no                  | contact                                          |
+| `BackToTop`    | ui       | no                  | all (in footer)                                  |
 
 Three client-side modules in total: `menu.ts`, `reveal.ts`, `lightbox.ts`. `BackToTop` is a plain anchor to `#main` with `scroll-behavior: smooth` in CSS, so it needs no JavaScript. That keeps the site inside the 15 KB JS budget with room to spare.
 
@@ -244,7 +244,7 @@ Wrapper that fades and lifts its children when they scroll into view. Full spec 
 | Summary   | `--text-body-sm`, secondary ink    | Clamped to 2 lines with `line-clamp-2`                                                           |
 | Tags      | `Tag`                              | Maximum 3; a 4th becomes `+2`                                                                    |
 
-**Empty/missing states:** no thumbnail in front matter renders a flat `--color-section` block with the project's initial, not a broken image. No summary renders nothing rather than an empty gap.
+**Empty/missing states:** the schema requires a thumbnail, its alt text and a summary, so a card can never be missing one; a project without them fails the build. Tags are optional: with none, the tag row is omitted rather than left as an empty gap.
 
 ### 4.2 `Timeline` / `TimelineNode`
 
@@ -284,7 +284,9 @@ The gallery is a grid of 2–6 thumbnails; each is a `<button>` that opens the l
 
 **Reduced motion:** no fade, no scale, no slide between images. The image simply changes.
 
-**No-JS behaviour:** without JavaScript the thumbnails are plain links to the full-size image file. Degrading to "nothing happens" is not acceptable; degrading to "you see the image" is.
+**No-JS behaviour:** without JavaScript the thumbnails are plain links to the full-size image file. Degrading to "nothing happens" is not acceptable; degrading to "you see the image" is. So the gallery is rendered as links, and `lightbox.ts` replaces each with a real `<button>` (same content, so the image's alt text names it) when it initialises.
+
+**Focus ring on the lightbox controls:** white, not the accent. The blue ring measures about 1.2:1 against the grey scrim, below the 3:1 a focus indicator needs; white measures about 3.7:1. The controls sit on the nav material, the control layer.
 
 ### 4.4 `ContactPanel`
 

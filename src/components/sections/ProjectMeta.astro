@@ -1,0 +1,40 @@
+---
+/**
+ * ProjectMeta
+ *
+ * The thin label/value strip under a project's header: Year and Role, each
+ * only when the front matter has it. With neither, it renders nothing at
+ * all, so a sparse project leaves no empty row. See
+ * docs/01-information-architecture.md §4.
+ *
+ * @example
+ * <ProjectMeta year="2025" role="Solo developer" />
+ */
+interface Props {
+  year?: string;
+  role?: string;
+  class?: string;
+}
+
+const { year, role, class: className } = Astro.props;
+const items = [
+  { label: "Year", value: year },
+  { label: "Role", value: role },
+].filter((item): item is { label: string; value: string } => !!item.value);
+---
+
+{items.length > 0 && (
+  <dl
+    class:list={[
+      "flex flex-wrap gap-x-12 gap-y-4 border-t border-border-subtle pt-6",
+      className,
+    ]}
+  >
+    {items.map(({ label, value }) => (
+      <div>
+        <dt class="text-caption text-text-secondary">{label}</dt>
+        <dd class="mt-1 text-body">{value}</dd>
+      </div>
+    ))}
+  </dl>
+)}
