@@ -69,10 +69,13 @@ const socialAlt = image
     />
     <script is:inline>
       // The router copies the next page's <html class="no-js"> on every
-      // client-side navigation, so the class is removed again after each swap.
+      // client-side navigation. Strip it from the incoming document before
+      // the swap: removing it after (astro:after-swap) lets WebKit style one
+      // frame with no-js on, and the reveal transition then animates every
+      // below-the-fold element from visible back to hidden.
       document.documentElement.classList.remove("no-js");
-      document.addEventListener("astro:after-swap", () =>
-        document.documentElement.classList.remove("no-js"),
+      document.addEventListener("astro:before-swap", (event) =>
+        event.newDocument.documentElement.classList.remove("no-js"),
       );
     </script>
     <title>{fullTitle}</title>
