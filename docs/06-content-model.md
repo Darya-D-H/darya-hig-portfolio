@@ -18,8 +18,9 @@ All three collections are declared in **`src/content.config.ts`** — a file at 
 
 ```ts
 // src/content.config.ts
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
+import { z } from "astro/zod"; // Astro 7 ships Zod 4 here
 
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
@@ -77,8 +78,8 @@ const projects = defineCollection({
       // --- external links (rendered only when present) ---
       links: z
         .object({
-          live: z.string().url().optional(),
-          source: z.string().url().optional(),
+          live: z.url().optional(),
+          source: z.url().optional(),
         })
         .default({}),
 
@@ -89,7 +90,7 @@ const projects = defineCollection({
 
 ### Schema decisions worth noting
 
-**`image()` rather than `z.string()` for image paths.** The `image()` helper resolves the path at build time and hands the component an object carrying intrinsic width and height. That means every `<Image>` renders with explicit dimensions, which eliminates layout shift by construction rather than by remembering to type width and height by hand. A missing or misspelled file is a build error, not a broken image in production.
+**`image()` rather than `z.string()` for image paths.** The `image()` helper resolves the path at build time and hands the component an object carrying intrinsic width and height. That means every `<Image>` renders with explicit dimensions, which eliminates layout shift by construction rather than by remembering to type width and height by hand. A missing or misspelled file is a build error, not a broken image in production. One caveat: Astro resolves the path only when a page renders the image, so a draft, or any project before the pages exist, would slip through. `tests/unit/content-images.test.ts` closes that gap by checking every image path in the front matter, so `verify` names the file and the path.
 
 **`thumbnailAlt` is required, `heroAlt` is not.** The thumbnail is the card's only image and always needs a description. The hero image on the detail page is frequently the same screenshot shown larger, in which case repeating the alt text is noise for a screen reader — so `heroAlt` is optional and falls back to `thumbnailAlt`, and if the hero is genuinely decorative it can be set to `""`.
 
@@ -185,17 +186,19 @@ challenge / solution / outcome structure goes here and renders after it.
 One file per role at `src/content/experience/<slug>.md`.
 
 ```ts
+/** "2024-03": the precision a role date really has. */
+const yearMonth = z
+  .string()
+  .regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Use YYYY-MM, for example 2024-03");
+
 const experience = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/experience" }),
   schema: z.object({
     role: z.string(),
     company: z.string(),
-    companyUrl: z.string().url().optional(),
-    startDate: z.string().regex(/^\d{4}-\d{2}$/), // "2024-03", for <time datetime>
-    endDate: z
-      .string()
-      .regex(/^\d{4}-\d{2}$/)
-      .optional(), // absent means current
+    companyUrl: z.url().optional(),
+    startDate: yearMonth, // "2024-03", for <time datetime>
+    endDate: yearMonth.optional(), // absent means current
     location: z.string().optional(),
     bullets: z.array(z.string()).min(2).max(4),
     order: z.number().int().positive(),
@@ -279,7 +282,7 @@ Projects 3 and 5 are the important ones. A set of six fully-populated records wi
 - Every placeholder string begins with `TODO:` so it is greppable. `npm run check:todo` fails the build when `--prod` is set, which prevents placeholder text shipping by accident.
 - Placeholder prose is realistic in **length and shape** — a real two-sentence challenge, not `Lorem ipsum dolor sit amet`. A layout judged against lorem ipsum looks fine and then breaks on real sentences with real word lengths.
 - Alt text placeholders are written as real alt text, because writing good alt text is a skill and leaving `TODO: alt` teaches nothing about whether the pattern works.
-- Placeholder images: generated flat-colour PNGs at the correct aspect ratios and realistic file sizes (roughly 200–400 KB before optimisation), so the performance budget is tested against something representative. A 2 KB placeholder makes the Lighthouse score meaningless.
+- Placeholder images: generated PNGs at the correct aspect ratios and realistic file sizes (roughly 200–400 KB before optimisation), so the performance budget is tested against something representative. A 2 KB placeholder makes the Lighthouse score meaningless. `node scripts/generate-placeholders.mjs` writes them deterministically: a gradient in each project's colour with blocky noise, sized to about 300 KB, labelled with the project and view. Cards and gallery shots are 16:10 (1280 × 800 and 1600 × 1000); heroes are 1960 × 1102, the 980px column at 2x.
 
 ---
 

@@ -43,7 +43,7 @@ Two small scripts, because these are project-specific rules that no off-the-shel
 
 **`npm run check:tokens`** — greps the component tree for Tailwind arbitrary-value syntax (`text-[`, `p-[`, `bg-[#`, `duration-[`, `rounded-[`) and fails if any is found. This is the mechanical enforcement of the no-arbitrary-values rule from [ADR-0002](adr/ADR-0002-tailwind-v4-tokens.md); without it the rule depends entirely on a human noticing.
 
-**`npm run check:todo`** — fails when `TODO:` appears in `src/content/` or `src/pages/` **and** the `--prod` flag is set. Placeholder copy is meant to exist during the build phase and never to ship. Part of the release checklist, not of `verify`.
+**`npm run check:todo`** — fails when `TODO:` appears in `src/content/` or `src/pages/` **and** the `--prod` flag is set. Without the flag it lists every placeholder by file and line and passes. Placeholder copy is meant to exist during the build phase and never to ship. Part of the release checklist, not of `verify`. `npm run check:todo --prod` hands the flag to npm rather than the script; the script reads it from npm's `npm_config_prod` as well, so that form and `npm run check:todo -- --prod` both work.
 
 ---
 
@@ -57,6 +57,7 @@ Lives in `tests/unit/`. There are only a handful of pure functions, and each get
 | `lib/reveal.ts`   | Stagger delay is `min(index, 4) * 80`; index 0 → 0ms; index 5 and index 9 both → 320ms (the cap)                                                                                                                                       |
 | `lib/menu.ts`     | Focus-trap index arithmetic: wrapping forward from the last element, wrapping backward from the first, behaviour with a single focusable element                                                                                       |
 | `lib/lightbox.ts` | Index clamping at both ends; `next` at the last index does not advance; the announcement string is 1-based (`Image 1 of 6`, never `Image 0 of 6`)                                                                                      |
+| Content images    | Every image path in every content file's front matter exists. Astro only resolves an `image()` path when a page renders it, so without this a draft's broken path would build cleanly                                                  |
 | `lib/projects.ts` | `getAdjacent`: first project has no `prev`, last has no `next`, a middle one has both; a single-project list has neither; drafts are skipped as neighbours; an unknown slug throws. Duplicate `order` values throw and name both files |
 
 The off-by-one cases are listed explicitly because they are the bugs that actually occur in focus traps and carousels.

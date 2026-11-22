@@ -22,6 +22,7 @@
     "test:a11y": "playwright test --grep @a11y",
     "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build",
     "check:tokens": "node scripts/check-tokens.mjs",
+    "check:todo": "node scripts/check-todo.mjs",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -58,6 +59,7 @@
     "prettier": "^3.10.1",
     "prettier-plugin-astro": "^1.1.2",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "sharp": "~0.35.5",
     "tailwindcss": "^4.3.5",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.73.0",

@@ -1,7 +1,9 @@
 /// <reference types="node" />
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = 4321;
+// Not the dev server's 4321: a running `npm run dev` would otherwise be
+// reused, and the tests would run against dev mode and its toolbar.
+const PORT = 4322;
 const BASE_URL = `http://localhost:${PORT}`;
 const DESKTOP = { width: 1440, height: 900 };
 
@@ -19,7 +21,7 @@ export default defineConfig({
   },
   // E2E runs against the built site, not the dev server.
   webServer: {
-    command: "npm run build && npm run preview",
+    command: `npm run build && npm run preview -- --port ${PORT}`,
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
