@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-// docs/07-test-plan.md §4. /_tokens stands in for the real pages until
-// Phase 5; everything below its first screen is wrapped in Reveal.
-const PAGE = "/_tokens";
+// docs/07-test-plan.md §4, on Home: the hero is above the fold and never
+// revealed; the about, featured and skills bands below it are.
+const PAGE = "/";
 
 const opacity = (locator: import("@playwright/test").Locator) =>
   locator.evaluate((el) => Number(getComputedStyle(el).opacity));

@@ -145,7 +145,7 @@ This is the single most failure-prone component on the site. The contract:
 
 ### 2.5 `SkipLink`
 
-First focusable element in the document. Visually hidden until focused, then pinned top-left above everything at `--z-skip-link`. Targets `#main`, which carries `tabindex="-1"` so focus actually lands there in every browser.
+First focusable element in the document. Visually hidden until focused, then pinned top-left above everything at `--z-skip-link`, at least 44px tall. Its padding is applied on focus: Tailwind's `not-sr-only` resets padding to 0, which once left it 20px tall. Targets `#main`, which carries `tabindex="-1"` so focus actually lands there in every browser.
 
 ### 2.6 `Footer`
 

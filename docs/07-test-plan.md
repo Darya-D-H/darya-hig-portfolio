@@ -22,7 +22,7 @@ Runs, in order, stopping at the first failure:
 
 Nothing is committed unless this passes. CI runs the same command on every push and pull request, so local and CI results cannot diverge.
 
-E2E, accessibility, visual and Lighthouse suites are separate because they need a built site and a browser. They run on pull requests and before any release.
+E2E, accessibility, visual and Lighthouse suites are separate because they need a built site and a browser. They run on pull requests and before any release. In CI, the `e2e` job runs the full Playwright matrix, axe scans included, on every pull request and every push to `main`, beside the `verify` job.
 
 ---
 
@@ -133,6 +133,7 @@ Running reduced motion as a Playwright project rather than a manual toggle is wh
 
 - Every `a`, `button` and `[role="button"]` on every page has a bounding box of at least 44 × 44 px.
 - Adjacent interactive elements are at least 8px apart.
+- Measured the way WCAG 2.5.8 allows: a link inside a sentence is exempt (its size is the line of text); a card's title link is measured by the card, which its `::after` covers; a visually hidden element is skipped, and the skip link is measured separately, when focused.
 
 **`content.spec.ts`**
 

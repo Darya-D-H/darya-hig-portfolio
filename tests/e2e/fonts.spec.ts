@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { PAGES } from "./pages";
 
 // Guards the font rules in docs/02-design-tokens.md §2 and ADR-0003. None of
 // the test engines has SF Pro, so every one of them must render Inter.
-const PAGES = ["/", "/_tokens"];
 
 for (const path of PAGES) {
   test.describe(`fonts on ${path}`, () => {

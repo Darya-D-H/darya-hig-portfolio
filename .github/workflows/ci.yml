@@ -31,4 +31,32 @@ jobs:
 
       - run: npm run check:tokens
 
-      # No deploy step until a host is chosen in Phase 7 (ADR-0005).
+  # The full Playwright matrix (docs/07-test-plan.md §4): Chromium, WebKit
+  # and Firefox at every width, reduced motion, and the axe scans. On Linux,
+  # so no engine has SF Pro and every page renders in Inter.
+  e2e:
+    name: e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium webkit firefox
+
+      - run: npm run test:e2e
+
+      - if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+  # No deploy step until a host is chosen in Phase 7 (ADR-0005).
