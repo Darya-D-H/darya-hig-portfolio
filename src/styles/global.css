@@ -363,10 +363,50 @@
     outline-offset: var(--size-focus-offset);
   }
 
+  /*
+   * #main takes focus from the skip link and BackToTop so the next Tab
+   * starts there. It is a landmark, not a control, so it draws no ring.
+   */
+  #main:focus {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* BackToTop and in-page links glide; reduced motion jumps. */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /*
+     * Scroll reveal (docs/04-motion.md §3). The hidden state exists only
+     * here, so with reduced motion nothing is ever hidden at all.
+     */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(var(--reveal-distance));
+      transition:
+        opacity var(--duration-reveal) var(--ease-out),
+        transform var(--duration-reveal) var(--ease-out);
+      transition-delay: var(--reveal-delay, 0ms);
+    }
+
+    [data-reveal][data-revealed="true"] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   /* Content is never hidden behind a script (docs/04-motion.md §3). */
   .no-js [data-reveal] {
     opacity: 1;
     transform: none;
+  }
+
+  /* Page transitions: a 300ms cross-fade (docs/04-motion.md §4). */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--duration-base);
+    animation-timing-function: var(--ease-in-out);
   }
 
   /*
@@ -381,6 +421,13 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
+    }
+
+    /* View-transition pseudo-elements are not matched by `*`. */
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation: none !important;
     }
   }
 }

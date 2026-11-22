@@ -1,13 +1,25 @@
 ---
-// Throwaway review page for Phase 2 (roadmap 2.8). Delete it in Phase 6.14,
-// before anything is deployed.
+// Throwaway review page for Phases 2 and 3 (roadmap 2.8, 3.8). Delete it in
+// Phase 6.14, before anything is deployed.
 //
 // Astro never routes a page file whose name starts with "_", so /_tokens is
 // produced by this single-path dynamic route instead.
 //
-// Every value shown is read from global.css at build time rather than typed
-// here, so the page cannot drift from the CSS it is meant to review.
+// Every token value shown is read from global.css at build time rather than
+// typed here, so the page cannot drift from the CSS it is meant to review.
+// Below the first screen, each block is wrapped in Reveal so the reveal and
+// view-transition tests have something to watch.
+import Section from "@/components/layout/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import Card from "@/components/ui/Card.astro";
+import Divider from "@/components/ui/Divider.astro";
+import Eyebrow from "@/components/ui/Eyebrow.astro";
+import Reveal from "@/components/ui/Reveal.astro";
+import Tag from "@/components/ui/Tag.astro";
+import TextLink from "@/components/ui/TextLink.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { staggerDelay } from "@/lib/reveal";
+import { site } from "@/site.config";
 import css from "@/styles/global.css?raw";
 
 export function getStaticPaths() {
@@ -32,7 +44,7 @@ const spaces = group("space-");
 const radii = group("radius-");
 const shadows = group("shadow-");
 const tables = [
-  { heading: "Font families", rows: group("font-") },
+  { heading: "Font families and weights", rows: group("font-") },
   { heading: "Containers", rows: group("container-") },
   { heading: "Breakpoints", rows: group("breakpoint-") },
   { heading: "Z-index", rows: group("z-") },
@@ -59,17 +71,126 @@ const typeScale = [
   "text-caption",
   "text-eyebrow",
 ];
+
+const sampleTags = ["PHP", "TypeScript", "Astro"];
 ---
 
 <BaseLayout title="Design tokens" noindex>
-  <main class="mx-auto max-w-wide px-6 py-16">
-    <h1 class="text-title">Design tokens</h1>
-    <p class="mt-4 max-w-content-md text-body-lg text-text-secondary">
-      Every token in global.css, rendered from the stylesheet itself. Resize
-      across 735px and 1069px to see the type scale change.
+  <Section padding="hero" labelledBy="tokens-title">
+    <Eyebrow>Review page</Eyebrow>
+    <h1 id="tokens-title" class="mt-2 text-title">
+      Design tokens
+    </h1>
+    <p class="mt-4 text-body-lg text-text-secondary">
+      Every token in global.css, rendered from the stylesheet itself, and every
+      primitive in each of its states. Resize across 735px and 1069px to see the
+      type scale change.
     </p>
+  </Section>
 
-    <section class="mt-16" aria-labelledby="colour">
+  <Section tone="grey" labelledBy="buttons">
+    <Reveal>
+      <h2 id="buttons" class="text-headline">
+        Buttons and links
+      </h2>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <Button href="/">Filled link</Button>
+        <Button>Filled button</Button>
+        <Button variant="plain" href="/">
+          Plain link
+        </Button>
+        <Button disabled>Disabled</Button>
+      </div>
+      <p class="mt-8 max-w-content-md text-body">
+        A link inside running text is always underlined, like this{" "}
+        <TextLink href="/">link to Home</TextLink>, because colour alone cannot
+        mark it.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-x-6">
+        <TextLink href="/" standalone chevron>
+          Go to Home
+        </TextLink>
+        <TextLink href={site.github} standalone external chevron>
+          GitHub
+        </TextLink>
+      </div>
+    </Reveal>
+  </Section>
+
+  <Section labelledBy="tinted">
+    <Reveal>
+      <h2 id="tinted" class="text-headline">
+        On a white band
+      </h2>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <Button variant="tinted" href="/">
+          Tinted link
+        </Button>
+        <Button variant="tinted">Tinted button</Button>
+      </div>
+      <ul class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+        <li>
+          <Card tone="onWhite">
+            <h3 class="text-card-title">Static card</h3>
+            <p class="mt-2 text-body-sm text-text-secondary">
+              On a white band a card takes a hairline border.
+            </p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {sampleTags.map((tag) => (
+                <li>
+                  <Tag>{tag}</Tag>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </li>
+        <li>
+          <Card tone="onWhite" interactive>
+            <h3 class="text-card-title">
+              <a href="/" data-card-link>
+                Interactive card
+              </a>
+            </h3>
+            <p class="mt-2 text-body-sm text-text-secondary">
+              The whole card is clickable; the link's name is just the title.
+            </p>
+          </Card>
+        </li>
+      </ul>
+      <Divider />
+    </Reveal>
+  </Section>
+
+  <Section tone="grey" labelledBy="cards-grey">
+    <h2 id="cards-grey" class="text-headline">
+      Cards on a grey band
+    </h2>
+    <ul class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {["One", "Two", "Three", "Four", "Five", "Six"].map((label, index) => (
+        <li>
+          <Reveal delay={staggerDelay(index)} class="h-full">
+            <Card interactive class="h-full">
+              <h3 class="text-card-title">
+                <a href="/" data-card-link>
+                  Card {label}
+                </a>
+              </h3>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                {sampleTags.map((tag) => (
+                  <li>
+                    <Tag tone="onGrey">{tag}</Tag>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          </Reveal>
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section width="wide" labelledBy="colour">
+    <Reveal>
       <h2 id="colour" class="text-headline">
         Colour
       </h2>
@@ -85,9 +206,11 @@ const typeScale = [
           </li>
         ))}
       </ul>
-    </section>
+    </Reveal>
+  </Section>
 
-    <section class="mt-16" aria-labelledby="type">
+  <Section width="wide" labelledBy="type">
+    <Reveal>
       <h2 id="type" class="text-headline">
         Type scale
       </h2>
@@ -99,9 +222,11 @@ const typeScale = [
           </li>
         ))}
       </ul>
-    </section>
+    </Reveal>
+  </Section>
 
-    <section class="mt-16" aria-labelledby="spacing">
+  <Section width="wide" labelledBy="spacing">
+    <Reveal>
       <h2 id="spacing" class="text-headline">
         Spacing
       </h2>
@@ -115,11 +240,13 @@ const typeScale = [
           </li>
         ))}
       </ul>
-    </section>
+    </Reveal>
+  </Section>
 
-    <section class="mt-16" aria-labelledby="radius">
+  <Section width="wide" labelledBy="radius">
+    <Reveal>
       <h2 id="radius" class="text-headline">
-        Radius
+        Radius and elevation
       </h2>
       <ul class="mt-8 flex flex-wrap gap-6">
         {radii.map(([name, value]) => (
@@ -133,31 +260,27 @@ const typeScale = [
             </p>
           </li>
         ))}
-      </ul>
-    </section>
-
-    <section class="mt-16" aria-labelledby="elevation">
-      <h2 id="elevation" class="text-headline">
-        Elevation
-      </h2>
-      <ul class="mt-8 flex flex-wrap gap-8">
-        {shadows.map(([name, value]) => (
-          <li class="max-w-content-md">
+        {shadows.map(([name]) => (
+          <li>
             <div
               class="size-25 rounded-sm bg-surface-raised"
               style={`box-shadow: var(--${name})`}
             />
             <p class="mt-2 font-mono text-caption">--{name}</p>
-            <p class="font-mono text-caption text-text-secondary">{value}</p>
           </li>
         ))}
       </ul>
-    </section>
+    </Reveal>
+  </Section>
 
+  <Section width="wide" labelledBy="other-tokens">
+    <h2 id="other-tokens" class="text-headline">
+      Other tokens
+    </h2>
     {tables.map(({ heading, rows }) => (
-      <section class="mt-16">
-        <h2 class="text-headline">{heading}</h2>
-        <table class="mt-6 w-full text-left text-body-sm">
+      <Reveal class="mt-12">
+        <h3 class="text-subhead">{heading}</h3>
+        <table class="mt-4 w-full text-left text-body-sm">
           <thead>
             <tr class="border-b border-border-subtle">
               <th scope="col" class="py-2">
@@ -177,7 +300,7 @@ const typeScale = [
             ))}
           </tbody>
         </table>
-      </section>
+      </Reveal>
     ))}
-  </main>
+  </Section>
 </BaseLayout>

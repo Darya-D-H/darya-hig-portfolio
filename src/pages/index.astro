@@ -1,11 +1,14 @@
 ---
-// Temporary blank page for the foundation phases. Replaced by the real Home
-// page in Phase 5.
+// Temporary placeholder until the real Home page in Phase 5. It is just the
+// shell plus one heading, which is what the Phase 3 axe scan wants.
+import Section from "@/components/layout/Section.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="TODO: Darya, software engineer">
-  <main>
-    <h1 class="text-title">TODO: Home page</h1>
-  </main>
+  <Section padding="hero" labelledBy="home-title">
+    <h1 id="home-title" class="text-title">
+      TODO: Home page
+    </h1>
+  </Section>
 </BaseLayout>
