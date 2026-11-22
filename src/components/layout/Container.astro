@@ -1,0 +1,31 @@
+---
+/**
+ * Container
+ *
+ * Max width plus side gutters, nothing else: no vertical padding, no
+ * background. The column is 980px above 1068px, 692px from 735px, and full
+ * width below, always with a 22px gutter outside it. `wide` lets a gallery or
+ * hero image break out to 1280px. See docs/03-components.md §2.2.
+ *
+ * @example
+ * <Container width="wide"><img … /></Container>
+ */
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div"> {
+  width?: "content" | "wide";
+}
+
+const { width = "content", class: className, ...rest } = Astro.props;
+---
+
+<div
+  class:list={[
+    "mx-auto box-content px-gutter",
+    width === "content" ? "md:max-w-content-md lg:max-w-content" : "max-w-wide",
+    className,
+  ]}
+  {...rest}
+>
+  <slot />
+</div>
