@@ -4,7 +4,7 @@
 
 Every value in this document becomes a token in `src/styles/global.css`. A component that needs a value not listed here is a signal that a token is missing — add it to this doc first, then to the CSS.
 
-Tailwind v4 reads its theme from a CSS-native `@theme` block, so these tokens are real custom properties. They are available both as Tailwind utilities (`bg-section`, `text-headline`) and as plain CSS variables (`var(--color-section)`) in the rare cases where a utility will not do.
+Tailwind v4 reads its theme from a CSS-native `@theme` block, so these tokens are real custom properties. They are available both as Tailwind utilities (`bg-surface-sunken`, `text-headline`) and as plain CSS variables (`var(--color-surface-sunken)`) in the rare cases where a utility will not do.
 
 ---
 
@@ -75,6 +75,10 @@ Components reference the semantic name, never the raw palette entry. This is wha
 --color-border-subtle   → --color-divider
 --color-focus           → --color-accent
 ```
+
+In markup that means `text-text-primary`, `text-text-secondary`, `bg-surface`, `bg-surface-sunken`, `bg-surface-raised`, `border-border-subtle` and `outline-focus`, never `text-ink` or `bg-section`. The doubled `text-text-` prefix is the cost of keeping the alias names readable as custom properties; it is accepted rather than renamed.
+
+Six palette colours have no alias, because each has exactly one role and the palette name already says what it is for. Components use these directly: `--color-accent` and `--color-accent-hover` (filled buttons), `--color-link` (text links), `--color-nav-bg` and `--color-nav-bg-fallback` (the nav material), and `--color-overlay` (the scrim). A dark theme would reassign them along with the rest.
 
 ---
 
