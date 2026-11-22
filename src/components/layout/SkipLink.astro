@@ -4,7 +4,9 @@
  *
  * The first focusable element in the document. Hidden until focused, then
  * pinned top-left above everything. Targets #main, which has tabindex="-1"
- * so focus actually lands there. See docs/03-components.md §2.5.
+ * so focus actually lands there. Its padding and 44px height are set on
+ * focus, because not-sr-only resets padding to 0. See docs/03-components.md
+ * §2.5.
  *
  * @example
  * <SkipLink />
@@ -13,7 +15,7 @@
 
 <a
   href="#main"
-  class="sr-only z-skip-link rounded-xs bg-surface px-4 py-3 text-body-sm text-link shadow-card-hover focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+  class="sr-only z-skip-link rounded-xs bg-surface text-body-sm text-link shadow-card-hover focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:flex focus:min-h-touch focus:items-center focus:px-4"
 >
   Skip to content
 </a>
