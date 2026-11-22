@@ -73,6 +73,8 @@ Supported: **the last two major versions** of Safari on macOS, Safari on iOS/iPa
 
 Older browsers are not blocked. They get a page that works and reads correctly, and may lose polish. Tailwind v4's own floor (Safari 16.4, Chrome 111, Firefox 128) sits well below this policy, so the two never conflict.
 
+That floor is also the CSS build target (`vite.build.cssTarget` in `astro.config.mjs`). Astro's default target is `esnext`, which tells the minifier no browser needs a prefix, and it then strips `-webkit-backdrop-filter`, which Safari before 18 needs for the nav material.
+
 Features with a defined fallback rather than an assumption of support:
 
 | Feature                          | Without it                                                                                                   |
@@ -211,6 +213,7 @@ import Section from "@/components/layout/Section.astro";
 import Card from "@/components/ui/Card.astro";
 import Tag from "@/components/ui/Tag.astro";
 import Reveal from "@/components/ui/Reveal.astro";
+import { staggerDelay } from "@/lib/reveal";
 import type { SkillCategory } from "@/content/config";
 
 interface Props {
@@ -232,7 +235,7 @@ const { heading, categories, tone = "grey" } = Astro.props;
   <ul class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
     {categories.map((category, index) => (
       <li>
-        <Reveal delay={index * 80}>
+        <Reveal delay={staggerDelay(index)}>
           <Card>
             <h3 class="text-card-title text-text-primary">{category.name}</h3>
             <ul class="mt-4 flex flex-wrap gap-2">

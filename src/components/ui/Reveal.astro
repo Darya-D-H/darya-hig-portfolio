@@ -1,0 +1,33 @@
+---
+/**
+ * Reveal
+ *
+ * Fades and lifts its content the first time it scrolls into view. The
+ * content is in the DOM and the accessibility tree from the start; only
+ * opacity and transform change, and only when motion is allowed. Never use
+ * it above the fold or on a possible LCP element. One distance and one
+ * duration site-wide; variety comes from the stagger.
+ * See docs/03-components.md §3.6 and docs/04-motion.md §3.
+ *
+ * @example
+ * {items.map((item, i) => <Reveal delay={staggerDelay(i)}>…</Reveal>)}
+ */
+import type { HTMLTag } from "astro/types";
+
+interface Props {
+  /** Milliseconds; use staggerDelay(index) from @/lib/reveal for groups. */
+  delay?: number;
+  as?: HTMLTag;
+  class?: string;
+}
+
+const { delay = 0, as: Tag = "div", class: className } = Astro.props;
+---
+
+<Tag
+  data-reveal
+  class={className}
+  style={delay > 0 ? `--reveal-delay: ${delay}ms` : undefined}
+>
+  <slot />
+</Tag>

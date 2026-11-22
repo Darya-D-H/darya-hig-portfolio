@@ -1,7 +1,20 @@
 ---
-// The document shell every page renders inside. Phase 3.2 adds the skip
-// link, the viewport-fit=cover viewport, meta and the #main landmark.
+/**
+ * BaseLayout
+ *
+ * The document shell for every page: head, skip link, nav, mobile menu,
+ * #main and footer, with the client router. The page's own content goes
+ * inside #main through the slot. Phase 5.18 adds SEO meta.
+ *
+ * @example
+ * <BaseLayout title="Skills — Darya"><Section …>…</Section></BaseLayout>
+ */
 import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
+import Footer from "@/components/layout/Footer.astro";
+import MobileMenu from "@/components/layout/MobileMenu.astro";
+import Nav from "@/components/layout/Nav.astro";
+import SkipLink from "@/components/layout/SkipLink.astro";
 import "@/styles/global.css";
 
 interface Props {
@@ -17,15 +30,43 @@ const { title, noindex = false } = Astro.props;
 <html lang="en" class="no-js">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <script is:inline>
+      // The router copies the next page's <html class="no-js"> on every
+      // client-side navigation, so the class is removed again after each swap.
       document.documentElement.classList.remove("no-js");
+      document.addEventListener("astro:after-swap", () =>
+        document.documentElement.classList.remove("no-js"),
+      );
     </script>
     <title>{title}</title>
     {noindex && <meta name="robots" content="noindex" />}
     <Font cssVariable="--font-inter" />
+    <ClientRouter />
   </head>
-  <body>
-    <slot />
+  <body class="flex min-h-dvh flex-col">
+    <SkipLink />
+    <Nav />
+    <MobileMenu />
+    <!-- Grows so the footer sits at the bottom of a short page. -->
+    <main id="main" tabindex="-1" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>
+
+<script>
+  import { initMenu } from "@/lib/menu";
+  import { initReveal } from "@/lib/reveal";
+
+  // astro:page-load fires on the first load and after every client-side
+  // navigation; DOMContentLoaded fires only once. Both inits are idempotent.
+  document.addEventListener("astro:page-load", () => {
+    initMenu();
+    initReveal();
+  });
+</script>

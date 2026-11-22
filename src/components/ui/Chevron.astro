@@ -1,0 +1,34 @@
+---
+/**
+ * Chevron
+ *
+ * The trailing › on plain buttons and standalone links, drawn as an inline
+ * SVG so a screen reader never reads "greater than". Hidden from assistive
+ * tech; sized in em so it scales with the text beside it.
+ *
+ * @example
+ * <a href="/projects">See all projects<Chevron /></a>
+ */
+---
+
+<svg
+  aria-hidden="true"
+  class="chevron"
+  viewBox="0 0 8 14"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M1.5 1.5L6.5 7l-5 5.5"></path>
+</svg>
+
+<style>
+  .chevron {
+    flex-shrink: 0;
+    height: 0.7em;
+    width: auto;
+    margin-inline-start: 0.25em;
+  }
+</style>

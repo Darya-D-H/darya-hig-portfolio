@@ -12,20 +12,21 @@ Tailwind v4 reads its theme from a CSS-native `@theme` block, so these tokens ar
 
 ### Palette
 
-| Token                   | Value                    | Used for                                         |
-| ----------------------- | ------------------------ | ------------------------------------------------ |
-| `--color-canvas`        | `#ffffff`                | Page background, white bands, card surfaces      |
-| `--color-section`       | `#f5f5f7`                | Alternating section bands, as specified          |
-| `--color-card`          | `#ffffff`                | Card surfaces sitting on a grey band             |
-| `--color-ink`           | `#1d1d1f`                | Primary text, headings                           |
-| `--color-ink-secondary` | `#6e6e73`                | Body copy, captions, metadata                    |
-| `--color-ink-tertiary`  | `#86868b`                | De-emphasised labels, timestamps                 |
-| `--color-accent`        | `#0071e3`                | Filled buttons, focus ring                       |
-| `--color-accent-hover`  | `#0068d1`                | Filled button hover — **darker**, see note below |
-| `--color-link`          | `#0066cc`                | Text links                                       |
-| `--color-divider`       | `#d2d2d7`                | Hairline rules, card borders, timeline line      |
-| `--color-nav-bg`        | `rgba(255,255,255,0.72)` | Translucent nav background                       |
-| `--color-overlay`       | `rgba(0,0,0,0.48)`       | Lightbox and mobile-menu scrim                   |
+| Token                   | Value                    | Used for                                                  |
+| ----------------------- | ------------------------ | --------------------------------------------------------- |
+| `--color-canvas`        | `#ffffff`                | Page background, white bands, card surfaces               |
+| `--color-section`       | `#f5f5f7`                | Alternating section bands, as specified                   |
+| `--color-card`          | `#ffffff`                | Card surfaces sitting on a grey band                      |
+| `--color-ink`           | `#1d1d1f`                | Primary text, headings                                    |
+| `--color-ink-secondary` | `#6e6e73`                | Body copy, captions, metadata                             |
+| `--color-ink-tertiary`  | `#86868b`                | De-emphasised labels, timestamps                          |
+| `--color-ink-strong`    | `#000000`                | Nav link hover: "full black" (docs/03-components.md §2.3) |
+| `--color-accent`        | `#0071e3`                | Filled buttons, focus ring                                |
+| `--color-accent-hover`  | `#0068d1`                | Filled button hover — **darker**, see note below          |
+| `--color-link`          | `#0066cc`                | Text links                                                |
+| `--color-divider`       | `#d2d2d7`                | Hairline rules, card borders, timeline line               |
+| `--color-nav-bg`        | `rgba(255,255,255,0.72)` | Translucent nav background                                |
+| `--color-overlay`       | `rgba(0,0,0,0.48)`       | Lightbox and mobile-menu scrim                            |
 
 ### Why two blues
 
@@ -33,21 +34,25 @@ Tailwind v4 reads its theme from a CSS-native `@theme` block, so these tokens ar
 
 Checked against WCAG 2.2 AA (4.5:1 for normal text, 3:1 for large text and UI components):
 
-| Foreground | Background | Ratio   | Normal text | Verdict                                  |
-| ---------- | ---------- | ------- | ----------- | ---------------------------------------- |
-| `#1d1d1f`  | `#ffffff`  | 16.83:1 | pass        | Primary text                             |
-| `#1d1d1f`  | `#f5f5f7`  | 15.46:1 | pass        | Primary text on grey bands               |
-| `#6e6e73`  | `#ffffff`  | 5.07:1  | pass        | Body copy                                |
-| `#6e6e73`  | `#f5f5f7`  | 4.66:1  | pass        | Body copy on grey bands                  |
-| `#86868b`  | `#ffffff`  | 3.62:1  | **fail**    | Large text only, ≥ 24px or ≥ 19px bold   |
-| `#86868b`  | `#f5f5f7`  | 3.33:1  | **fail**    | Large text only                          |
-| `#ffffff`  | `#0071e3`  | 4.70:1  | pass        | Filled button label                      |
-| `#0071e3`  | `#ffffff`  | 4.70:1  | pass        | Accent text on white                     |
-| `#0071e3`  | `#f5f5f7`  | 4.31:1  | **fail**    | Do not use for body-size text on grey    |
-| `#ffffff`  | `#0068d1`  | 5.38:1  | pass        | Filled button label, hover               |
-| `#ffffff`  | `#0077ed`  | 4.32:1  | **fail**    | Apple's hover blue — rejected, see below |
-| `#0066cc`  | `#ffffff`  | 5.57:1  | pass        | Text links                               |
-| `#0066cc`  | `#f5f5f7`  | 5.11:1  | pass        | Text links on grey bands                 |
+| Foreground | Background | Ratio   | Normal text | Verdict                                                 |
+| ---------- | ---------- | ------- | ----------- | ------------------------------------------------------- |
+| `#1d1d1f`  | `#ffffff`  | 16.83:1 | pass        | Primary text                                            |
+| `#1d1d1f`  | `#f5f5f7`  | 15.46:1 | pass        | Primary text on grey bands                              |
+| `#6e6e73`  | `#ffffff`  | 5.07:1  | pass        | Body copy                                               |
+| `#6e6e73`  | `#f5f5f7`  | 4.66:1  | pass        | Body copy on grey bands                                 |
+| `#86868b`  | `#ffffff`  | 3.62:1  | **fail**    | Large text only, ≥ 24px or ≥ 19px bold                  |
+| `#86868b`  | `#f5f5f7`  | 3.33:1  | **fail**    | Large text only                                         |
+| `#ffffff`  | `#0071e3`  | 4.70:1  | pass        | Filled button label                                     |
+| `#0071e3`  | `#ffffff`  | 4.70:1  | pass        | Accent text on white                                    |
+| `#0071e3`  | `#f5f5f7`  | 4.31:1  | **fail**    | Do not use for body-size text on grey                   |
+| `#ffffff`  | `#0068d1`  | 5.38:1  | pass        | Filled button label, hover                              |
+| `#ffffff`  | `#0077ed`  | 4.32:1  | **fail**    | Apple's hover blue — rejected, see below                |
+| `#0066cc`  | `#ffffff`  | 5.57:1  | pass        | Text links                                              |
+| `#0066cc`  | `#f5f5f7`  | 5.11:1  | pass        | Text links on grey bands                                |
+| `#000000`  | `#ffffff`  | 21.00:1 | pass        | Nav link hover                                          |
+| `#0066cc`  | `#e6f1fc`  | 4.86:1  | pass        | Tinted button label: accent at 0.10 over white          |
+| `#0066cc`  | `#dbebfb`  | 4.58:1  | pass        | Tinted button label, hover: accent at 0.14 over white   |
+| `#0066cc`  | `#d6e8fb`  | 4.45:1  | **fail**    | Accent at 0.16, the first-draft tinted hover — rejected |
 
 Ratios computed with the WCAG 2.x relative-luminance formula; the script used is in [docs/07-test-plan.md](07-test-plan.md) so any new colour can be checked the same way.
 
@@ -69,6 +74,7 @@ Components reference the semantic name, never the raw palette entry. This is wha
 --color-text-primary    → --color-ink
 --color-text-secondary  → --color-ink-secondary
 --color-text-tertiary   → --color-ink-tertiary
+--color-text-strong     → --color-ink-strong
 --color-surface         → --color-canvas
 --color-surface-sunken  → --color-section
 --color-surface-raised  → --color-card
@@ -174,21 +180,24 @@ A `clamp()` on `vw` means a user who zooms gets nothing, because the viewport wi
 
 Base unit 4px. The scale is the subset actually needed; adding an entry requires a reason.
 
-| Token        | Value | Typical use                              |
-| ------------ | ----- | ---------------------------------------- |
-| `--space-1`  | 4px   | Icon-to-label gap                        |
-| `--space-2`  | 8px   | Tag chip padding, tight stacks           |
-| `--space-3`  | 12px  | Inside small components                  |
-| `--space-4`  | 16px  | Default gap in a stack                   |
-| `--space-5`  | 20px  | —                                        |
-| `--space-6`  | 24px  | Card inner padding, mobile               |
-| `--space-8`  | 32px  | Card inner padding, desktop; grid gutter |
-| `--space-10` | 40px  | Heading to content                       |
-| `--space-12` | 48px  | Sub-section spacing                      |
-| `--space-16` | 64px  | Section padding, mobile                  |
-| `--space-20` | 80px  | Section padding, tablet                  |
-| `--space-25` | 100px | Section padding, desktop                 |
-| `--space-32` | 128px | Hero padding, desktop                    |
+| Token            | Value | Typical use                              |
+| ---------------- | ----- | ---------------------------------------- |
+| `--space-1`      | 4px   | Icon-to-label gap                        |
+| `--space-2`      | 8px   | Tag chip padding, tight stacks           |
+| `--space-3`      | 12px  | Inside small components                  |
+| `--space-4`      | 16px  | Default gap in a stack                   |
+| `--space-5`      | 20px  | —                                        |
+| `--space-6`      | 24px  | Card inner padding, mobile               |
+| `--space-8`      | 32px  | Card inner padding, desktop; grid gutter |
+| `--space-10`     | 40px  | Heading to content                       |
+| `--space-12`     | 48px  | Sub-section spacing                      |
+| `--space-16`     | 64px  | Section padding, mobile                  |
+| `--space-20`     | 80px  | Section padding, tablet                  |
+| `--space-25`     | 100px | Section padding, desktop                 |
+| `--space-18`     | 72px  | Hero padding, mobile                     |
+| `--space-24`     | 96px  | Hero padding, tablet                     |
+| `--space-32`     | 128px | Hero padding, desktop                    |
+| `--space-gutter` | 22px  | Container side gutter, every width (§4)  |
 
 ### Section vertical rhythm
 
@@ -450,8 +459,8 @@ Responsive type sizes are applied in the base layer with media queries that reas
 The implementation adds four things the block above does not show. None of them is a new value; each exposes a documented token, or stops Tailwind from exposing something undocumented.
 
 - **`@theme static`.** Every token is emitted as a custom property on `:root` whether or not a utility uses it, so all of them can be inspected in devtools and used in `var()`.
-- **Defaults are cleared** in each namespace the design owns: `--color-*`, `--font-*`, `--text-*`, `--font-weight-*`, `--tracking-*`, `--leading-*`, `--spacing-*`, `--radius-*`, `--shadow-*`, `--breakpoint-*`, `--container-*` and `--ease-*` are each set to `initial` first. So `text-sm`, `rounded-lg`, `p-7`, `font-bold` and `tracking-tight` do not exist, and a type token's line height, weight or tracking cannot be overridden on its own.
-- **Spacing, z-index and duration aliases.** Tailwind reads spacing from `--spacing-*`, z-index from `--z-index-*` and durations from `--transition-duration-*`, so each documented token gets a one-line alias: `--spacing-4: var(--space-4)`, `--z-index-sticky: var(--z-sticky)`, `--transition-duration-fast: var(--duration-fast)`. That gives `p-4`, `z-sticky` and `duration-fast`, and only for steps on the scale.
+- **Defaults are cleared** in each namespace the design owns: `--color-*`, `--font-*`, `--text-*`, `--font-weight-*`, `--tracking-*`, `--leading-*`, `--spacing-*`, `--radius-*`, `--shadow-*`, `--breakpoint-*`, `--container-*` and `--ease-*` are each set to `initial` first. So `text-sm`, `rounded-lg`, `p-7`, `font-bold` and `tracking-tight` do not exist, and a type token's line height, weight or tracking cannot be overridden on its own. The one weight token, `--font-weight-semibold: 600`, exists for the current-page nav link, which needs weight 600 at body-small size.
+- **Spacing, z-index and duration aliases.** Tailwind reads spacing from `--spacing-*`, z-index from `--z-index-*` and durations from `--transition-duration-*`, so each documented token gets a one-line alias: `--spacing-4: var(--space-4)`, `--z-index-sticky: var(--z-sticky)`, `--transition-duration-fast: var(--duration-fast)`. That gives `p-4`, `z-sticky` and `duration-fast`, and only for steps on the scale. Two sizing tokens are exposed the same way, as `--spacing-nav` and `--spacing-touch`, so `h-nav`, `min-h-touch` and `size-touch` exist.
 - **Transition defaults.** `--default-transition-duration` is `var(--duration-fast)` and `--default-transition-timing-function` is `var(--ease-in-out)`, so a bare `transition-colors` uses the hover timing from [docs/04-motion.md](04-motion.md) §5.
 
 `npm run check:tokens` catches what the theme cannot prevent: arbitrary values (`text-[23px]`, `bg-(--x)`), bare durations and z-indexes (`duration-300`, `z-10`), and raw hex, `px` or `ms` in a component's styles.

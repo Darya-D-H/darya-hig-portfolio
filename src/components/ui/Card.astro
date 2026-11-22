@@ -1,0 +1,87 @@
+---
+/**
+ * Card
+ *
+ * A white surface with the 28px card radius. On a grey band it needs no
+ * border; on a white band it gets a hairline. An interactive card contains
+ * exactly one link marked data-card-link (normally the title): its ::after
+ * stretches over the whole card, so the card is clickable while the link's
+ * accessible name stays just the title, and the focus ring is drawn on the
+ * card. See docs/03-components.md §3.3.
+ *
+ * @example
+ * <Card interactive>
+ *   <h3><a href="/projects/x" data-card-link>Project title</a></h3>
+ *   <p>Summary</p>
+ * </Card>
+ */
+interface Props {
+  tone?: "onGrey" | "onWhite";
+  interactive?: boolean;
+  padding?: "default" | "none";
+  class?: string;
+}
+
+const {
+  tone = "onGrey",
+  interactive = false,
+  padding = "default",
+  class: className,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    "card relative rounded-card bg-surface-raised",
+    tone === "onWhite" && "border border-border-subtle",
+    padding === "default" && "p-6 lg:p-8",
+    interactive && "interactive",
+    className,
+  ]}
+>
+  <slot />
+</div>
+
+<style>
+  .interactive {
+    transition:
+      box-shadow var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .interactive :global([data-card-link])::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  /* The ring belongs to the card, not to the title text. */
+  .interactive :global([data-card-link]:focus-visible) {
+    outline: none;
+  }
+
+  .interactive:hover,
+  .interactive:has(:global([data-card-link]:focus-visible)) {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(calc(var(--space-1) / -2));
+  }
+
+  .interactive:has(:global([data-card-link]:focus-visible)) {
+    outline: var(--size-focus-ring) solid var(--color-focus);
+    outline-offset: var(--size-focus-offset);
+  }
+
+  .interactive:active {
+    transform: scale(0.995);
+  }
+
+  /* Shadow only: no lift, no press. */
+  @media (prefers-reduced-motion: reduce) {
+    .interactive:hover,
+    .interactive:active,
+    .interactive:has(:global([data-card-link]:focus-visible)) {
+      transform: none;
+    }
+  }
+</style>

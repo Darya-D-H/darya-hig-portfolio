@@ -1,0 +1,59 @@
+---
+/**
+ * Section
+ *
+ * The band primitive. Owns vertical padding and background so no page
+ * hand-rolls either. Two adjacent sections deliberately do not share their
+ * padding at the seam. See docs/03-components.md §2.1.
+ *
+ * @example
+ * <Section tone="grey" labelledBy="skills-heading">
+ *   <h2 id="skills-heading" class="text-headline">Skills</h2>
+ * </Section>
+ */
+import Container from "@/components/layout/Container.astro";
+
+interface Props {
+  tone?: "white" | "grey";
+  /** ID of the heading that names this section, for aria-labelledby. */
+  labelledBy?: string;
+  width?: "content" | "wide";
+  /** `div` for a band with no heading of its own. */
+  as?: "section" | "div";
+  padding?: "default" | "hero" | "none";
+}
+
+const {
+  tone = "white",
+  labelledBy,
+  width = "content",
+  as: Tag = "section",
+  padding = "default",
+} = Astro.props;
+
+// A <section> with no accessible name is just a <div> to assistive tech.
+if (Tag === "section" && !labelledBy) {
+  console.warn(
+    `[Section] A <section> on ${Astro.url.pathname} has no labelledBy. ` +
+      `Name it with a heading id, or use as="div".`,
+  );
+}
+
+const paddingClass = {
+  default: "py-16 md:py-20 lg:py-25",
+  hero: "py-18 md:py-24 lg:py-32",
+  none: "",
+}[padding];
+---
+
+<Tag
+  class:list={[
+    tone === "grey" ? "bg-surface-sunken" : "bg-surface",
+    paddingClass,
+  ]}
+  aria-labelledby={labelledBy}
+>
+  <Container width={width}>
+    <slot />
+  </Container>
+</Tag>

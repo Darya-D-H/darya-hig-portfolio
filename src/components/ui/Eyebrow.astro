@@ -1,0 +1,18 @@
+---
+/**
+ * Eyebrow
+ *
+ * The small coloured label above a heading. A <p>, never a heading: making
+ * it one would break the outline and demote the real heading. In
+ * --color-link rather than the accent, because eyebrows sit on grey bands.
+ * See docs/03-components.md §3.5.
+ *
+ * @example
+ * <Eyebrow>Contact</Eyebrow>
+ * <h1 class="text-title">Let's talk.</h1>
+ */
+---
+
+<p class="text-eyebrow text-link">
+  <slot />
+</p>

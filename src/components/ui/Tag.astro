@@ -1,0 +1,26 @@
+---
+/**
+ * Tag
+ *
+ * A non-interactive label chip: not a link, not a filter. Place it inside an
+ * <li> in a <ul> so the count is announced. Grey fill on a white card, white
+ * fill on a grey band. See docs/03-components.md §3.4.
+ *
+ * @example
+ * <ul class="flex flex-wrap gap-2"><li><Tag>PHP</Tag></li></ul>
+ */
+interface Props {
+  tone?: "onWhite" | "onGrey";
+}
+
+const { tone = "onWhite" } = Astro.props;
+---
+
+<span
+  class:list={[
+    "inline-block rounded-xs px-3 py-2 text-caption text-text-secondary",
+    tone === "onWhite" ? "bg-surface-sunken" : "bg-surface",
+  ]}
+>
+  <slot />
+</span>

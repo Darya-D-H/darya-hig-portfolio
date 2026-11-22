@@ -1,0 +1,18 @@
+---
+/**
+ * BackToTop
+ *
+ * A plain link to #main: no JavaScript. The glide comes from
+ * scroll-behavior: smooth in the base layer, which reduced motion turns
+ * into an instant jump. Focus lands on #main, so the next Tab starts at the
+ * top of the content. See docs/03-components.md §1.
+ *
+ * @example
+ * <BackToTop />
+ */
+import TextLink from "@/components/ui/TextLink.astro";
+---
+
+<TextLink href="#main" standalone class="text-body-sm">
+  Back to top
+</TextLink>

@@ -1,0 +1,124 @@
+---
+/**
+ * MobileMenu
+ *
+ * The full-screen menu below 735px: a scrim and a panel that slides down
+ * from the top. lib/menu.ts handles opening, the focus trap, Escape, focus
+ * return, the inert background and the scroll lock. Always in the DOM;
+ * `visibility: hidden` keeps it out of the tab order and the accessibility
+ * tree while closed. See docs/03-components.md §2.4.
+ *
+ * @example
+ * <MobileMenu />
+ */
+import { navLinks } from "@/site.config";
+import { currentState } from "@/lib/menu";
+
+const path = Astro.url.pathname;
+---
+
+<div
+  id="mobile-menu"
+  class="mobile-menu fixed inset-0 z-menu md:hidden"
+  data-mobile-menu
+  data-open="false"
+  transition:persist="mobile-menu"
+>
+  <div class="scrim absolute inset-0 bg-overlay" data-menu-scrim></div>
+  <div class="panel relative bg-surface">
+    <div class="flex h-nav items-center justify-end px-gutter">
+      <button
+        type="button"
+        class="-mr-3 flex size-touch items-center justify-center text-text-primary"
+        data-menu-close
+      >
+        <span class="sr-only">Close menu</span>
+        <svg
+          aria-hidden="true"
+          class="menu-glyph"
+          viewBox="0 0 18 18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        >
+          <path d="M4 4l10 10M14 4L4 14"></path>
+        </svg>
+      </button>
+    </div>
+    <nav aria-label="Menu" class="px-gutter">
+      <ul class="flex flex-col gap-2">
+        {navLinks.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              data-nav-link
+              aria-current={currentState(path, href)}
+              class="flex min-h-touch items-center text-subhead text-text-primary"
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<style>
+  .mobile-menu {
+    visibility: hidden;
+    transition: visibility 0s var(--duration-menu);
+  }
+
+  /*
+   * Opening is never a visibility transition: the first link must be
+   * focusable the moment the menu opens, even when reduced motion turns
+   * every transition into a near-instant one. Only closing waits for the slide.
+   */
+  .mobile-menu[data-open="true"] {
+    visibility: visible;
+    transition: none;
+  }
+
+  .panel {
+    padding-top: var(--inset-top);
+    padding-bottom: calc(var(--space-8) + var(--inset-bottom));
+    transform: translateY(-100%);
+    transition: transform var(--duration-menu) var(--ease-nav);
+  }
+
+  [data-open="true"] .panel {
+    transform: none;
+  }
+
+  .scrim {
+    opacity: 0;
+    transition: opacity var(--duration-menu) var(--ease-nav);
+  }
+
+  [data-open="true"] .scrim {
+    opacity: 1;
+  }
+
+  .menu-glyph {
+    width: var(--space-5);
+    height: var(--space-5);
+  }
+
+  [aria-current] {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /*
+   * Instant, not merely faster. Nothing in the menu transitions at all:
+   * otherwise the global reduced-motion rule makes every descendant transition its
+   * inherited visibility, and the first link is briefly unfocusable.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu,
+    .mobile-menu :global(*) {
+      transition-property: none;
+    }
+  }
+</style>
