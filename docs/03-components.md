@@ -284,7 +284,9 @@ The gallery is a grid of 2–6 thumbnails; each is a `<button>` that opens the l
 
 **Reduced motion:** no fade, no scale, no slide between images. The image simply changes.
 
-**No-JS behaviour:** without JavaScript the thumbnails are plain links to the full-size image file. Degrading to "nothing happens" is not acceptable; degrading to "you see the image" is.
+**No-JS behaviour:** without JavaScript the thumbnails are plain links to the full-size image file. Degrading to "nothing happens" is not acceptable; degrading to "you see the image" is. So the gallery is rendered as links, and `lightbox.ts` replaces each with a real `<button>` (same content, so the image's alt text names it) when it initialises.
+
+**Focus ring on the lightbox controls:** white, not the accent. The blue ring measures about 1.2:1 against the grey scrim, below the 3:1 a focus indicator needs; white measures about 3.7:1. The controls sit on the nav material, the control layer.
 
 ### 4.4 `ContactPanel`
 

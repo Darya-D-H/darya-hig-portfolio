@@ -60,13 +60,15 @@ const { title, noindex = false } = Astro.props;
 </html>
 
 <script>
+  import { initLightbox } from "@/lib/lightbox";
   import { initMenu } from "@/lib/menu";
   import { initReveal } from "@/lib/reveal";
 
   // astro:page-load fires on the first load and after every client-side
-  // navigation; DOMContentLoaded fires only once. Both inits are idempotent.
+  // navigation; DOMContentLoaded fires only once. All three are idempotent.
   document.addEventListener("astro:page-load", () => {
     initMenu();
     initReveal();
+    initLightbox();
   });
 </script>
