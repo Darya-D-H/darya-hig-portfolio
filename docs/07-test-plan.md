@@ -22,7 +22,7 @@ Runs, in order, stopping at the first failure:
 
 Nothing is committed unless this passes. CI runs the same command on every push and pull request, so local and CI results cannot diverge.
 
-E2E, accessibility, visual and Lighthouse suites are separate because they need a built site and a browser. They run on pull requests and before any release.
+E2E, accessibility, visual and Lighthouse suites are separate because they need a built site and a browser. They run on pull requests and before any release. In CI, the `e2e` job runs the full Playwright matrix, axe scans included, on every pull request and every push to `main`, beside the `verify` job.
 
 ---
 

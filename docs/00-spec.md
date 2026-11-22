@@ -184,7 +184,7 @@ darya-hig-portfolio/
 ├── tests/
 │   ├── unit/                      # Vitest
 │   └── e2e/                       # Playwright specs, including a11y scans
-├── .github/workflows/ci.yml       # verify on push and PR
+├── .github/workflows/ci.yml       # verify and e2e jobs on push to main and on PRs
 ├── LICENSE                        # MIT — covers code only; content is reserved (see README)
 ├── astro.config.mjs
 ├── tsconfig.json
