@@ -133,6 +133,7 @@ Running reduced motion as a Playwright project rather than a manual toggle is wh
 
 - Every `a`, `button` and `[role="button"]` on every page has a bounding box of at least 44 × 44 px.
 - Adjacent interactive elements are at least 8px apart.
+- Measured the way WCAG 2.5.8 allows: a link inside a sentence is exempt (its size is the line of text); a card's title link is measured by the card, which its `::after` covers; a visually hidden element is skipped, and the skip link is measured separately, when focused.
 
 **`content.spec.ts`**
 
