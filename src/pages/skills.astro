@@ -1,0 +1,15 @@
+---
+import { getCollection } from "astro:content";
+import PageHeader from "@/components/sections/PageHeader.astro";
+import SkillsGrid from "@/components/sections/SkillsGrid.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const skills = await getCollection("skills");
+---
+
+<BaseLayout title="Skills — Darya">
+  <PageHeader eyebrow="Toolkit" title="Skills">
+    TODO: One line on the languages and tools you reach for, and why.
+  </PageHeader>
+  <SkillsGrid heading="Skill categories" headingHidden categories={skills} />
+</BaseLayout>
