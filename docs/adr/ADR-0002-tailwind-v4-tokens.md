@@ -13,7 +13,7 @@ The design is specified as a set of precise values borrowed from apple.com: a 28
 Two things must be true of the implementation:
 
 1. Those values exist in exactly one place. A 28px radius repeated across nine components is nine places to miss when it changes.
-2. A size and its line-height, weight and tracking cannot be applied separately. The whole point of the scale is that 24px *always* comes with 1.1667 and .009em. If a component can set the size and forget the tracking, the scale is decorative.
+2. A size and its line-height, weight and tracking cannot be applied separately. The whole point of the scale is that 24px _always_ comes with 1.1667 and .009em. If a component can set the size and forget the tracking, the scale is decorative.
 
 Darya chose Tailwind during planning. The open question was how to hold the tokens, since Tailwind's reputation is for utility classes with arbitrary values — the opposite of a token system.
 
@@ -43,13 +43,13 @@ In v4 the theme is CSS, not a JavaScript config:
 
 That produces `rounded-card`, `bg-section`, and a `text-card-title` utility that applies **all four** typographic properties at once. It also makes every token available as a plain custom property (`var(--radius-card)`) for the rare case a utility will not do.
 
-| Dimension | Assessment |
-|---|---|
-| Complexity | Low. One CSS file; no JS config |
-| Token enforcement | Strong. The correct pairing is the easy one |
-| Build speed | Fast — v4's Oxide engine |
-| Astro integration | One Vite plugin |
-| Escape hatches | `var(--token)` in a scoped `<style>` where needed |
+| Dimension         | Assessment                                        |
+| ----------------- | ------------------------------------------------- |
+| Complexity        | Low. One CSS file; no JS config                   |
+| Token enforcement | Strong. The correct pairing is the easy one       |
+| Build speed       | Fast — v4's Oxide engine                          |
+| Astro integration | One Vite plugin                                   |
+| Escape hatches    | `var(--token)` in a scoped `<style>` where needed |
 
 **Pros**
 

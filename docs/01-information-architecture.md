@@ -44,13 +44,13 @@ Four sections, in this order. Bands alternate between white and `#f5f5f7` so eac
 
 Full-width, generous vertical padding, centred text. No image, no illustration. The restraint is the point; an Apple product page opens with one enormous sentence.
 
-| Element | Token | Placeholder content |
-|---|---|---|
-| Eyebrow | `text-eyebrow`, accent colour | `Software Engineer` |
-| Headline | `text-hero` | `I build web applications that feel considered.` |
-| Subhead | `text-body-lg`, secondary ink | `PHP on the back end, modern JavaScript and CSS on the front. Currently based in Baghdad.` *(TODO: confirm location, or remove)* |
-| Primary CTA | Button, filled pill | `View projects` → `/projects` |
-| Secondary CTA | Button, text link with chevron | `Get in touch ›` → `/contact` |
+| Element       | Token                          | Placeholder content                                                                                                              |
+| ------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| Eyebrow       | `text-eyebrow`, accent colour  | `Software Engineer`                                                                                                              |
+| Headline      | `text-hero`                    | `I build web applications that feel considered.`                                                                                 |
+| Subhead       | `text-body-lg`, secondary ink  | `PHP on the back end, modern JavaScript and CSS on the front. Currently based in Baghdad.` _(TODO: confirm location, or remove)_ |
+| Primary CTA   | Button, filled pill            | `View projects` → `/projects`                                                                                                    |
+| Secondary CTA | Button, text link with chevron | `Get in touch ›` → `/contact`                                                                                                    |
 
 **Behaviour:** the hero does not animate in on load. Content above the fold appears immediately — a fade-in on the first thing a visitor sees reads as slowness, and it hurts LCP. Everything below the fold reveals on scroll. This is a deliberate exception to the motion spec and is recorded in [docs/04-motion.md](04-motion.md).
 
@@ -58,12 +58,12 @@ Full-width, generous vertical padding, centred text. No image, no illustration. 
 
 A short self-introduction. Two columns on desktop, stacked on mobile: a section heading on the left, two or three paragraphs on the right. No portrait photo in v1 (adding one is a content decision, not a layout one — the layout reserves space for it should Darya want it later).
 
-| Element | Placeholder content |
-|---|---|
-| Heading (h2) | `About` |
-| Body, para 1 | `TODO: I'm a software engineer focused on web applications. I work mostly in PHP, and I care about the part of the stack where the interface meets the data.` |
-| Body, para 2 | `TODO: Two or three sentences on how you work, what you're drawn to, and what you're looking for.` |
-| Inline stat row *(optional, off by default)* | Reserved. Not rendered in v1. |
+| Element                                      | Placeholder content                                                                                                                                           |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Heading (h2)                                 | `About`                                                                                                                                                       |
+| Body, para 1                                 | `TODO: I'm a software engineer focused on web applications. I work mostly in PHP, and I care about the part of the stack where the interface meets the data.` |
+| Body, para 2                                 | `TODO: Two or three sentences on how you work, what you're drawn to, and what you're looking for.`                                                            |
+| Inline stat row _(optional, off by default)_ | Reserved. Not rendered in v1.                                                                                                                                 |
 
 ### 2.3 Featured projects — white band
 
@@ -87,18 +87,18 @@ This is the one piece of duplication across pages, and it is intentional: a recr
 
 ### Structure
 
-| Element | Content |
-|---|---|
+| Element                 | Content                                                                                                                           |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | Page header, white band | Eyebrow `Work`; h1 `Projects`; one-line intro: `TODO: A selection of things I've built, with notes on the decisions behind them.` |
-| Grid, `#f5f5f7` band | All six project cards |
+| Grid, `#f5f5f7` band    | All six project cards                                                                                                             |
 
 ### Grid behaviour
 
-| Viewport | Columns |
-|---|---|
-| > 1068px | 3 |
-| 735–1068px | 2 |
-| ≤ 734px | 1 |
+| Viewport   | Columns |
+| ---------- | ------- |
+| > 1068px   | 3       |
+| 735–1068px | 2       |
+| ≤ 734px    | 1       |
 
 Cards reveal on scroll in a staggered sequence, 80ms apart, row by row rather than one long cascade — a six-item cascade at 80ms each takes 480ms to finish and starts to feel like a loading spinner.
 
@@ -145,7 +145,7 @@ Generated from the `projects` collection. Content model in [docs/06-content-mode
 **Prev/next rules:**
 
 - Neighbours follow the Projects grid order (`order` ascending, drafts excluded), so the pair walks the same sequence a recruiter sees on `/projects`.
-- No wraparound. The first project shows only *Next*, the last only *Previous*. Jumping from the last project back to the first without saying so is disorienting, for the same reason the lightbox does not wrap.
+- No wraparound. The first project shows only _Next_, the last only _Previous_. Jumping from the last project back to the first without saying so is disorienting, for the same reason the lightbox does not wrap.
 - Each link shows its direction and the neighbouring project's title — never a bare arrow.
 
 ### Band rhythm
@@ -156,18 +156,18 @@ Alternating white and grey bands on a page this long becomes stripey. Instead th
 
 ## 5. Skills — `/skills`
 
-| Element | Content |
-|---|---|
-| Page header, white band | Eyebrow `Toolkit`; h1 `Skills`; one-line intro |
-| Category cards, `#f5f5f7` band | Four cards |
+| Element                        | Content                                        |
+| ------------------------------ | ---------------------------------------------- |
+| Page header, white band        | Eyebrow `Toolkit`; h1 `Skills`; one-line intro |
+| Category cards, `#f5f5f7` band | Four cards                                     |
 
 ### Categories (placeholder)
 
-| Category | Items *(TODO: Darya to confirm and expand)* |
-|---|---|
-| Backend | PHP, Laravel, MySQL, REST APIs, Composer |
-| Frontend | JavaScript, TypeScript, HTML, CSS, Astro, Tailwind CSS |
-| Tooling | Git, GitHub Actions, Vite, npm, Docker |
+| Category  | Items _(TODO: Darya to confirm and expand)_                   |
+| --------- | ------------------------------------------------------------- |
+| Backend   | PHP, Laravel, MySQL, REST APIs, Composer                      |
+| Frontend  | JavaScript, TypeScript, HTML, CSS, Astro, Tailwind CSS        |
+| Tooling   | Git, GitHub Actions, Vite, npm, Docker                        |
 | Practices | Accessibility, responsive design, design systems, code review |
 
 Each card: an h3 heading, an optional one-line description, then items as tag chips in a wrapping row.
@@ -180,10 +180,10 @@ Cards reveal on scroll, 80ms stagger.
 
 ## 6. Experience — `/experience`
 
-| Element | Content |
-|---|---|
-| Page header, white band | Eyebrow `Career`; h1 `Experience`; one-line intro |
-| Timeline, `#f5f5f7` band | One node per role, newest first |
+| Element                  | Content                                           |
+| ------------------------ | ------------------------------------------------- |
+| Page header, white band  | Eyebrow `Career`; h1 `Experience`; one-line intro |
+| Timeline, `#f5f5f7` band | One node per role, newest first                   |
 
 ### Desktop timeline (> 1068px)
 
@@ -201,7 +201,7 @@ A single vertical hairline at the left of the content column, with a dot at each
  │   └──│ Engineer                     │
 ```
 
-Deliberately *not* the alternating left/right zigzag timeline. It reads as a decorative infographic, it doubles the horizontal space needed, and it forces an awkward reading order for screen readers and for anyone scanning quickly.
+Deliberately _not_ the alternating left/right zigzag timeline. It reads as a decorative infographic, it doubles the horizontal space needed, and it forces an awkward reading order for screen readers and for anyone scanning quickly.
 
 ### Mobile (≤ 734px)
 
@@ -213,13 +213,13 @@ The timeline is an ordered list (`<ol>`), one `<li>` per role. The line and dots
 
 ### Node content
 
-| Field | Placeholder |
-|---|---|
-| Role | `TODO: Software Engineer` |
-| Company | `TODO: Company name` |
-| Dates | `TODO: 2024 — Present` |
-| Location / mode | `TODO: Remote` *(optional)* |
-| Bullets | 2–4 achievement lines, each starting with a verb and, where possible, carrying a number |
+| Field           | Placeholder                                                                             |
+| --------------- | --------------------------------------------------------------------------------------- |
+| Role            | `TODO: Software Engineer`                                                               |
+| Company         | `TODO: Company name`                                                                    |
+| Dates           | `TODO: 2024 — Present`                                                                  |
+| Location / mode | `TODO: Remote` _(optional)_                                                             |
+| Bullets         | 2–4 achievement lines, each starting with a verb and, where possible, carrying a number |
 
 ---
 
@@ -227,12 +227,12 @@ The timeline is an ordered list (`<ol>`), one `<li>` per role. The line and dots
 
 Short page, no form. One white band, vertically centred, generous padding.
 
-| Element | Content |
-|---|---|
-| Eyebrow | `Contact` |
-| Heading (h1) | `Let's talk.` |
-| Body | `TODO: The best way to reach me is email. I usually reply within a day.` |
-| Primary CTA | Filled pill button, `Email me` → `mailto:darya.dler.contact@gmail.com` |
+| Element      | Content                                                                                                                                                                            |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Eyebrow      | `Contact`                                                                                                                                                                          |
+| Heading (h1) | `Let's talk.`                                                                                                                                                                      |
+| Body         | `TODO: The best way to reach me is email. I usually reply within a day.`                                                                                                           |
+| Primary CTA  | Filled pill button, `Email me` → `mailto:darya.dler.contact@gmail.com`                                                                                                             |
 | Social links | `GitHub ›` → `https://github.com/Darya-D-H`, `LinkedIn ›` → `https://www.linkedin.com/in/darya-dler-hussein` — text links with chevrons, `rel="me noopener"`, opening in a new tab |
 
 **On the mailto link:** a plain `mailto:` href is visible to scrapers. The alternatives are worse — assembling the address in JavaScript breaks it for anyone without JS and for a crawler that should find it, and a form adds a third-party dependency for a site that has none. The address ships in plain text, and modern mail providers filter the resulting spam adequately. Recorded here so the trade-off is explicit.
@@ -249,11 +249,11 @@ Error pages lead with what happened in plain language. The HTTP status code is t
 
 One white band, centred vertically and horizontally, and the same layout as every other page, so the nav and footer are present and the visitor is never stranded. Top to bottom:
 
-| Element | Content | Style |
-|---|---|---|
-| Heading (h1) | `The page you're looking for can't be found.` | `--text-headline`, `--color-ink` |
-| Link home | `Go to Home ›` → `/` | Standalone `TextLink`: `--text-body-lg`, `--color-link` (`#0066cc`), no underline at rest, underline on hover and focus. Not a button |
-| Status code | `Error 404` | `--text-caption`, `--color-ink-secondary`, placed last with `--space-16` above it |
+| Element      | Content                                       | Style                                                                                                                                 |
+| ------------ | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Heading (h1) | `The page you're looking for can't be found.` | `--text-headline`, `--color-ink`                                                                                                      |
+| Link home    | `Go to Home ›` → `/`                          | Standalone `TextLink`: `--text-body-lg`, `--color-link` (`#0066cc`), no underline at rest, underline on hover and focus. Not a button |
+| Status code  | `Error 404`                                   | `--text-caption`, `--color-ink-secondary`, placed last with `--space-16` above it                                                     |
 
 **Why a link and not a button.** The page has one job, getting the visitor home, and a single blue link does it without competing with the message. It stands alone, with no body text around it, so the rule in [docs/03-components.md](03-components.md) §3.2 applies: colour is enough to mark it as a link, and the underline appears on hover and focus. Its hit area is padded to 44px tall even though the text is shorter.
 
@@ -273,14 +273,14 @@ Every page except Home and 404 opens with the same block: eyebrow, h1, one-line 
 
 ### Band alternation
 
-| Page | Band sequence |
-|---|---|
-| Home | white → grey → white → grey |
-| Projects | white → grey |
+| Page           | Band sequence                         |
+| -------------- | ------------------------------------- |
+| Home           | white → grey → white → grey           |
+| Projects       | white → grey                          |
 | Project detail | white throughout → grey (closing CTA) |
-| Skills | white → grey |
-| Experience | white → grey |
-| Contact | white |
+| Skills         | white → grey                          |
+| Experience     | white → grey                          |
+| Contact        | white                                 |
 
 A page never opens on grey. The nav is translucent white, and a grey band immediately beneath it muddies the blur.
 

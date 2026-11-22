@@ -14,7 +14,7 @@ One file per project at `src/content/projects/<slug>.md`. The filename is the sl
 
 ### Schema
 
-All three collections are declared in **`src/content.config.ts`** — a file at the root of `src/`, not inside `src/content/`. Astro's Content Layer moved it there, and the old `src/content/config.ts` location is no longer picked up. The content *files* still live under `src/content/<collection>/`, because the `glob` loader takes an explicit `base`.
+All three collections are declared in **`src/content.config.ts`** — a file at the root of `src/`, not inside `src/content/`. Astro's Content Layer moved it there, and the old `src/content/config.ts` location is no longer picked up. The content _files_ still live under `src/content/<collection>/`, because the `glob` loader takes an explicit `base`.
 
 ```ts
 // src/content.config.ts
@@ -27,23 +27,23 @@ const projects = defineCollection({
     z.object({
       // --- identity ---
       title: z.string().max(60),
-      summary: z.string().max(140),          // one line, used on cards and in meta description
-      order: z.number().int().positive(),    // explicit grid order, ascending
-      featured: z.boolean().default(false),  // exactly 3 must be true
+      summary: z.string().max(140), // one line, used on cards and in meta description
+      order: z.number().int().positive(), // explicit grid order, ascending
+      featured: z.boolean().default(false), // exactly 3 must be true
 
       // --- optional meta strip ---
-      year: z.string().optional(),           // "2025" or "2024—2025"
-      role: z.string().optional(),           // "Solo developer", "Frontend"
-      projectType: z.string().optional(),    // eyebrow on the detail page
+      year: z.string().optional(), // "2025" or "2024—2025"
+      role: z.string().optional(), // "Solo developer", "Frontend"
+      projectType: z.string().optional(), // eyebrow on the detail page
 
       // --- imagery ---
-      thumbnail: image(),                    // 16:10, card image
-      thumbnailAlt: z.string(),              // required: no image without a description
-      hero: image().optional(),              // detail page banner; falls back to thumbnail
+      thumbnail: image(), // 16:10, card image
+      thumbnailAlt: z.string(), // required: no image without a description
+      hero: image().optional(), // detail page banner; falls back to thumbnail
       heroAlt: z.string().optional(),
 
       // --- case study ---
-      challenge: z.string(),                 // markdown-capable prose
+      challenge: z.string(), // markdown-capable prose
       solution: z.string(),
       outcome: z.string(),
 
@@ -54,13 +54,15 @@ const projects = defineCollection({
         data: z.array(z.string()).default([]),
         tooling: z.array(z.string()).default([]),
       }),
-      tags: z.array(z.string()).max(3),      // the <=3 shown on the card
+      tags: z.array(z.string()).max(3), // the <=3 shown on the card
 
       // --- design system notes (section omitted entirely if absent) ---
       designSystem: z
         .object({
           notes: z.string(),
-          palette: z.array(z.object({ name: z.string(), value: z.string() })).optional(),
+          palette: z
+            .array(z.object({ name: z.string(), value: z.string() }))
+            .optional(),
           typeSample: z.string().optional(),
         })
         .optional(),
@@ -80,7 +82,7 @@ const projects = defineCollection({
         })
         .default({}),
 
-      draft: z.boolean().default(false),     // excluded from production builds
+      draft: z.boolean().default(false), // excluded from production builds
     }),
 });
 ```
@@ -106,8 +108,9 @@ const projects = defineCollection({
 Home shows exactly three featured projects. Rather than silently slicing the array, the Home page asserts:
 
 ```ts
-const featured = (await getCollection("projects", ({ data }) => data.featured && !data.draft))
-  .sort((a, b) => a.data.order - b.data.order);
+const featured = (
+  await getCollection("projects", ({ data }) => data.featured && !data.draft)
+).sort((a, b) => a.data.order - b.data.order);
 
 if (featured.length !== 3) {
   throw new Error(
@@ -158,8 +161,14 @@ designSystem:
     - { name: "Primary", value: "#1f6feb" }
     - { name: "Surface", value: "#ffffff" }
 gallery:
-  - { src: "../../assets/projects/invoice-tracker/list.png", alt: "Invoice list with status filters applied" }
-  - { src: "../../assets/projects/invoice-tracker/detail.png", alt: "Single invoice detail view with payment history" }
+  - {
+      src: "../../assets/projects/invoice-tracker/list.png",
+      alt: "Invoice list with status filters applied",
+    }
+  - {
+      src: "../../assets/projects/invoice-tracker/detail.png",
+      alt: "Single invoice detail view with payment history",
+    }
 links:
   live: "https://example.com"
   source: "https://github.com/example/invoice-tracker"
@@ -182,8 +191,11 @@ const experience = defineCollection({
     role: z.string(),
     company: z.string(),
     companyUrl: z.string().url().optional(),
-    startDate: z.string().regex(/^\d{4}-\d{2}$/),          // "2024-03", for <time datetime>
-    endDate: z.string().regex(/^\d{4}-\d{2}$/).optional(), // absent means current
+    startDate: z.string().regex(/^\d{4}-\d{2}$/), // "2024-03", for <time datetime>
+    endDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}$/)
+      .optional(), // absent means current
     location: z.string().optional(),
     bullets: z.array(z.string()).min(2).max(4),
     order: z.number().int().positive(),
@@ -236,11 +248,11 @@ No proficiency levels, for the reasons given in [docs/01-information-architectur
 
 ### Placeholder categories
 
-| File | Name | Items |
-|---|---|---|
-| `backend.md` | Backend | PHP, Laravel, MySQL, REST APIs, Composer |
-| `frontend.md` | Frontend | JavaScript, TypeScript, HTML, CSS, Astro, Tailwind CSS |
-| `tooling.md` | Tooling | Git, GitHub Actions, Vite, npm, Docker |
+| File           | Name      | Items                                                         |
+| -------------- | --------- | ------------------------------------------------------------- |
+| `backend.md`   | Backend   | PHP, Laravel, MySQL, REST APIs, Composer                      |
+| `frontend.md`  | Frontend  | JavaScript, TypeScript, HTML, CSS, Astro, Tailwind CSS        |
+| `tooling.md`   | Tooling   | Git, GitHub Actions, Vite, npm, Docker                        |
 | `practices.md` | Practices | Accessibility, responsive design, design systems, code review |
 
 All marked `TODO` for Darya to confirm and expand.
@@ -251,14 +263,14 @@ All marked `TODO` for Darya to confirm and expand.
 
 Six projects, varied deliberately so the templates are tested against realistic edge cases rather than six identical ideal records.
 
-| # | Slug | Featured | Shape being tested |
-|---|---|---|---|
-| 1 | `invoice-tracker` | yes | The complete record: every optional field populated, 4 gallery images, both links |
-| 2 | `component-library` | yes | Has `designSystem` with a palette and type sample — the design-system section at full size |
-| 3 | `api-gateway` | yes | **No gallery, no live link.** Source link only. Tests that the gallery and link sections vanish cleanly rather than leaving gaps |
-| 4 | `booking-widget` | no | **Long title and long summary**, at the 60- and 140-character limits, to test card clamping and heading wrap |
-| 5 | `cli-toolkit` | no | **Minimum viable record**: no `year`, no `role`, no `designSystem`, 2 gallery images. Tests that the meta strip omits itself |
-| 6 | `portfolio-site` | no | This site, self-referentially. Tests a project whose live link points to the host site itself |
+| #   | Slug                | Featured | Shape being tested                                                                                                               |
+| --- | ------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `invoice-tracker`   | yes      | The complete record: every optional field populated, 4 gallery images, both links                                                |
+| 2   | `component-library` | yes      | Has `designSystem` with a palette and type sample — the design-system section at full size                                       |
+| 3   | `api-gateway`       | yes      | **No gallery, no live link.** Source link only. Tests that the gallery and link sections vanish cleanly rather than leaving gaps |
+| 4   | `booking-widget`    | no       | **Long title and long summary**, at the 60- and 140-character limits, to test card clamping and heading wrap                     |
+| 5   | `cli-toolkit`       | no       | **Minimum viable record**: no `year`, no `role`, no `designSystem`, 2 gallery images. Tests that the meta strip omits itself     |
+| 6   | `portfolio-site`    | no       | This site, self-referentially. Tests a project whose live link points to the host site itself                                    |
 
 Projects 3 and 5 are the important ones. A set of six fully-populated records will not reveal that an absent optional section leaves 100px of empty band behind it.
 
@@ -273,23 +285,23 @@ Projects 3 and 5 are the important ones. A set of six fully-populated records wi
 
 ## 5. Content conventions
 
-| Rule | Reason |
-|---|---|
-| Slugs are lowercase kebab-case, and never change once published | A changed slug is a broken URL |
-| `summary` is one sentence, under 140 characters | It is reused as the page's meta description, where longer text is truncated by search engines |
-| `title` under 60 characters | Longer titles wrap to three lines on a card at mobile width |
-| Images live in `src/assets/projects/<slug>/`, not in `public/` | Only `src/assets` goes through `astro:assets` optimisation; anything in `public/` is served unprocessed at full size |
-| Alt text describes the content, not the medium | "Invoice list showing five overdue invoices", not "screenshot of the app" |
-| `draft: true` excludes a project from production | Lets a half-written case study be committed without publishing it |
+| Rule                                                            | Reason                                                                                                               |
+| --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Slugs are lowercase kebab-case, and never change once published | A changed slug is a broken URL                                                                                       |
+| `summary` is one sentence, under 140 characters                 | It is reused as the page's meta description, where longer text is truncated by search engines                        |
+| `title` under 60 characters                                     | Longer titles wrap to three lines on a card at mobile width                                                          |
+| Images live in `src/assets/projects/<slug>/`, not in `public/`  | Only `src/assets` goes through `astro:assets` optimisation; anything in `public/` is served unprocessed at full size |
+| Alt text describes the content, not the medium                  | "Invoice list showing five overdue invoices", not "screenshot of the app"                                            |
+| `draft: true` excludes a project from production                | Lets a half-written case study be committed without publishing it                                                    |
 
 ### Where SEO fields come from
 
-| Meta | Source |
-|---|---|
-| `<title>` | `title` + ` — Darya` |
-| `meta description` | `summary` |
-| `og:title` / `og:description` | Same |
-| `og:image` | `hero` if present, else `thumbnail`, else the shared site image |
-| canonical | Built from the site URL and the slug |
+| Meta                          | Source                                                          |
+| ----------------------------- | --------------------------------------------------------------- |
+| `<title>`                     | `title` + ` — Darya`                                            |
+| `meta description`            | `summary`                                                       |
+| `og:title` / `og:description` | Same                                                            |
+| `og:image`                    | `hero` if present, else `thumbnail`, else the shared site image |
+| canonical                     | Built from the site URL and the slug                            |
 
 All derived, none hand-written per page, so they cannot drift out of sync with the content.

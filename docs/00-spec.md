@@ -49,20 +49,20 @@ These were confirmed during planning. If any is wrong, the spec changes before c
 
 ## 3. Tech stack
 
-| Layer | Choice | Version | Rationale |
-|---|---|---|---|
-| Framework | Astro | 7.x | Ships zero JavaScript by default, static output, components, content collections, built-in view transitions. See [ADR-0001](adr/ADR-0001-astro-as-framework.md) |
-| Styling | Tailwind CSS | 4.x via `@tailwindcss/vite` | Tokens live in a CSS-native `@theme` block. See [ADR-0002](adr/ADR-0002-tailwind-v4-tokens.md) |
-| Language | TypeScript | 6.0.x, strict mode | Typed content schemas and component props. Pinned below 7 because `@astrojs/check` and `typescript-eslint` do not support TypeScript 7 yet |
-| Content | Astro content collections | built in | One Markdown file per project, validated by a Zod schema. See [ADR-0004](adr/ADR-0004-project-detail-pages-via-content-collections.md) |
-| Images | `astro:assets` + `sharp` | 0.35.x | Automatic responsive `srcset`, AVIF/WebP, intrinsic sizing to prevent layout shift |
-| Fallback font | Inter via Astro's Fonts API (`fontProviders.npm()`) + `@fontsource-variable/inter` | 5.3.x | Served from this site to visitors without SF Pro; Apple visitors never download it. Never preloaded. See [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md) |
-| Interactivity | Vanilla TypeScript | — | Mobile menu, scroll reveal, lightbox. No React, Vue or Svelte island is needed |
-| Lint | ESLint + `eslint-plugin-astro` + `eslint-plugin-jsx-a11y` | latest | Catches a11y mistakes in markup |
-| Format | Prettier + `prettier-plugin-astro` + `prettier-plugin-tailwindcss` | latest | Consistent class ordering |
-| Unit tests | Vitest | latest | For the few pure functions (slug helpers, reveal utilities) |
-| E2E / a11y | Playwright + `@axe-core/playwright` | latest | Keyboard paths, menu behaviour, automated a11y scan per page |
-| Sitemap | `@astrojs/sitemap` | 3.x | SEO |
+| Layer         | Choice                                                                             | Version                     | Rationale                                                                                                                                                            |
+| ------------- | ---------------------------------------------------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework     | Astro                                                                              | 7.x                         | Ships zero JavaScript by default, static output, components, content collections, built-in view transitions. See [ADR-0001](adr/ADR-0001-astro-as-framework.md)      |
+| Styling       | Tailwind CSS                                                                       | 4.x via `@tailwindcss/vite` | Tokens live in a CSS-native `@theme` block. See [ADR-0002](adr/ADR-0002-tailwind-v4-tokens.md)                                                                       |
+| Language      | TypeScript                                                                         | 6.0.x, strict mode          | Typed content schemas and component props. Pinned below 7 because `@astrojs/check` and `typescript-eslint` do not support TypeScript 7 yet                           |
+| Content       | Astro content collections                                                          | built in                    | One Markdown file per project, validated by a Zod schema. See [ADR-0004](adr/ADR-0004-project-detail-pages-via-content-collections.md)                               |
+| Images        | `astro:assets` + `sharp`                                                           | 0.35.x                      | Automatic responsive `srcset`, AVIF/WebP, intrinsic sizing to prevent layout shift                                                                                   |
+| Fallback font | Inter via Astro's Fonts API (`fontProviders.npm()`) + `@fontsource-variable/inter` | 5.3.x                       | Served from this site to visitors without SF Pro; Apple visitors never download it. Never preloaded. See [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md) |
+| Interactivity | Vanilla TypeScript                                                                 | —                           | Mobile menu, scroll reveal, lightbox. No React, Vue or Svelte island is needed                                                                                       |
+| Lint          | ESLint + `eslint-plugin-astro` + `eslint-plugin-jsx-a11y`                          | latest                      | Catches a11y mistakes in markup                                                                                                                                      |
+| Format        | Prettier + `prettier-plugin-astro` + `prettier-plugin-tailwindcss`                 | latest                      | Consistent class ordering                                                                                                                                            |
+| Unit tests    | Vitest                                                                             | latest                      | For the few pure functions (slug helpers, reveal utilities)                                                                                                          |
+| E2E / a11y    | Playwright + `@axe-core/playwright`                                                | latest                      | Keyboard paths, menu behaviour, automated a11y scan per page                                                                                                         |
+| Sitemap       | `@astrojs/sitemap`                                                                 | 3.x                         | SEO                                                                                                                                                                  |
 
 **Environment requirement:** Astro 7 requires Node.js 22.23.4 or newer. The repo pins this in `package.json` `engines` (`>=22.23.4`, Astro's own floor) and in `.nvmrc` (`22`).
 
@@ -74,12 +74,12 @@ Older browsers are not blocked. They get a page that works and reads correctly, 
 
 Features with a defined fallback rather than an assumption of support:
 
-| Feature | Without it |
-|---|---|
-| `backdrop-filter` (nav material) | Opaque nav background via `@supports` — [docs/02-design-tokens.md](02-design-tokens.md) |
-| View Transition API | `<ClientRouter />` uses its built-in fallback; navigation still works |
-| `IntersectionObserver` | Every reveal element is shown immediately — [docs/04-motion.md](04-motion.md) |
-| JavaScript entirely | All content visible; lightbox thumbnails link to the full image; mobile menu falls back to a plain link list |
+| Feature                          | Without it                                                                                                   |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `backdrop-filter` (nav material) | Opaque nav background via `@supports` — [docs/02-design-tokens.md](02-design-tokens.md)                      |
+| View Transition API              | `<ClientRouter />` uses its built-in fallback; navigation still works                                        |
+| `IntersectionObserver`           | Every reveal element is shown immediately — [docs/04-motion.md](04-motion.md)                                |
+| JavaScript entirely              | All content visible; lightbox thumbnails link to the full image; mobile menu falls back to a plain link list |
 
 ### Astro 7 notes that affect how we write code
 
@@ -226,22 +226,22 @@ const { heading, categories, tone = "grey" } = Astro.props;
   </h2>
 
   <ul class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-    {
-      categories.map((category, index) => (
-        <li>
-          <Reveal delay={index * 80}>
-            <Card>
-              <h3 class="text-card-title text-ink">{category.name}</h3>
-              <ul class="mt-4 flex flex-wrap gap-2">
-                {category.items.map((item) => (
-                  <li><Tag>{item}</Tag></li>
-                ))}
-              </ul>
-            </Card>
-          </Reveal>
-        </li>
-      ))
-    }
+    {categories.map((category, index) => (
+      <li>
+        <Reveal delay={index * 80}>
+          <Card>
+            <h3 class="text-card-title text-ink">{category.name}</h3>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {category.items.map((item) => (
+                <li>
+                  <Tag>{item}</Tag>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </Reveal>
+      </li>
+    ))}
   </ul>
 </Section>
 ```
@@ -264,16 +264,16 @@ const { heading, categories, tone = "grey" } = Astro.props;
 
 Full detail in [docs/07-test-plan.md](07-test-plan.md). Summary:
 
-| Level | Tool | Lives in | Covers |
-|---|---|---|---|
-| Types | `astro check`, `tsc` | — | Props, content schema conformance |
-| Lint | ESLint | — | Code smells, markup a11y rules |
-| Unit | Vitest | `tests/unit/` | Pure helpers: slug formatting, reveal threshold maths, SEO string building |
-| Component behaviour | Playwright | `tests/e2e/` | Mobile menu open/close/focus trap, lightbox keyboard handling, reveal fires once |
-| Accessibility | Playwright + axe-core | `tests/e2e/a11y.spec.ts` | Automated scan on all 6 page types, tagged `@a11y` |
-| Visual | Playwright screenshots | `tests/e2e/visual.spec.ts` | Each page at 1440, 1068, 734, 375 widths |
-| Performance | Lighthouse CI | CI | Budgets from the spec below |
-| Manual | Checklist | `docs/07-test-plan.md` | Real-device Safari iOS, keyboard-only pass, VoiceOver pass, reduced-motion pass |
+| Level               | Tool                   | Lives in                   | Covers                                                                           |
+| ------------------- | ---------------------- | -------------------------- | -------------------------------------------------------------------------------- |
+| Types               | `astro check`, `tsc`   | —                          | Props, content schema conformance                                                |
+| Lint                | ESLint                 | —                          | Code smells, markup a11y rules                                                   |
+| Unit                | Vitest                 | `tests/unit/`              | Pure helpers: slug formatting, reveal threshold maths, SEO string building       |
+| Component behaviour | Playwright             | `tests/e2e/`               | Mobile menu open/close/focus trap, lightbox keyboard handling, reveal fires once |
+| Accessibility       | Playwright + axe-core  | `tests/e2e/a11y.spec.ts`   | Automated scan on all 6 page types, tagged `@a11y`                               |
+| Visual              | Playwright screenshots | `tests/e2e/visual.spec.ts` | Each page at 1440, 1068, 734, 375 widths                                         |
+| Performance         | Lighthouse CI          | CI                         | Budgets from the spec below                                                      |
+| Manual              | Checklist              | `docs/07-test-plan.md`     | Real-device Safari iOS, keyboard-only pass, VoiceOver pass, reduced-motion pass  |
 
 **Coverage expectation:** there is very little pure logic in a static site, so a line-coverage percentage would be a vanity metric. Instead the rule is: every module in `src/lib/` has unit tests for its edge cases, and every interactive component has an E2E test for its keyboard path.
 
@@ -281,15 +281,15 @@ Full detail in [docs/07-test-plan.md](07-test-plan.md). Summary:
 
 Measured by Lighthouse CI on the mobile profile against the built site:
 
-| Metric | Budget |
-|---|---|
-| Performance score | ≥ 95 |
-| Accessibility score | 100 |
-| Best practices | ≥ 95 |
-| SEO | ≥ 95 |
-| LCP | < 2.0s |
-| CLS | < 0.05 |
-| Total JS shipped (gzipped) | < 15 KB |
+| Metric                     | Budget                    |
+| -------------------------- | ------------------------- |
+| Performance score          | ≥ 95                      |
+| Accessibility score        | 100                       |
+| Best practices             | ≥ 95                      |
+| SEO                        | ≥ 95                      |
+| LCP                        | < 2.0s                    |
+| CLS                        | < 0.05                    |
+| Total JS shipped (gzipped) | < 15 KB                   |
 | Largest single page weight | < 500 KB including images |
 
 A page that cannot hit the JS budget is a design problem, not a budget problem.
@@ -352,18 +352,18 @@ The build is done when all of these are true and demonstrable:
 
 These do not block the documentation phase, but need answers before the phases they affect.
 
-| # | Question | Blocks | Default if unanswered |
-|---|---|---|---|
-| 1 | Which host? | Phase 7, deployment | Build stays host-agnostic; nothing is deployed |
-| 2 | Custom domain, or a platform subdomain? | Phase 7 | Platform subdomain |
+| #   | Question                                | Blocks              | Default if unanswered                          |
+| --- | --------------------------------------- | ------------------- | ---------------------------------------------- |
+| 1   | Which host?                             | Phase 7, deployment | Build stays host-agnostic; nothing is deployed |
+| 2   | Custom domain, or a platform subdomain? | Phase 7             | Platform subdomain                             |
 
 ### Resolved
 
-| # | Question | Decision | Recorded in |
-|---|---|---|---|
-| 3 | GitHub, LinkedIn and email | `https://github.com/Darya-D-H` and `https://www.linkedin.com/in/darya-dler-hussein`, plus email `darya.dler.contact@gmail.com`, all held in `src/site.config.ts` (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §7 |
-| 4 | Non-Apple fallback typeface | Self-host Inter, loaded only where SF Pro is unavailable, never preloaded (2026-11-21) | [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md), [docs/02-design-tokens.md](02-design-tokens.md) §2 |
-| 5 | Prev/next on project detail pages | Yes, following grid order, no wraparound (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §4, [docs/03-components.md](03-components.md) §4.5 |
-| 7 | Browser support | Last two major versions of Safari, iOS Safari, Chrome, Edge, Firefox (2026-11-21) | §3 above |
-| 6 | Error page copy | Plain-language message as the h1, a blue `Go to Home ›` text link (not a button), and the status code small in secondary ink at the bottom (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §8 |
-| 8 | Repository licence | MIT for code; written content and images all rights reserved (2026-11-21) | `LICENSE`, `README.md` |
+| #   | Question                          | Decision                                                                                                                                                                      | Recorded in                                                                                                              |
+| --- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| 3   | GitHub, LinkedIn and email        | `https://github.com/Darya-D-H` and `https://www.linkedin.com/in/darya-dler-hussein`, plus email `darya.dler.contact@gmail.com`, all held in `src/site.config.ts` (2026-11-21) | [docs/01-information-architecture.md](01-information-architecture.md) §7                                                 |
+| 4   | Non-Apple fallback typeface       | Self-host Inter, loaded only where SF Pro is unavailable, never preloaded (2026-11-21)                                                                                        | [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md), [docs/02-design-tokens.md](02-design-tokens.md) §2          |
+| 5   | Prev/next on project detail pages | Yes, following grid order, no wraparound (2026-11-21)                                                                                                                         | [docs/01-information-architecture.md](01-information-architecture.md) §4, [docs/03-components.md](03-components.md) §4.5 |
+| 7   | Browser support                   | Last two major versions of Safari, iOS Safari, Chrome, Edge, Firefox (2026-11-21)                                                                                             | §3 above                                                                                                                 |
+| 6   | Error page copy                   | Plain-language message as the h1, a blue `Go to Home ›` text link (not a button), and the status code small in secondary ink at the bottom (2026-11-21)                       | [docs/01-information-architecture.md](01-information-architecture.md) §8                                                 |
+| 8   | Repository licence                | MIT for code; written content and images all rights reserved (2026-11-21)                                                                                                     | `LICENSE`, `README.md`                                                                                                   |
