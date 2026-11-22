@@ -43,7 +43,7 @@ Two small scripts, because these are project-specific rules that no off-the-shel
 
 **`npm run check:tokens`** — greps the component tree for Tailwind arbitrary-value syntax (`text-[`, `p-[`, `bg-[#`, `duration-[`, `rounded-[`) and fails if any is found. This is the mechanical enforcement of the no-arbitrary-values rule from [ADR-0002](adr/ADR-0002-tailwind-v4-tokens.md); without it the rule depends entirely on a human noticing.
 
-**`npm run check:todo`** — fails when `TODO:` appears in `src/content/` or `src/pages/` **and** the `--prod` flag is set. Placeholder copy is meant to exist during the build phase and never to ship. Part of the release checklist, not of `verify`.
+**`npm run check:todo`** — fails when `TODO:` appears in `src/content/` or `src/pages/` **and** the `--prod` flag is set. Without the flag it lists every placeholder by file and line and passes. Placeholder copy is meant to exist during the build phase and never to ship. Part of the release checklist, not of `verify`. `npm run check:todo --prod` hands the flag to npm rather than the script; the script reads it from npm's `npm_config_prod` as well, so that form and `npm run check:todo -- --prod` both work.
 
 ---
 
