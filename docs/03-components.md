@@ -76,7 +76,7 @@ Sticky translucent bar, 44px tall.
 **Structure**
 
 ```html
-<header class="z-sticky sticky top-0">
+<header class="sticky top-0 z-sticky">
   <nav aria-label="Main">
     <a href="/">Darya</a>
     <!-- wordmark, links home -->
@@ -351,7 +351,7 @@ The body of an HTTP error page. Content rules and copy are in [docs/01-informati
 ```html
 <section aria-labelledby="error-title" class="error-page">
   <h1 id="error-title">The page you're looking for can't be found.</h1>
-  <a class="text-link text-link--standalone" href="/"
+  <a class="text-link--standalone text-link" href="/"
     >Go to Home<span aria-hidden="true"> ›</span></a
   >
   <p class="error-code">Error 404</p>

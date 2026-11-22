@@ -1,1 +1,373 @@
 @import "tailwindcss";
+
+/*
+ * Design tokens. docs/02-design-tokens.md is the source of truth: a token is
+ * added there and here in the same commit, and a value is never changed
+ * without asking first.
+ *
+ * `static` emits every token as a custom property on :root, used or not, so
+ * each one is inspectable in devtools and available to var() in the rare
+ * scoped <style> that needs it.
+ */
+@theme static {
+  /*
+   * Clear Tailwind's defaults in every namespace the design owns, so only
+   * documented tokens produce utilities. `text-sm`, `rounded-lg`, `p-7` and
+   * `tracking-tight` do not exist here, and a type token's size, line height,
+   * weight and tracking cannot be overridden piecemeal.
+   */
+  --color-*: initial;
+  --font-*: initial;
+  --text-*: initial;
+  --font-weight-*: initial;
+  --tracking-*: initial;
+  --leading-*: initial;
+  --spacing-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --breakpoint-*: initial;
+  --container-*: initial;
+  --ease-*: initial;
+
+  /* ---- colour: palette (§1) ---- */
+  --color-canvas: #ffffff;
+  --color-section: #f5f5f7;
+  --color-card: #ffffff;
+  --color-ink: #1d1d1f;
+  --color-ink-secondary: #6e6e73;
+  --color-ink-tertiary: #86868b;
+  --color-accent: #0071e3;
+  --color-accent-hover: #0068d1;
+  --color-link: #0066cc;
+  --color-divider: #d2d2d7;
+  --color-nav-bg: rgb(255 255 255 / 0.72);
+  --color-nav-bg-fallback: rgb(255 255 255 / 0.96);
+  --color-overlay: rgb(0 0 0 / 0.48);
+
+  /* ---- colour: semantic aliases (§1). Components use these. ---- */
+  --color-text-primary: var(--color-ink);
+  --color-text-secondary: var(--color-ink-secondary);
+  --color-text-tertiary: var(--color-ink-tertiary);
+  --color-surface: var(--color-canvas);
+  --color-surface-sunken: var(--color-section);
+  --color-surface-raised: var(--color-card);
+  --color-border-subtle: var(--color-divider);
+  --color-focus: var(--color-accent);
+
+  /* ---- type: families (§2). Order is load-bearing; see the doc. ---- */
+  /* --font-inter is defined by Astro's <Font /> component in BaseLayout. */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-mono:
+    ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /*
+   * ---- type: scale (§2) ----
+   * Mobile-first: these are the ≤734px values. The md and lg overrides are in
+   * the base layer below, and reassign the same properties.
+   */
+  --text-hero: 2.5rem; /* 40px */
+  --text-hero--line-height: 1.1;
+  --text-hero--font-weight: 600;
+  --text-hero--letter-spacing: 0em;
+
+  --text-title: 2rem; /* 32px */
+  --text-title--line-height: 1.125;
+  --text-title--font-weight: 600;
+  --text-title--letter-spacing: 0.004em;
+
+  --text-headline: 1.75rem; /* 28px */
+  --text-headline--line-height: 1.1428;
+  --text-headline--font-weight: 600;
+  --text-headline--letter-spacing: 0.007em;
+
+  --text-subhead: 1.3125rem; /* 21px */
+  --text-subhead--line-height: 1.1905;
+  --text-subhead--font-weight: 600;
+  --text-subhead--letter-spacing: 0.011em;
+
+  --text-card-title: 1.1875rem; /* 19px */
+  --text-card-title--line-height: 1.2105;
+  --text-card-title--font-weight: 600;
+  --text-card-title--letter-spacing: 0.012em;
+
+  --text-body-lg: 1.0625rem; /* 17px */
+  --text-body-lg--line-height: 1.4706;
+  --text-body-lg--font-weight: 400;
+  --text-body-lg--letter-spacing: -0.022em;
+
+  --text-body: 1.0625rem; /* 17px */
+  --text-body--line-height: 1.4706;
+  --text-body--font-weight: 400;
+  --text-body--letter-spacing: -0.022em;
+
+  --text-body-sm: 0.875rem; /* 14px */
+  --text-body-sm--line-height: 1.4286;
+  --text-body-sm--font-weight: 400;
+  --text-body-sm--letter-spacing: -0.016em;
+
+  --text-caption: 0.75rem; /* 12px */
+  --text-caption--line-height: 1.3334;
+  --text-caption--font-weight: 400;
+  --text-caption--letter-spacing: -0.01em;
+
+  --text-eyebrow: 1.0625rem; /* 17px */
+  --text-eyebrow--line-height: 1.2353;
+  --text-eyebrow--font-weight: 600;
+  --text-eyebrow--letter-spacing: 0.012em;
+
+  /* ---- spacing (§3) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-25: 100px;
+  --space-32: 128px;
+
+  /* Tailwind mapping: p-4, gap-8, mt-12 and so on, for scale steps only. */
+  --spacing-0: 0px;
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+  --spacing-10: var(--space-10);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+  --spacing-20: var(--space-20);
+  --spacing-25: var(--space-25);
+  --spacing-32: var(--space-32);
+
+  /* ---- layout: containers and breakpoints (§4) ---- */
+  --container-content: 980px;
+  --container-content-md: 692px;
+  --container-wide: 1280px;
+
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 735px;
+  --breakpoint-lg: 1069px;
+  --breakpoint-xl: 1441px;
+
+  /* ---- layout: z-index ladder (§4) ---- */
+  --z-base: 0;
+  --z-sticky: 100;
+  --z-menu: 200;
+  --z-overlay: 300;
+  --z-lightbox: 400;
+  --z-skip-link: 500;
+
+  /* Tailwind mapping: z-sticky, z-menu and so on. */
+  --z-index-base: var(--z-base);
+  --z-index-sticky: var(--z-sticky);
+  --z-index-menu: var(--z-menu);
+  --z-index-overlay: var(--z-overlay);
+  --z-index-lightbox: var(--z-lightbox);
+  --z-index-skip-link: var(--z-skip-link);
+
+  /* ---- radius (§5) ---- */
+  --radius-card: 28px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
+  --radius-pill: 980px;
+
+  /* ---- elevation (§6) ---- */
+  --shadow-none: none;
+  --shadow-card-hover: 0 4px 24px rgb(0 0 0 / 0.08);
+  --shadow-nav: 0 1px 0 rgb(0 0 0 / 0.06);
+  --shadow-lightbox: 0 24px 64px rgb(0 0 0 / 0.24);
+
+  /* ---- motion (§8, docs/04-motion.md) ---- */
+  --duration-instant: 100ms;
+  --duration-fast: 200ms;
+  --duration-base: 300ms;
+  --duration-menu: 400ms;
+  --duration-reveal: 600ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-nav: cubic-bezier(0.32, 0.08, 0.24, 1);
+
+  --reveal-distance: 24px;
+  --reveal-stagger: 80ms;
+
+  /* Tailwind mapping: duration-fast and so on, and the default for a bare
+     `transition` / `transition-colors` class. */
+  --transition-duration-instant: var(--duration-instant);
+  --transition-duration-fast: var(--duration-fast);
+  --transition-duration-base: var(--duration-base);
+  --transition-duration-menu: var(--duration-menu);
+  --transition-duration-reveal: var(--duration-reveal);
+  --default-transition-duration: var(--duration-fast);
+  --default-transition-timing-function: var(--ease-in-out);
+
+  /* ---- sizing (§9) ---- */
+  --size-nav-height: 44px;
+  --size-touch-min: 44px;
+  --size-focus-ring: 2px;
+  --size-focus-offset: 2px;
+  --size-hairline: 1px;
+}
+
+@layer base {
+  /*
+   * Tokens that must not sit in @theme, because their names fall in a
+   * Tailwind namespace that expects a different kind of value: --blur-* is a
+   * single length, and --inset-* feeds the inset utilities.
+   */
+  :root {
+    /* materials (§7) */
+    --blur-nav: saturate(180%) blur(20px);
+    --inset-top: env(safe-area-inset-top, 0px);
+    --inset-bottom: env(safe-area-inset-bottom, 0px);
+
+    /* Responsive type (§2): the 735–1068px column. */
+    @variant md {
+      --text-hero: 3rem; /* 48px */
+      --text-hero--line-height: 1.0833;
+      --text-hero--letter-spacing: -0.003em;
+
+      --text-title: 2.5rem; /* 40px */
+      --text-title--line-height: 1.1;
+      --text-title--letter-spacing: 0em;
+
+      --text-headline: 2rem; /* 32px */
+      --text-headline--line-height: 1.125;
+      --text-headline--letter-spacing: 0.004em;
+
+      --text-subhead: 1.5rem; /* 24px */
+      --text-subhead--line-height: 1.1667;
+      --text-subhead--letter-spacing: 0.009em;
+
+      --text-card-title: 1.3125rem; /* 21px */
+      --text-card-title--line-height: 1.1905;
+      --text-card-title--letter-spacing: 0.011em;
+
+      --text-body-lg: 1.1875rem; /* 19px */
+      --text-body-lg--line-height: 1.4211;
+      --text-body-lg--letter-spacing: 0.012em;
+    }
+
+    /* Responsive type (§2): the >1068px column. */
+    @variant lg {
+      --text-hero: 3.5rem; /* 56px */
+      --text-hero--line-height: 1.0714;
+      --text-hero--letter-spacing: -0.005em;
+
+      --text-title: 3rem; /* 48px */
+      --text-title--line-height: 1.0833;
+      --text-title--letter-spacing: -0.003em;
+
+      --text-headline: 2.5rem; /* 40px */
+      --text-headline--line-height: 1.1;
+      --text-headline--letter-spacing: 0em;
+
+      --text-subhead: 1.75rem; /* 28px */
+      --text-subhead--line-height: 1.1428;
+      --text-subhead--letter-spacing: 0.007em;
+
+      --text-card-title: 1.5rem; /* 24px */
+      --text-card-title--line-height: 1.1667;
+      --text-card-title--letter-spacing: 0.009em;
+
+      --text-body-lg: 1.3125rem; /* 21px */
+      --text-body-lg--line-height: 1.381;
+      --text-body-lg--letter-spacing: 0.011em;
+
+      --text-eyebrow: 1.1875rem; /* 19px */
+      --text-eyebrow--line-height: 1.2105;
+    }
+  }
+
+  /* The root font-size is never set, so the reader's default size wins. */
+  html {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+  }
+
+  body {
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-weight: var(--text-body--font-weight);
+    letter-spacing: var(--text-body--letter-spacing);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
+
+  /*
+   * WCAG 2.4.11 Focus Not Obscured: keep anything the browser scrolls to, by
+   * fragment link or by keyboard focus, clear of the 44px sticky nav.
+   */
+  :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    [id],
+    a[href],
+    button,
+    input,
+    select,
+    textarea,
+    summary,
+    [tabindex]
+  ) {
+    scroll-margin-top: calc(var(--size-nav-height) + var(--space-4));
+  }
+
+  /*
+   * Every element carries the focus colour before it is focused, so a
+   * transition-colors class can never fade the ring in: only outline-style
+   * changes on focus, and that is discrete. The ring appears instantly.
+   */
+  :where(*) {
+    outline-color: var(--color-focus);
+  }
+
+  :focus-visible {
+    outline-width: var(--size-focus-ring);
+    outline-style: solid;
+    outline-offset: var(--size-focus-offset);
+  }
+
+  /* Content is never hidden behind a script (docs/04-motion.md §3). */
+  .no-js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /*
+   * The one place !important is allowed: a reader's motion preference must
+   * win over every component's own style (docs/04-motion.md §6).
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
