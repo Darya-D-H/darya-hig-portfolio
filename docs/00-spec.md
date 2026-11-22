@@ -225,7 +225,7 @@ const { heading, categories, tone = "grey" } = Astro.props;
 ---
 
 <Section tone={tone} labelledBy="skills-heading">
-  <h2 id="skills-heading" class="text-headline text-ink">
+  <h2 id="skills-heading" class="text-headline text-text-primary">
     {heading}
   </h2>
 
@@ -234,7 +234,7 @@ const { heading, categories, tone = "grey" } = Astro.props;
       <li>
         <Reveal delay={index * 80}>
           <Card>
-            <h3 class="text-card-title text-ink">{category.name}</h3>
+            <h3 class="text-card-title text-text-primary">{category.name}</h3>
             <ul class="mt-4 flex flex-wrap gap-2">
               {category.items.map((item) => (
                 <li>
@@ -255,7 +255,7 @@ const { heading, categories, tone = "grey" } = Astro.props;
 - **Components:** `PascalCase.astro`. One component per file. Props declared as a named `interface Props` with a doc comment on anything non-obvious.
 - **Modules:** `camelCase.ts`. Named exports only; no default exports outside of `.astro` pages.
 - **Types:** `PascalCase`. Content types are inferred from the Zod schema and re-exported, never hand-duplicated.
-- **CSS classes:** Tailwind utilities in markup. Semantic token names (`text-headline`, `bg-section`, `rounded-card`) rather than raw values. A raw value such as `text-[23px]` in a component is a bug: it means a token is missing.
+- **CSS classes:** Tailwind utilities in markup. Semantic token names (`text-headline`, `bg-surface-sunken`, `rounded-card`) rather than raw values. A raw value such as `text-[23px]` in a component is a bug: it means a token is missing.
 - **Order of Tailwind classes:** enforced by `prettier-plugin-tailwindcss`. Never hand-sort.
 - **Paths:** `@/` alias for `src/`. No `../../..` chains.
 - **Accessibility in markup:** every section has an accessible name; every interactive element is a real `<button>` or `<a>`; lists of things are real lists.
