@@ -1,0 +1,71 @@
+---
+/**
+ * ProjectPager
+ *
+ * Previous / next links at the end of a project page, in grid order with no
+ * wraparound. Each link says its direction and the neighbour's title, never
+ * a bare arrow, and its whole tile is the target. Next stays in the right
+ * column even when there is no Previous. Renders nothing for a project with
+ * no neighbours. See docs/03-components.md §4.5.
+ *
+ * @example
+ * <ProjectPager prev={adjacent.prev} next={adjacent.next} />
+ */
+import Chevron from "@/components/ui/Chevron.astro";
+import type { Neighbour } from "@/lib/projects";
+
+interface Props {
+  prev?: Neighbour;
+  next?: Neighbour;
+}
+
+const { prev, next } = Astro.props;
+---
+
+{(prev || next) && (
+  <nav aria-label="More projects" class="grid grid-cols-1 gap-6 md:grid-cols-2">
+    {prev && (
+      <a href={`/projects/${prev.slug}`} rel="prev" class="pager-link">
+        <span class="flex items-center text-caption text-text-secondary">
+          <Chevron direction="back" />
+          Previous project
+        </span>
+        <span class="pager-title mt-1 block text-body text-link">
+          {prev.title}
+        </span>
+      </a>
+    )}
+    {next && (
+      <a
+        href={`/projects/${next.slug}`}
+        rel="next"
+        class="pager-link text-right md:col-start-2"
+      >
+        <span class="flex items-center justify-end text-caption text-text-secondary">
+          Next project
+          <Chevron />
+        </span>
+        <span class="pager-title mt-1 block text-body text-link">
+          {next.title}
+        </span>
+      </a>
+    )}
+  </nav>
+)}
+
+<style>
+  .pager-link {
+    display: block;
+    min-height: var(--size-touch-min);
+    padding-block: var(--space-3);
+  }
+
+  .pager-title {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .pager-link:hover .pager-title,
+  .pager-link:focus-visible .pager-title {
+    text-decoration-line: underline;
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import ProjectLayout from "@/layouts/ProjectLayout.astro";
+import { getAdjacent, sortProjects } from "@/lib/projects";
+
+export async function getStaticPaths() {
+  const all = await getCollection("projects");
+  const published = sortProjects(all, { includeDrafts: import.meta.env.DEV });
+  return published.map((project) => ({
+    params: { slug: project.id },
+    // A draft (dev only) has no place in the published order.
+    props: {
+      project,
+      adjacent: project.data.draft ? {} : getAdjacent(all, project.id),
+    },
+  }));
+}
+
+const { project, adjacent } = Astro.props;
+---
+
+<ProjectLayout project={project} adjacent={adjacent} />

@@ -1,0 +1,228 @@
+---
+/**
+ * ProjectLayout
+ *
+ * A project detail page, in the IA's section order: back link, header,
+ * meta strip, hero, challenge / solution / outcome, any extra prose, tech
+ * stack, design system, gallery, links, prev/next, then a closing grey band.
+ * Every optional section is omitted outright when its data is absent, so a
+ * sparse project leaves no empty band or stray divider. White throughout
+ * until the closing band. See docs/01-information-architecture.md §4.
+ *
+ * @example
+ * <ProjectLayout project={entry} adjacent={getAdjacent(all, entry.id)} />
+ */
+import { Image } from "astro:assets";
+import { render, type CollectionEntry } from "astro:content";
+import Section from "@/components/layout/Section.astro";
+import Gallery from "@/components/sections/Gallery.astro";
+import ProjectMeta from "@/components/sections/ProjectMeta.astro";
+import ProjectPager from "@/components/sections/ProjectPager.astro";
+import Chevron from "@/components/ui/Chevron.astro";
+import Divider from "@/components/ui/Divider.astro";
+import Eyebrow from "@/components/ui/Eyebrow.astro";
+import Reveal from "@/components/ui/Reveal.astro";
+import Tag from "@/components/ui/Tag.astro";
+import TextLink from "@/components/ui/TextLink.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import type { Neighbour } from "@/lib/projects";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  adjacent: { prev?: Neighbour; next?: Neighbour };
+}
+
+const { project, adjacent } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+const hasBody = project.body?.trim().length;
+
+/** Front matter prose: blank lines separate paragraphs. */
+const paragraphs = (text: string) =>
+  text
+    .split(/\n\s*\n/)
+    .map((para) => para.trim())
+    .filter(Boolean);
+
+const caseStudy = [
+  { id: "challenge", heading: "Challenge", text: p.challenge },
+  { id: "solution", heading: "Solution", text: p.solution },
+  { id: "outcome", heading: "Outcome", text: p.outcome },
+];
+
+const stackGroups = [
+  { label: "Language", items: p.stack.language },
+  { label: "Framework", items: p.stack.framework },
+  { label: "Data", items: p.stack.data },
+  { label: "Tooling", items: p.stack.tooling },
+].filter((group) => group.items.length > 0);
+---
+
+<BaseLayout title={`${p.title} — Darya`}>
+  <Section as="div">
+    <TextLink href="/projects" standalone class="text-body-sm">
+      <Chevron direction="back" />
+      Projects
+    </TextLink>
+
+    <header class="mt-6">
+      {p.projectType && <Eyebrow>{p.projectType}</Eyebrow>}
+      <h1 class="mt-2 text-title">{p.title}</h1>
+      <p class="mt-4 max-w-content-md text-body-lg text-text-secondary">
+        {p.summary}
+      </p>
+    </header>
+
+    <ProjectMeta year={p.year} role={p.role} class="mt-10" />
+
+    {/* The LCP element: loaded first, never revealed. */}
+    <Image
+      src={p.hero ?? p.thumbnail}
+      alt={p.heroAlt ?? p.thumbnailAlt}
+      widths={[640, 980, 1280, 1960]}
+      sizes="(min-width: 1069px) 980px, (min-width: 735px) 692px, calc(100vw - 44px)"
+      loading="eager"
+      fetchpriority="high"
+      class="mt-12 w-full rounded-card"
+    />
+
+    <div class="mt-16 flex flex-col gap-16">
+      {caseStudy.map(({ id, heading, text }) => (
+        <Reveal as="section" aria-labelledby={id} class="max-w-content-md">
+          <h2 id={id} class="text-headline">
+            {heading}
+          </h2>
+          {paragraphs(text).map((para) => (
+            <p class="mt-4 text-body">{para}</p>
+          ))}
+        </Reveal>
+      ))}
+
+      {hasBody && (
+        <Reveal class="body max-w-content-md text-body">
+          <Content />
+        </Reveal>
+      )}
+
+      {stackGroups.length > 0 && (
+        <Reveal as="section" aria-labelledby="stack">
+          <h2 id="stack" class="text-headline">
+            Tech stack
+          </h2>
+          <dl class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+            {stackGroups.map(({ label, items }) => (
+              <div>
+                <dt class="text-caption text-text-secondary">{label}</dt>
+                <dd class="mt-2">
+                  <ul class="flex flex-wrap gap-2">
+                    {items.map((item) => (
+                      <li>
+                        <Tag>{item}</Tag>
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
+      )}
+
+      {p.designSystem && (
+        <Reveal as="section" aria-labelledby="design-system">
+          <h2 id="design-system" class="text-headline">
+            Design system
+          </h2>
+          {paragraphs(p.designSystem.notes).map((para) => (
+            <p class="mt-4 max-w-content-md text-body">{para}</p>
+          ))}
+          {p.designSystem.palette && (
+            <ul class="mt-8 flex flex-wrap gap-6" aria-label="Palette">
+              {p.designSystem.palette.map(({ name, value }) => (
+                <li class="flex items-center gap-3">
+                  <span
+                    class="size-10 rounded-sm border border-border-subtle"
+                    style={`background-color: ${value}`}
+                    aria-hidden="true"
+                  />
+                  <span class="text-body-sm">
+                    {name}
+                    <span class="block font-mono text-caption text-text-secondary">
+                      {value}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {p.designSystem.typeSample && (
+            <p class="mt-8 rounded-sm bg-surface-sunken p-6 text-headline">
+              {p.designSystem.typeSample}
+            </p>
+          )}
+        </Reveal>
+      )}
+
+      {p.gallery && (
+        <Reveal as="section" aria-labelledby="gallery">
+          <h2 id="gallery" class="text-headline">
+            Gallery
+          </h2>
+          <div class="mt-6">
+            <Gallery images={p.gallery} />
+          </div>
+        </Reveal>
+      )}
+
+      {(p.links.live || p.links.source) && (
+        <ul class="flex flex-wrap gap-x-8" aria-label="Project links">
+          {p.links.live && (
+            <li>
+              <TextLink href={p.links.live} standalone external chevron>
+                View live site
+              </TextLink>
+            </li>
+          )}
+          {p.links.source && (
+            <li>
+              <TextLink href={p.links.source} standalone external chevron>
+                View source
+              </TextLink>
+            </li>
+          )}
+        </ul>
+      )}
+
+      {(adjacent.prev || adjacent.next) && (
+        <div>
+          <Divider />
+          <div class="mt-8">
+            <ProjectPager prev={adjacent.prev} next={adjacent.next} />
+          </div>
+        </div>
+      )}
+    </div>
+  </Section>
+
+  <Section tone="grey" as="div">
+    <ul class="flex flex-wrap justify-center gap-x-10" aria-label="Next steps">
+      <li>
+        <TextLink href="/projects" standalone chevron class="text-body-lg">
+          See all projects
+        </TextLink>
+      </li>
+      <li>
+        <TextLink href="/contact" standalone chevron class="text-body-lg">
+          Get in touch
+        </TextLink>
+      </li>
+    </ul>
+  </Section>
+</BaseLayout>
+
+<style>
+  /* The free Markdown body: space its paragraphs like the case study. */
+  .body :global(p + p) {
+    margin-top: var(--space-4);
+  }
+</style>
