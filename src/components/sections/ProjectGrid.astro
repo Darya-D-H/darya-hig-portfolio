@@ -5,7 +5,9 @@
  * Project cards in three columns above 1068px, two from 735px and one
  * below. Cards reveal row by row: the stagger runs across a row and starts
  * again on the next, so a long grid never reads as one slow cascade
- * (docs/01-information-architecture.md §3). The first row loads eagerly.
+ * (docs/01-information-architecture.md §3). The first row loads eagerly
+ * when the grid is near the top of its page; below the fold, every card is
+ * lazy.
  *
  * @example
  * <ProjectGrid projects={sorted} />
@@ -19,9 +21,11 @@ interface Props {
   /** Already in grid order. */
   projects: CollectionEntry<"projects">[];
   headingLevel?: "h2" | "h3";
+  /** Load the first row at once. Off when the grid starts below the fold. */
+  eagerFirstRow?: boolean;
 }
 
-const { projects, headingLevel = "h3" } = Astro.props;
+const { projects, headingLevel = "h3", eagerFirstRow = true } = Astro.props;
 const COLUMNS = 3;
 ---
 
@@ -31,7 +35,7 @@ const COLUMNS = 3;
       <Reveal delay={staggerDelay(index % COLUMNS)} class="h-full">
         <ProjectCard
           project={project}
-          eager={index < COLUMNS}
+          eager={eagerFirstRow && index < COLUMNS}
           headingLevel={headingLevel}
         />
       </Reveal>
