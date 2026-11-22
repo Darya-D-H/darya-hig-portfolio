@@ -1,0 +1,99 @@
+---
+/**
+ * Timeline
+ *
+ * The Experience roles as an ordered list, newest first. One vertical
+ * hairline on the <ol> and a dot on each <li>, both CSS pseudo-elements and
+ * so invisible to assistive tech. The same component at every width: below
+ * 735px the line moves in to 8px and the cards take the full width. Not a
+ * left/right zigzag. See docs/03-components.md §4.2 and
+ * docs/01-information-architecture.md §6.
+ *
+ * @example
+ * <Timeline roles={experience} />
+ */
+import type { CollectionEntry } from "astro:content";
+import Section from "@/components/layout/Section.astro";
+import TimelineNode from "@/components/sections/TimelineNode.astro";
+import Reveal from "@/components/ui/Reveal.astro";
+import { staggerDelay } from "@/lib/reveal";
+
+interface Props {
+  roles: CollectionEntry<"experience">[];
+}
+
+const sorted = [...Astro.props.roles].sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Section tone="grey" labelledBy="roles-heading">
+  <h2 id="roles-heading" class="sr-only">
+    Roles
+  </h2>
+  <ol class="timeline flex flex-col gap-8">
+    {sorted.map(({ data }, index) => (
+      <li class="node">
+        <Reveal delay={staggerDelay(index)}>
+          <TimelineNode role={data} />
+        </Reveal>
+      </li>
+    ))}
+  </ol>
+</Section>
+
+<style>
+  /* Lets @variant read the breakpoint tokens, so no width is repeated. */
+  @reference "@/styles/global.css";
+
+  /*
+   * Mobile first: the line a small step in, small dots, cards a short way
+   * off the line. From md: the line at the column edge, full-size dots,
+   * cards further off it. Values per docs/03-components.md §4.2.
+   */
+  .timeline {
+    --line-x: var(--space-2);
+    --dot: var(--size-timeline-dot-sm);
+    --offset: var(--space-7);
+    position: relative;
+    padding-inline-start: calc(var(--line-x) + var(--offset));
+
+    @variant md {
+      --line-x: var(--spacing-0);
+      --dot: var(--size-timeline-dot);
+      --offset: var(--space-12);
+    }
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: var(--line-x);
+    width: var(--size-hairline);
+    background-color: var(--color-border-subtle);
+  }
+
+  .node {
+    position: relative;
+  }
+
+  /* Level with the role title: the card's padding plus half a line. */
+  .node::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--space-6) + 0.6em);
+    inset-inline-start: calc(
+      -1 * var(--offset) - var(--dot) / 2 + var(--size-hairline) / 2
+    );
+    width: var(--dot);
+    height: var(--dot);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-text-secondary);
+
+    /* The card's padding grows at lg, and so does the title. */
+    @variant lg {
+      top: calc(var(--space-8) + 0.75em);
+    }
+  }
+</style>

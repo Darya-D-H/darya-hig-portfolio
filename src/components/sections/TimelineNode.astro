@@ -1,0 +1,76 @@
+---
+/**
+ * TimelineNode
+ *
+ * One role on the Experience timeline: an <article> with the role as h3,
+ * company and dates in a <p> (each date in a <time> with its YYYY-MM
+ * value), and the achievement bullets. Its dot is drawn by Timeline and is
+ * invisible to assistive tech. See docs/03-components.md §4.2.
+ *
+ * @example
+ * <TimelineNode role={entry.data} />
+ */
+import type { CollectionEntry } from "astro:content";
+import Card from "@/components/ui/Card.astro";
+
+interface Props {
+  role: CollectionEntry<"experience">["data"];
+}
+
+const { role } = Astro.props;
+
+// "2024-03" → "Mar 2024". Built from the parts, never from a Date, so no
+// timezone can shift a role into the previous month.
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+const display = (yearMonth: string) => {
+  const [year, month] = yearMonth.split("-");
+  return `${MONTHS[Number(month) - 1]} ${year}`;
+};
+---
+
+<article>
+  <Card>
+    <h3 class="text-card-title">{role.role}</h3>
+    <p class="mt-1 text-body-sm text-text-secondary">
+      {role.companyUrl ? (
+        <a href={role.companyUrl} class="text-link underline">
+          {role.company}
+        </a>
+      ) : (
+        role.company
+      )}
+      <span aria-hidden="true"> · </span>
+      <time datetime={role.startDate}>{display(role.startDate)}</time>
+      {" — "}
+      {role.endDate ? (
+        <time datetime={role.endDate}>{display(role.endDate)}</time>
+      ) : (
+        "Present"
+      )}
+      {role.location && (
+        <>
+          <span aria-hidden="true"> · </span>
+          {role.location}
+        </>
+      )}
+    </p>
+    <ul class="mt-4 flex list-disc flex-col gap-2 pl-5 text-body">
+      {role.bullets.map((bullet) => (
+        <li>{bullet}</li>
+      ))}
+    </ul>
+  </Card>
+</article>
