@@ -68,3 +68,24 @@ export function getAdjacent(
     next: toNeighbour(ordered[index + 1]),
   };
 }
+
+/** How many projects Home features, no more and no fewer. */
+export const FEATURED_COUNT = 3;
+
+/**
+ * The featured projects for Home, in grid order. Asserts there are exactly
+ * three instead of slicing, so a fourth `featured: true` fails the build
+ * loudly rather than vanishing (docs/06-content-model.md §1).
+ */
+export function selectFeatured<
+  T extends ProjectLike & { data: { featured?: boolean } },
+>(projects: readonly T[]): T[] {
+  const featured = sortProjects(projects).filter((p) => p.data.featured);
+  if (featured.length !== FEATURED_COUNT) {
+    throw new Error(
+      `Home expects exactly ${FEATURED_COUNT} featured projects, found ${featured.length}. ` +
+        `Set featured: true on exactly three files in src/content/projects/.`,
+    );
+  }
+  return featured;
+}

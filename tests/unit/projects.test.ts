@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   assertUniqueOrder,
   getAdjacent,
+  selectFeatured,
   sortProjects,
   type ProjectLike,
 } from "@/lib/projects";
@@ -81,5 +82,48 @@ describe("getAdjacent", () => {
     expect(() =>
       getAdjacent([project("x", 1), project("y", 1)], "x"),
     ).toThrowError(/both have order/);
+  });
+});
+
+describe("selectFeatured", () => {
+  const featured = (
+    id: string,
+    order: number,
+    isFeatured: boolean,
+    draft = false,
+  ) => ({
+    id,
+    data: { title: id, order, draft, featured: isFeatured },
+  });
+
+  it("returns exactly three, in grid order", () => {
+    const all = [
+      featured("c", 3, true),
+      featured("x", 4, false),
+      featured("a", 1, true),
+      featured("b", 2, true),
+    ];
+    expect(selectFeatured(all).map((p) => p.id)).toEqual(["a", "b", "c"]);
+  });
+
+  it("fails at two, naming the count", () => {
+    expect(() =>
+      selectFeatured([featured("a", 1, true), featured("b", 2, true)]),
+    ).toThrowError(/exactly 3 featured projects, found 2/);
+  });
+
+  it("fails at four", () => {
+    const four = [1, 2, 3, 4].map((n) => featured(`p${n}`, n, true));
+    expect(() => selectFeatured(four)).toThrowError(/found 4/);
+  });
+
+  it("does not count a featured draft", () => {
+    const all = [
+      featured("a", 1, true),
+      featured("b", 2, true),
+      featured("c", 3, true),
+      featured("d", 4, true, true),
+    ];
+    expect(selectFeatured(all)).toHaveLength(3);
   });
 });

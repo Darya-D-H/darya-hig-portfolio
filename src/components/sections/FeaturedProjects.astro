@@ -1,0 +1,37 @@
+---
+/**
+ * FeaturedProjects
+ *
+ * Home's row of exactly three featured projects, then "See all projects ›".
+ * The count is asserted, not sliced: two or four featured projects fail the
+ * build with a message saying how to fix it, rather than quietly rendering a
+ * gap in a three-column grid. See docs/06-content-model.md §1.
+ *
+ * @example
+ * <FeaturedProjects projects={await getCollection("projects")} />
+ */
+import type { CollectionEntry } from "astro:content";
+import Section from "@/components/layout/Section.astro";
+import ProjectGrid from "@/components/sections/ProjectGrid.astro";
+import TextLink from "@/components/ui/TextLink.astro";
+import { selectFeatured } from "@/lib/projects";
+
+interface Props {
+  /** Every project; drafts and non-featured ones are filtered here. */
+  projects: CollectionEntry<"projects">[];
+}
+
+const featured = selectFeatured(Astro.props.projects);
+---
+
+<Section labelledBy="featured-heading">
+  <h2 id="featured-heading" class="text-headline">
+    Featured projects
+  </h2>
+  <div class="mt-12">
+    <ProjectGrid projects={featured} />
+  </div>
+  <TextLink href="/projects" standalone chevron class="mt-8 text-body-lg">
+    See all projects
+  </TextLink>
+</Section>
