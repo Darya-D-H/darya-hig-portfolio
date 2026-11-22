@@ -213,6 +213,7 @@ import Section from "@/components/layout/Section.astro";
 import Card from "@/components/ui/Card.astro";
 import Tag from "@/components/ui/Tag.astro";
 import Reveal from "@/components/ui/Reveal.astro";
+import { staggerDelay } from "@/lib/reveal";
 import type { SkillCategory } from "@/content/config";
 
 interface Props {
@@ -234,7 +235,7 @@ const { heading, categories, tone = "grey" } = Astro.props;
   <ul class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
     {categories.map((category, index) => (
       <li>
-        <Reveal delay={index * 80}>
+        <Reveal delay={staggerDelay(index)}>
           <Card>
             <h3 class="text-card-title text-text-primary">{category.name}</h3>
             <ul class="mt-4 flex flex-wrap gap-2">

@@ -226,7 +226,7 @@ An eyebrow is **not** a heading. It is a `<p>` that sits before the `<h1>`/`<h2>
 
 Wrapper that fades and lifts its children when they scroll into view. Full spec in [docs/04-motion.md](04-motion.md).
 
-**Props:** `delay` (ms, for stagger), `distance` (defaults to `--reveal-distance`), `as` (element to render).
+**Props:** `delay` (ms; use `staggerDelay(index)` from `lib/reveal.ts` for a group, which applies the cap), `as` (element to render). There is no `distance` prop: one reveal distance site-wide ([docs/04-motion.md](04-motion.md) §1).
 
 **Contract:** the content is in the DOM and in the accessibility tree from the start. It is not `display: none` and not `visibility: hidden` — only `opacity` and `transform` change, so a screen reader reads it immediately and a search engine indexes it. If JavaScript never runs, a `.no-js` class on `<html>` leaves everything at full opacity. **Content is never hidden behind a script.**
 
