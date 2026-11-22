@@ -53,7 +53,7 @@ These were confirmed during planning. If any is wrong, the spec changes before c
 |---|---|---|---|
 | Framework | Astro | 7.x | Ships zero JavaScript by default, static output, components, content collections, built-in view transitions. See [ADR-0001](adr/ADR-0001-astro-as-framework.md) |
 | Styling | Tailwind CSS | 4.x via `@tailwindcss/vite` | Tokens live in a CSS-native `@theme` block. See [ADR-0002](adr/ADR-0002-tailwind-v4-tokens.md) |
-| Language | TypeScript | strict mode | Typed content schemas and component props |
+| Language | TypeScript | 6.0.x, strict mode | Typed content schemas and component props. Pinned below 7 because `@astrojs/check` and `typescript-eslint` do not support TypeScript 7 yet |
 | Content | Astro content collections | built in | One Markdown file per project, validated by a Zod schema. See [ADR-0004](adr/ADR-0004-project-detail-pages-via-content-collections.md) |
 | Images | `astro:assets` + `sharp` | 0.35.x | Automatic responsive `srcset`, AVIF/WebP, intrinsic sizing to prevent layout shift |
 | Fallback font | Inter via Astro's Fonts API (`fontProviders.npm()`) + `@fontsource-variable/inter` | 5.3.x | Served from this site to visitors without SF Pro; Apple visitors never download it. Never preloaded. See [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md) |
@@ -64,7 +64,7 @@ These were confirmed during planning. If any is wrong, the spec changes before c
 | E2E / a11y | Playwright + `@axe-core/playwright` | latest | Keyboard paths, menu behaviour, automated a11y scan per page |
 | Sitemap | `@astrojs/sitemap` | 3.x | SEO |
 
-**Environment requirement:** Astro 7 requires Node.js 22 or newer. The repo pins this in `package.json` `engines` and in `.nvmrc`.
+**Environment requirement:** Astro 7 requires Node.js 22.23.4 or newer. The repo pins this in `package.json` `engines` (`>=22.23.4`, Astro's own floor) and in `.nvmrc` (`22`).
 
 ### Browser support
 

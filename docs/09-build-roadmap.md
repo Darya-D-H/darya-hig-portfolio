@@ -33,7 +33,7 @@ No task touches more than about five files.
 | # | Task | Acceptance | Verify |
 |---|---|---|---|
 | 1.1 | `npm create astro@latest`, minimal template, TypeScript strict | `npm run dev` serves a blank page | Browser |
-| 1.2 | Pin Node: `engines.node: ">=22"` plus `.nvmrc` | Both present | `node -v` |
+| 1.2 | Pin Node: `engines.node: ">=22.23.4"` plus `.nvmrc` | Both present | `node -v` |
 | 1.3 | Install Tailwind v4 via `@tailwindcss/vite`, wire the plugin | A utility class applies | Browser |
 | 1.4 | ESLint + `eslint-plugin-astro` + `jsx-a11y` | `npm run lint` passes clean | Command |
 | 1.5 | Prettier + astro and tailwindcss plugins | `npm run format:check` passes | Command |
