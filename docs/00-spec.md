@@ -146,7 +146,7 @@ npm run check:tokens
 darya-hig-portfolio/
 ├── docs/                          # this documentation set (committed, kept current)
 │   └── adr/                       # architecture decision records
-├── public/                        # copied verbatim to dist; favicons, og image, robots.txt
+├── public/                        # copied verbatim to dist; favicons and og image (robots.txt is src/pages/robots.txt.ts)
 ├── src/
 │   ├── assets/                    # images processed by astro:assets
 │   │   └── projects/<slug>/       # per-project screenshots
