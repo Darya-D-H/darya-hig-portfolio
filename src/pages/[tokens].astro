@@ -1,0 +1,183 @@
+---
+// Throwaway review page for Phase 2 (roadmap 2.8). Delete it in Phase 6.14,
+// before anything is deployed.
+//
+// Astro never routes a page file whose name starts with "_", so /_tokens is
+// produced by this single-path dynamic route instead.
+//
+// Every value shown is read from global.css at build time rather than typed
+// here, so the page cannot drift from the CSS it is meant to review.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import css from "@/styles/global.css?raw";
+
+export function getStaticPaths() {
+  return [{ params: { tokens: "_tokens" } }];
+}
+
+// Tailwind mapping aliases are implementation detail, not design tokens.
+const ALIAS = /^(spacing|z-index|transition-duration|default)-/;
+
+const tokens = new Map<string, string>();
+for (const [, name, value] of css.matchAll(/--([a-z0-9-]+):\s*([^;]+);/g)) {
+  const clean = value.replace(/\s+/g, " ").trim();
+  if (clean === "initial" || ALIAS.test(name) || tokens.has(name)) continue;
+  tokens.set(name, clean);
+}
+
+const group = (prefix: string) =>
+  [...tokens].filter(([name]) => name.startsWith(prefix));
+
+const colours = group("color-");
+const spaces = group("space-");
+const radii = group("radius-");
+const shadows = group("shadow-");
+const tables = [
+  { heading: "Font families", rows: group("font-") },
+  { heading: "Containers", rows: group("container-") },
+  { heading: "Breakpoints", rows: group("breakpoint-") },
+  { heading: "Z-index", rows: group("z-") },
+  { heading: "Durations", rows: group("duration-") },
+  { heading: "Easing", rows: group("ease-") },
+  { heading: "Reveal", rows: group("reveal-") },
+  { heading: "Sizing", rows: group("size-") },
+  {
+    heading: "Materials and insets",
+    rows: [...group("blur-"), ...group("inset-")],
+  },
+];
+
+// Written out in full so Tailwind sees each class name in the source.
+const typeScale = [
+  "text-hero",
+  "text-title",
+  "text-headline",
+  "text-subhead",
+  "text-card-title",
+  "text-body-lg",
+  "text-body",
+  "text-body-sm",
+  "text-caption",
+  "text-eyebrow",
+];
+---
+
+<BaseLayout title="Design tokens" noindex>
+  <main class="mx-auto max-w-wide px-6 py-16">
+    <h1 class="text-title">Design tokens</h1>
+    <p class="mt-4 max-w-content-md text-body-lg text-text-secondary">
+      Every token in global.css, rendered from the stylesheet itself. Resize
+      across 735px and 1069px to see the type scale change.
+    </p>
+
+    <section class="mt-16" aria-labelledby="colour">
+      <h2 id="colour" class="text-headline">
+        Colour
+      </h2>
+      <ul class="mt-8 grid grid-cols-2 gap-6 md:grid-cols-4">
+        {colours.map(([name, value]) => (
+          <li>
+            <div
+              class="h-20 rounded-sm border border-border-subtle"
+              style={`background-color: var(--${name})`}
+            />
+            <p class="mt-2 text-body-sm">--{name}</p>
+            <p class="font-mono text-caption text-text-secondary">{value}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mt-16" aria-labelledby="type">
+      <h2 id="type" class="text-headline">
+        Type scale
+      </h2>
+      <ul class="mt-8 flex flex-col gap-8">
+        {typeScale.map((cls) => (
+          <li>
+            <p class="font-mono text-caption text-text-secondary">{cls}</p>
+            <p class={cls}>The quick brown fox jumps over the lazy dog</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mt-16" aria-labelledby="spacing">
+      <h2 id="spacing" class="text-headline">
+        Spacing
+      </h2>
+      <ul class="mt-8 flex flex-col gap-3">
+        {spaces.map(([name, value]) => (
+          <li class="flex items-center gap-4">
+            <span class="w-32 shrink-0 font-mono text-caption">
+              --{name} · {value}
+            </span>
+            <span class="h-4 bg-accent" style={`width: var(--${name})`} />
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mt-16" aria-labelledby="radius">
+      <h2 id="radius" class="text-headline">
+        Radius
+      </h2>
+      <ul class="mt-8 flex flex-wrap gap-6">
+        {radii.map(([name, value]) => (
+          <li>
+            <div
+              class="size-25 bg-surface-sunken"
+              style={`border-radius: var(--${name})`}
+            />
+            <p class="mt-2 font-mono text-caption">
+              --{name} · {value}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mt-16" aria-labelledby="elevation">
+      <h2 id="elevation" class="text-headline">
+        Elevation
+      </h2>
+      <ul class="mt-8 flex flex-wrap gap-8">
+        {shadows.map(([name, value]) => (
+          <li class="max-w-content-md">
+            <div
+              class="size-25 rounded-sm bg-surface-raised"
+              style={`box-shadow: var(--${name})`}
+            />
+            <p class="mt-2 font-mono text-caption">--{name}</p>
+            <p class="font-mono text-caption text-text-secondary">{value}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    {tables.map(({ heading, rows }) => (
+      <section class="mt-16">
+        <h2 class="text-headline">{heading}</h2>
+        <table class="mt-6 w-full text-left text-body-sm">
+          <thead>
+            <tr class="border-b border-border-subtle">
+              <th scope="col" class="py-2">
+                Token
+              </th>
+              <th scope="col" class="py-2">
+                Value
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(([name, value]) => (
+              <tr class="border-b border-border-subtle">
+                <td class="py-2 font-mono">--{name}</td>
+                <td class="py-2 font-mono text-text-secondary">{value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    ))}
+  </main>
+</BaseLayout>

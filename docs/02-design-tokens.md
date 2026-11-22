@@ -94,6 +94,8 @@ One stack, used for everything. On Apple hardware it resolves to genuine SF Pro 
 
 `--font-inter` is defined by Astro's Fonts API, not by hand: it expands to the hashed Inter family plus a metric-matched local fallback, so the swap from fallback to Inter on first visit does not shift layout. Configuration is in [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md) § Decision.
 
+**Inter's cost.** One file: the latin variable subset from `@fontsource-variable/inter` 5.3.0, **48,256 bytes (47.1 KB) woff2**, covering every weight. Only non-Apple visitors download it, once.
+
 **The order of the first four families is load-bearing.** Three rules follow from it:
 
 1. **Inter must come before `system-ui`.** On Windows `system-ui` _is_ Segoe UI and on Android it _is_ Roboto, so anything after it is unreachable. (The first draft of this doc put `system-ui` first, which would have made Inter dead code.)
@@ -314,6 +316,8 @@ On a notched or Dynamic Island iPhone, and in a home-screen web app, the viewpor
 --inset-bottom: env(safe-area-inset-bottom, 0px);
 ```
 
+`--blur-nav` and the two insets are declared on `:root` in the base layer rather than in `@theme`. Their names fall in Tailwind namespaces that expect other kinds of value (`--blur-*` is a single length, `--inset-*` feeds the `inset` utilities), so inside `@theme` they would generate broken utilities.
+
 The nav adds `--inset-top` to its top padding; the mobile menu panel pads both top and bottom; the footer adds `--inset-bottom`. This requires `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">` — without `viewport-fit=cover` the `env()` values are all zero and the insets silently do nothing.
 
 ### Icons
@@ -383,7 +387,8 @@ This is the implementation target. `src/styles/global.css` begins:
   --font-sans:
     -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-mono:
+    ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 
   /* mobile-first values; breakpoint overrides live in the base layer */
   --text-hero: 2.5rem; /* 40px */
@@ -434,7 +439,18 @@ This is the implementation target. `src/styles/global.css` begins:
 
 Tailwind v4 turns a `--text-*` entry plus its `--line-height`, `--font-weight` and `--letter-spacing` modifiers into a single utility, so `class="text-hero"` applies all four properties at once. That is why the type scale is expressed this way rather than as four separate utilities per size — it makes the correct pairing the easy one and a mismatched pairing impossible by accident.
 
-Responsive type sizes are applied in the base layer with media queries that reassign the same custom properties, so `text-hero` keeps working and no component carries `lg:text-[56px]`.
+Responsive type sizes are applied in the base layer with media queries that reassign the same custom properties, so `text-hero` keeps working and no component carries `lg:text-[56px]`. The queries are written as `@variant md { … }` and `@variant lg { … }`, so they read their widths from the breakpoint tokens rather than repeating `735px` and `1069px`.
+
+### How the tokens map onto Tailwind
+
+The implementation adds four things the block above does not show. None of them is a new value; each exposes a documented token, or stops Tailwind from exposing something undocumented.
+
+- **`@theme static`.** Every token is emitted as a custom property on `:root` whether or not a utility uses it, so all of them can be inspected in devtools and used in `var()`.
+- **Defaults are cleared** in each namespace the design owns: `--color-*`, `--font-*`, `--text-*`, `--font-weight-*`, `--tracking-*`, `--leading-*`, `--spacing-*`, `--radius-*`, `--shadow-*`, `--breakpoint-*`, `--container-*` and `--ease-*` are each set to `initial` first. So `text-sm`, `rounded-lg`, `p-7`, `font-bold` and `tracking-tight` do not exist, and a type token's line height, weight or tracking cannot be overridden on its own.
+- **Spacing, z-index and duration aliases.** Tailwind reads spacing from `--spacing-*`, z-index from `--z-index-*` and durations from `--transition-duration-*`, so each documented token gets a one-line alias: `--spacing-4: var(--space-4)`, `--z-index-sticky: var(--z-sticky)`, `--transition-duration-fast: var(--duration-fast)`. That gives `p-4`, `z-sticky` and `duration-fast`, and only for steps on the scale.
+- **Transition defaults.** `--default-transition-duration` is `var(--duration-fast)` and `--default-transition-timing-function` is `var(--ease-in-out)`, so a bare `transition-colors` uses the hover timing from [docs/04-motion.md](04-motion.md) §5.
+
+`npm run check:tokens` catches what the theme cannot prevent: arbitrary values (`text-[23px]`, `bg-(--x)`), bare durations and z-indexes (`duration-300`, `z-10`), and raw hex, `px` or `ms` in a component's styles.
 
 ---
 
