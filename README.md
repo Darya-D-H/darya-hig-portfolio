@@ -2,7 +2,7 @@
 
 A static personal portfolio built with Astro, styled with Tailwind CSS v4, and designed against Apple's Human Interface Guidelines and the visual language of apple.com.
 
-**Status:** documentation phase. No application code has been written yet. Everything in `/docs` is reviewed and approved before the build starts.
+**Status:** in build. The documentation set was approved at the `docs-approved` tag, and the work now follows the phases in [docs/09-build-roadmap.md](docs/09-build-roadmap.md). Nothing is deployed yet.
 
 ## Documentation
 
@@ -24,7 +24,22 @@ Read in this order:
 
 ## Stack
 
-Astro 7 · Tailwind CSS v4 · TypeScript (strict) · ESLint · Prettier · no runtime framework, no backend.
+Astro 7 · Tailwind CSS v4 · TypeScript (strict) · ESLint · Prettier · Vitest · Playwright · no runtime framework, no backend.
+
+## Development
+
+Requires Node.js 22.23.4 or newer (see `.nvmrc`).
+
+```bash
+npm install
+npm run dev       # http://localhost:4321
+npm run verify    # format, lint, typecheck, unit tests, build
+npm run test:e2e  # Playwright, against the built site
+```
+
+`npm run verify` is the gate for every commit, and CI runs the same command on every pull request. The full command list is in [docs/00-spec.md](docs/00-spec.md) §4.
+
+The build is a plain static `dist/` folder with no host-specific configuration, because the host is not chosen yet ([ADR-0005](docs/adr/ADR-0005-defer-hosting-decision.md)).
 
 ## Licence
 
