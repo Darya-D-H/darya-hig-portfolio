@@ -12,10 +12,9 @@ export default defineConfig({
   site: PLACEHOLDER_SITE,
   output: "static",
   integrations: [
-    // The 404 and the throwaway review page are noindex, and never listed.
+    // The 404 is noindex and served at any unknown URL: never listed.
     sitemap({
-      filter: (page) =>
-        !page.replace(/\/$/, "").endsWith("/404") && !page.includes("/_tokens"),
+      filter: (page) => !page.replace(/\/$/, "").endsWith("/404"),
     }),
   ],
   // Inter is the non-Apple fallback (ADR-0003). The local provider reads the

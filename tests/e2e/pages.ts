@@ -1,5 +1,5 @@
-// Every public page, for specs that sweep the whole site. The 404 and the
-// throwaway /_tokens review page are deliberately not in this list.
+// Every public page, for specs that sweep the whole site. The 404 is not in
+// this list; specs that cover it add it explicitly.
 export const PAGES = [
   "/",
   "/projects",

@@ -1,24 +1,16 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { PAGES } from "./pages";
 
-// Grows into the full scan in docs/07-test-plan.md §5 in Phase 6. For now:
-// the shell on its own, the review page, and the mobile menu open.
+// docs/07-test-plan.md §5: every page at every width in the matrix, plus
+// the 404, the mobile menu open and the lightbox open. Zero violations is
+// the gate, not zero serious ones.
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 const scan = (page: Page) =>
   new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
 
-for (const path of [
-  "/",
-  "/_tokens",
-  "/skills",
-  "/experience",
-  "/contact",
-  "/no-such-page",
-  "/projects",
-  "/projects/invoice-tracker",
-  "/projects/cli-toolkit",
-]) {
+for (const path of [...PAGES, "/no-such-page"]) {
   test(`${path} has no axe violations`, { tag: "@a11y" }, async ({ page }) => {
     await page.goto(path);
     // Scan the settled page: with motion, reveal content starts transparent.

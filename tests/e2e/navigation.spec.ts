@@ -184,7 +184,6 @@ test.describe("search metadata", () => {
     );
     expect(paths.sort()).toEqual([...PAGES].sort());
     expect(sitemap).not.toContain("404");
-    expect(sitemap).not.toContain("_tokens");
   });
 
   test("robots.txt points at the sitemap", async ({ request }) => {
