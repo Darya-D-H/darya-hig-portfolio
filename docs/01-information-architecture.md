@@ -290,4 +290,8 @@ Exactly one `h1` per page. Section headings are `h2`. Card and node titles are `
 
 ### SEO per page
 
-Each page sets its own `<title>` (`Page — Darya`), a unique meta description, a canonical URL, and Open Graph plus Twitter card tags. Project pages derive all of these from front matter. One shared `og-image.png` ships in `public/` for v1; per-project OG images are a later enhancement.
+Each page sets its own `<title>` (`Page — Darya`; Home is `Darya — Software Engineer`), a unique meta description, a canonical URL, and Open Graph plus Twitter card tags. Project pages derive all of these from front matter, and use their hero (or thumbnail) as the preview image. Every other page shares `og-image.png` in `public/`: the name and role on white, in the site's type. Designed per-project preview images are a later enhancement.
+
+- **Canonical URLs end in a slash** (`/skills/`), because Astro builds each page as a folder with an `index.html` and the sitemap lists that form. The 404 has no canonical: it is served at every unknown URL and is `noindex`.
+- **`robots.txt` is generated** by `src/pages/robots.txt.ts` from the configured `site`, so it can never point at an old origin.
+- **The favicon and touch icon are placeholders** (a plain rounded square in the secondary ink) until Darya has a logo. `node scripts/generate-site-images.mjs` regenerates them and the preview image from the tokens and `site.config.ts`.
