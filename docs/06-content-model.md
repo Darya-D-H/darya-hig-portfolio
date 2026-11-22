@@ -90,7 +90,7 @@ const projects = defineCollection({
 
 ### Schema decisions worth noting
 
-**`image()` rather than `z.string()` for image paths.** The `image()` helper resolves the path at build time and hands the component an object carrying intrinsic width and height. That means every `<Image>` renders with explicit dimensions, which eliminates layout shift by construction rather than by remembering to type width and height by hand. A missing or misspelled file is a build error, not a broken image in production.
+**`image()` rather than `z.string()` for image paths.** The `image()` helper resolves the path at build time and hands the component an object carrying intrinsic width and height. That means every `<Image>` renders with explicit dimensions, which eliminates layout shift by construction rather than by remembering to type width and height by hand. A missing or misspelled file is a build error, not a broken image in production. One caveat: Astro resolves the path only when a page renders the image, so a draft, or any project before the pages exist, would slip through. `tests/unit/content-images.test.ts` closes that gap by checking every image path in the front matter, so `verify` names the file and the path.
 
 **`thumbnailAlt` is required, `heroAlt` is not.** The thumbnail is the card's only image and always needs a description. The hero image on the detail page is frequently the same screenshot shown larger, in which case repeating the alt text is noise for a screen reader — so `heroAlt` is optional and falls back to `thumbnailAlt`, and if the hero is genuinely decorative it can be set to `""`.
 
