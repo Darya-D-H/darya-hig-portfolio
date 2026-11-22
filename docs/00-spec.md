@@ -73,6 +73,8 @@ Supported: **the last two major versions** of Safari on macOS, Safari on iOS/iPa
 
 Older browsers are not blocked. They get a page that works and reads correctly, and may lose polish. Tailwind v4's own floor (Safari 16.4, Chrome 111, Firefox 128) sits well below this policy, so the two never conflict.
 
+That floor is also the CSS build target (`vite.build.cssTarget` in `astro.config.mjs`). Astro's default target is `esnext`, which tells the minifier no browser needs a prefix, and it then strips `-webkit-backdrop-filter`, which Safari before 18 needs for the nav material.
+
 Features with a defined fallback rather than an assumption of support:
 
 | Feature                          | Without it                                                                                                   |

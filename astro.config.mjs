@@ -35,5 +35,18 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      // Astro's default CSS target is esnext, which leaves the minifier with
+      // no browsers to support, so it strips vendor prefixes. The nav needs
+      // -webkit-backdrop-filter for Safari (docs/02-design-tokens.md §7).
+      // This is Tailwind v4's own floor (spec §3, browser support).
+      cssTarget: [
+        "chrome111",
+        "edge111",
+        "firefox128",
+        "safari16.4",
+        "ios16.4",
+      ],
+    },
   },
 });
