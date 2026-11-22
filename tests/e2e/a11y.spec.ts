@@ -8,7 +8,14 @@ const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const scan = (page: Page) =>
   new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
 
-for (const path of ["/", "/_tokens"]) {
+for (const path of [
+  "/",
+  "/_tokens",
+  "/skills",
+  "/experience",
+  "/contact",
+  "/no-such-page",
+]) {
   test(`${path} has no axe violations`, { tag: "@a11y" }, async ({ page }) => {
     await page.goto(path);
     // Scan the settled page: with motion, reveal content starts transparent.
