@@ -36,6 +36,7 @@ const COLUMNS = 3;
         <ProjectCard
           project={project}
           eager={eagerFirstRow && index < COLUMNS}
+          priority={eagerFirstRow && index === 0}
           headingLevel={headingLevel}
         />
       </Reveal>
