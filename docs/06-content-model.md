@@ -282,7 +282,7 @@ Projects 3 and 5 are the important ones. A set of six fully-populated records wi
 - Every placeholder string begins with `TODO:` so it is greppable. `npm run check:todo` fails the build when `--prod` is set, which prevents placeholder text shipping by accident.
 - Placeholder prose is realistic in **length and shape** — a real two-sentence challenge, not `Lorem ipsum dolor sit amet`. A layout judged against lorem ipsum looks fine and then breaks on real sentences with real word lengths.
 - Alt text placeholders are written as real alt text, because writing good alt text is a skill and leaving `TODO: alt` teaches nothing about whether the pattern works.
-- Placeholder images: generated flat-colour PNGs at the correct aspect ratios and realistic file sizes (roughly 200–400 KB before optimisation), so the performance budget is tested against something representative. A 2 KB placeholder makes the Lighthouse score meaningless.
+- Placeholder images: generated PNGs at the correct aspect ratios and realistic file sizes (roughly 200–400 KB before optimisation), so the performance budget is tested against something representative. A 2 KB placeholder makes the Lighthouse score meaningless. `node scripts/generate-placeholders.mjs` writes them deterministically: a gradient in each project's colour with blocky noise, sized to about 300 KB, labelled with the project and view. Cards and gallery shots are 16:10 (1280 × 800 and 1600 × 1000); heroes are 1960 × 1102, the 980px column at 2x.
 
 ---
 
