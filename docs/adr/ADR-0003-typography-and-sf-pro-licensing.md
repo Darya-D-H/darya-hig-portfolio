@@ -50,23 +50,34 @@ On Apple hardware this resolves to genuine SF Pro, selected by the OS, and Inter
 Inter is loaded through Astro's Fonts API (stable since Astro 6) from a pinned npm package, so builds are reproducible and need no network access to a font CDN:
 
 ```js
-// astro.config.mjs — confirm option names against the Astro 7 docs in Phase 2
+// astro.config.mjs
 import { defineConfig, fontProviders } from "astro/config";
 
 export default defineConfig({
   fonts: [
     {
-      provider: fontProviders.npm(), // resolves @fontsource-variable/inter from package.json
+      provider: fontProviders.local(),
       name: "Inter",
       cssVariable: "--font-inter",
-      weights: ["100 900"], // one variable file, not one file per weight
-      styles: ["normal"],
-      subsets: ["latin"],
+      options: {
+        variants: [
+          {
+            // one variable file, latin only, read from the pinned package
+            src: [
+              "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2",
+            ],
+            weight: "100 900",
+            style: "normal",
+          },
+        ],
+      },
       fallbacks: ["sans-serif"], // Astro generates a metric-matched fallback from this
     },
   ],
 });
 ```
+
+**Why `local()` and not `npm()`** (confirmed in Phase 2 against Astro 7.4). The `npm()` provider was the first plan, and it fails two ways. With `remote: false` it resolves the package's files to `file://` URLs, which Astro's font fetcher cannot read, so the build fails. With the default `remote: true` it ignores `subsets`, emits all seven of the package's subset files, and may fetch them from a CDN. `local()` pointed at the package's latin file does what this ADR wants: one file, from the version pinned in `package-lock.json`, with no network access. The output is byte-identical to the package file.
 
 ```astro
 <!-- BaseLayout.astro <head> — note: no `preload` prop -->
@@ -154,5 +165,5 @@ For this site, authenticity on Apple platforms is non-negotiable: the audience s
 4. [ ] Record the no-Apple-fonts rule in the spec's "Never" list — done
 5. [ ] Add a non-Apple-platform typography check to the test plan — done
 6. [x] Resolve open question 4 (self-hosted Inter) — Option D adopted 2026-11-21
-7. [ ] Configure Inter through the Fonts API with no `preload` (roadmap task 2.12)
+7. [x] Configure Inter through the Fonts API with no `preload` (roadmap task 2.12)
 8. [ ] On a real Mac and iPhone, confirm the Network panel shows no Inter request

@@ -94,6 +94,8 @@ One stack, used for everything. On Apple hardware it resolves to genuine SF Pro 
 
 `--font-inter` is defined by Astro's Fonts API, not by hand: it expands to the hashed Inter family plus a metric-matched local fallback, so the swap from fallback to Inter on first visit does not shift layout. Configuration is in [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md) § Decision.
 
+**Inter's cost.** One file: the latin variable subset from `@fontsource-variable/inter` 5.3.0, **48,256 bytes (47.1 KB) woff2**, covering every weight. Only non-Apple visitors download it, once.
+
 **The order of the first four families is load-bearing.** Three rules follow from it:
 
 1. **Inter must come before `system-ui`.** On Windows `system-ui` _is_ Segoe UI and on Android it _is_ Roboto, so anything after it is unreachable. (The first draft of this doc put `system-ui` first, which would have made Inter dead code.)
