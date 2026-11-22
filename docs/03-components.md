@@ -244,7 +244,7 @@ Wrapper that fades and lifts its children when they scroll into view. Full spec 
 | Summary   | `--text-body-sm`, secondary ink    | Clamped to 2 lines with `line-clamp-2`                                                           |
 | Tags      | `Tag`                              | Maximum 3; a 4th becomes `+2`                                                                    |
 
-**Empty/missing states:** no thumbnail in front matter renders a flat `--color-section` block with the project's initial, not a broken image. No summary renders nothing rather than an empty gap.
+**Empty/missing states:** the schema requires a thumbnail, its alt text and a summary, so a card can never be missing one; a project without them fails the build. Tags are optional: with none, the tag row is omitted rather than left as an empty gap.
 
 ### 4.2 `Timeline` / `TimelineNode`
 

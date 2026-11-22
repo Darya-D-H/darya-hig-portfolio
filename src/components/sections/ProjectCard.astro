@@ -1,0 +1,60 @@
+---
+/**
+ * ProjectCard
+ *
+ * A single project in a grid. The title is the link; the whole card is
+ * clickable via a stretched ::after overlay so the accessible name stays
+ * short. 16:10 thumbnail with the card's top corners, a summary clamped to
+ * two lines, and up to three tags. See docs/03-components.md §4.1.
+ *
+ * @example
+ * <ProjectCard project={entry} eager={index < 3} />
+ */
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import Card from "@/components/ui/Card.astro";
+import Tag from "@/components/ui/Tag.astro";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  /** Load at once: the first row is usually in view on arrival. */
+  eager?: boolean;
+  /** The h-level of the title within the page outline. */
+  headingLevel?: "h2" | "h3";
+}
+
+const { project, eager = false, headingLevel: Heading = "h3" } = Astro.props;
+const { title, summary, thumbnail, thumbnailAlt, tags } = project.data;
+---
+
+<Card interactive padding="none" class="flex h-full flex-col overflow-hidden">
+  <Image
+    src={thumbnail}
+    alt={thumbnailAlt}
+    widths={[400, 640, 960, 1280]}
+    sizes="(min-width: 1069px) 300px, (min-width: 735px) 330px, calc(100vw - 44px)"
+    loading={eager ? "eager" : "lazy"}
+    class="aspect-16/10 w-full object-cover"
+  />
+  <div class="flex flex-1 flex-col p-6">
+    <Heading class="text-card-title">
+      <a href={`/projects/${project.id}`} data-card-link>
+        {title}
+      </a>
+    </Heading>
+    {summary && (
+      <p class="mt-2 line-clamp-2 text-body-sm text-text-secondary">
+        {summary}
+      </p>
+    )}
+    {tags.length > 0 && (
+      <ul class="mt-auto flex flex-wrap gap-2 pt-4" aria-label="Technologies">
+        {tags.slice(0, 3).map((tag) => (
+          <li>
+            <Tag>{tag}</Tag>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</Card>
