@@ -1,14 +1,31 @@
 ---
-// Temporary placeholder until the real Home page in Phase 5. It is just the
-// shell plus one heading, which is what the Phase 3 axe scan wants.
-import Section from "@/components/layout/Section.astro";
+import { getCollection } from "astro:content";
+import AboutSection from "@/components/sections/AboutSection.astro";
+import FeaturedProjects from "@/components/sections/FeaturedProjects.astro";
+import Hero from "@/components/sections/Hero.astro";
+import SkillsGrid from "@/components/sections/SkillsGrid.astro";
+import TextLink from "@/components/ui/TextLink.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const projects = await getCollection("projects");
+const skills = await getCollection("skills", ({ data }) => data.showOnHome);
 ---
 
-<BaseLayout title="TODO: Darya, software engineer">
-  <Section padding="hero" labelledBy="home-title">
-    <h1 id="home-title" class="text-title">
-      TODO: Home page
-    </h1>
-  </Section>
+<BaseLayout description="TODO: Darya is a software engineer building web applications in PHP and modern JavaScript.">
+  <Hero
+    headline="TODO: I build web applications that feel considered."
+    subhead="TODO: PHP on the back end, modern JavaScript and CSS on the front. Currently based in Baghdad (confirm the location, or remove it)."
+  />
+  <AboutSection
+    paragraphs={[
+      "TODO: I'm a software engineer focused on web applications. I work mostly in PHP, and I care about the part of the stack where the interface meets the data.",
+      "TODO: Two or three sentences on how you work, what you're drawn to, and what you're looking for.",
+    ]}
+  />
+  <FeaturedProjects projects={projects} />
+  <SkillsGrid heading="Skills" categories={skills}>
+    <TextLink href="/skills" standalone chevron class="mt-8 text-body-lg">
+      All skills
+    </TextLink>
+  </SkillsGrid>
 </BaseLayout>

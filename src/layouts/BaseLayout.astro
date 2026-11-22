@@ -4,27 +4,60 @@
  *
  * The document shell for every page: head, skip link, nav, mobile menu,
  * #main and footer, with the client router. The page's own content goes
- * inside #main through the slot. Phase 5.18 adds SEO meta.
+ * inside #main through the slot. Every page's title, description,
+ * canonical URL and Open Graph / Twitter tags are derived here by lib/seo.ts
+ * from what the page passes in, so none is hand-written per page.
  *
  * @example
- * <BaseLayout title="Skills — Darya"><Section …>…</Section></BaseLayout>
+ * <BaseLayout title="Skills" description="…"><Section …>…</Section></BaseLayout>
  */
-import { Font } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { Font, getImage } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import Footer from "@/components/layout/Footer.astro";
 import MobileMenu from "@/components/layout/MobileMenu.astro";
 import Nav from "@/components/layout/Nav.astro";
 import SkipLink from "@/components/layout/SkipLink.astro";
+import { canonicalUrl, metaDescription, pageTitle } from "@/lib/seo";
+import { site } from "@/site.config";
 import "@/styles/global.css";
 
 interface Props {
-  /** The full document title. */
-  title: string;
+  /** The page's own title, "Skills"; the site name is added. Home omits it. */
+  title?: string;
+  /** One sentence; becomes the meta and social description. */
+  description: string;
+  /** The social preview image; the shared og-image.png when absent. */
+  image?: ImageMetadata;
+  imageAlt?: string;
+  type?: "website" | "article";
   /** Keeps the page out of search indexes, for the 404 and review pages. */
   noindex?: boolean;
 }
 
-const { title, noindex = false } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  imageAlt,
+  type = "website",
+  noindex = false,
+} = Astro.props;
+
+// astro.config.mjs always sets `site` (a placeholder until Phase 7).
+const origin = Astro.site ?? new URL(Astro.url.origin);
+const fullTitle = pageTitle(title);
+const summary = metaDescription(description);
+const canonical = canonicalUrl(Astro.url.pathname, origin);
+const social = image
+  ? new URL(
+      (await getImage({ src: image, width: 1200, format: "jpg" })).src,
+      origin,
+    ).href
+  : new URL("/og-image.png", origin).href;
+const socialAlt = image
+  ? (imageAlt ?? "")
+  : `${site.name}, ${site.role.toLowerCase()}`;
 ---
 
 <html lang="en" class="no-js">
@@ -42,8 +75,28 @@ const { title, noindex = false } = Astro.props;
         document.documentElement.classList.remove("no-js"),
       );
     </script>
-    <title>{title}</title>
+    <title>{fullTitle}</title>
+    <meta name="description" content={summary} />
+    {/* The 404 is served at any unknown URL and is noindex: no canonical. */}
+    {!noindex && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex" />}
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={summary} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={social} />
+    <meta property="og:image:alt" content={socialAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={summary} />
+    <meta name="twitter:image" content={social} />
+    <meta name="twitter:image:alt" content={socialAlt} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <Font cssVariable="--font-inter" />
     <ClientRouter />
   </head>

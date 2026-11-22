@@ -102,7 +102,8 @@ test.describe("prev and next", () => {
         .getByRole("navigation", { name: "More projects" })
         .getByRole("link", { name: /Next project/ })
         .click();
-      await page.waitForURL(`**/projects/${GRID_ORDER[i]}`);
+      // Client-side navigation fires no load event: poll the URL instead.
+      await expect(page).toHaveURL(new RegExp(`/projects/${GRID_ORDER[i]}/?$`));
       visited.push(new URL(page.url()).pathname.split("/").pop() ?? "");
     }
     expect(visited).toEqual(GRID_ORDER);
@@ -118,4 +119,10 @@ test.describe("prev and next", () => {
       pager.getByRole("link", { name: /Next project.*API Gateway/ }),
     ).toBeVisible();
   });
+});
+
+test("Home renders exactly three featured projects", async ({ page }) => {
+  await page.goto("/");
+  const featured = page.getByRole("region", { name: "Featured projects" });
+  await expect(featured.locator("[data-card-link]")).toHaveCount(3);
 });

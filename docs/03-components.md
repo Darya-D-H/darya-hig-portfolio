@@ -10,37 +10,38 @@ The state list is not boilerplate. The most common failure in a portfolio build 
 
 ## 1. Component inventory
 
-| Component      | Folder   | Ships JS            | Used on                                          |
-| -------------- | -------- | ------------------- | ------------------------------------------------ |
-| `Nav`          | layout   | no                  | all                                              |
-| `MobileMenu`   | layout   | yes                 | all, below 735px                                 |
-| `Footer`       | layout   | no                  | all                                              |
-| `Container`    | layout   | no                  | all                                              |
-| `Section`      | layout   | no                  | all                                              |
-| `SkipLink`     | layout   | no                  | all                                              |
-| `Button`       | ui       | no                  | most                                             |
-| `TextLink`     | ui       | no                  | most                                             |
-| `Card`         | ui       | no                  | projects, skills, experience                     |
-| `Tag`          | ui       | no                  | projects, skills                                 |
-| `Eyebrow`      | ui       | no                  | most                                             |
-| `Divider`      | ui       | no                  | project detail                                   |
-| `Chevron`      | ui       | no                  | `Button`, `TextLink`, back link, pager, lightbox |
-| `Reveal`       | ui       | yes (shared module) | all below the fold                               |
-| `Hero`         | sections | no                  | home                                             |
-| `AboutSection` | sections | no                  | home                                             |
-| `ProjectCard`  | sections | no                  | home, projects                                   |
-| `ProjectGrid`  | sections | no                  | home, projects                                   |
-| `SkillsGrid`   | sections | no                  | home, skills                                     |
-| `Timeline`     | sections | no                  | experience                                       |
-| `TimelineNode` | sections | no                  | experience                                       |
-| `ProjectMeta`  | sections | no                  | project detail                                   |
-| `ProjectPager` | sections | no                  | project detail                                   |
-| `ErrorPage`    | sections | no                  | 404                                              |
-| `PageHeader`   | sections | no                  | projects, skills, experience                     |
-| `Gallery`      | sections | yes (lightbox)      | project detail                                   |
-| `Lightbox`     | sections | yes                 | project detail                                   |
-| `ContactPanel` | sections | no                  | contact                                          |
-| `BackToTop`    | ui       | no                  | all (in footer)                                  |
+| Component          | Folder   | Ships JS            | Used on                                          |
+| ------------------ | -------- | ------------------- | ------------------------------------------------ |
+| `Nav`              | layout   | no                  | all                                              |
+| `MobileMenu`       | layout   | yes                 | all, below 735px                                 |
+| `Footer`           | layout   | no                  | all                                              |
+| `Container`        | layout   | no                  | all                                              |
+| `Section`          | layout   | no                  | all                                              |
+| `SkipLink`         | layout   | no                  | all                                              |
+| `Button`           | ui       | no                  | most                                             |
+| `TextLink`         | ui       | no                  | most                                             |
+| `Card`             | ui       | no                  | projects, skills, experience                     |
+| `Tag`              | ui       | no                  | projects, skills                                 |
+| `Eyebrow`          | ui       | no                  | most                                             |
+| `Divider`          | ui       | no                  | project detail                                   |
+| `Chevron`          | ui       | no                  | `Button`, `TextLink`, back link, pager, lightbox |
+| `Reveal`           | ui       | yes (shared module) | all below the fold                               |
+| `Hero`             | sections | no                  | home                                             |
+| `AboutSection`     | sections | no                  | home                                             |
+| `FeaturedProjects` | sections | no                  | home                                             |
+| `ProjectCard`      | sections | no                  | home, projects                                   |
+| `ProjectGrid`      | sections | no                  | home, projects                                   |
+| `SkillsGrid`       | sections | no                  | home, skills                                     |
+| `Timeline`         | sections | no                  | experience                                       |
+| `TimelineNode`     | sections | no                  | experience                                       |
+| `ProjectMeta`      | sections | no                  | project detail                                   |
+| `ProjectPager`     | sections | no                  | project detail                                   |
+| `ErrorPage`        | sections | no                  | 404                                              |
+| `PageHeader`       | sections | no                  | projects, skills, experience                     |
+| `Gallery`          | sections | yes (lightbox)      | project detail                                   |
+| `Lightbox`         | sections | yes                 | project detail                                   |
+| `ContactPanel`     | sections | no                  | contact                                          |
+| `BackToTop`        | ui       | no                  | all (in footer)                                  |
 
 Three client-side modules in total: `menu.ts`, `reveal.ts`, `lightbox.ts`. `BackToTop` is a plain anchor to `#main` with `scroll-behavior: smooth` in CSS, so it needs no JavaScript. That keeps the site inside the 15 KB JS budget with room to spare.
 

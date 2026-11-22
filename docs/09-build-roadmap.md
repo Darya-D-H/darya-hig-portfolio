@@ -219,6 +219,8 @@ Ordered simplest-first so the patterns are established on easy pages before the 
 
 **Gate:** `npm run check:todo --prod` passes. No placeholder text is public.
 
+The favicon and touch icon are placeholders too, and images rather than text, so `check:todo` cannot see them. Replace them with Darya's logo before release and rerun `node scripts/generate-site-images.mjs`.
+
 ---
 
 ## Risks

@@ -1,0 +1,33 @@
+---
+/**
+ * AboutSection
+ *
+ * A short self-introduction on a grey band: the heading on the left and the
+ * paragraphs on the right from 735px, stacked below. No portrait in v1; the
+ * layout leaves room for one. See docs/01-information-architecture.md §2.2.
+ *
+ * @example
+ * <AboutSection paragraphs={["…", "…"]} />
+ */
+import Section from "@/components/layout/Section.astro";
+import Reveal from "@/components/ui/Reveal.astro";
+
+interface Props {
+  paragraphs: string[];
+}
+
+const { paragraphs } = Astro.props;
+---
+
+<Section tone="grey" labelledBy="about-heading">
+  <Reveal class="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
+    <h2 id="about-heading" class="text-headline">
+      About
+    </h2>
+    <div class="flex flex-col gap-4 md:col-span-2">
+      {paragraphs.map((para) => (
+        <p class="text-body-lg">{para}</p>
+      ))}
+    </div>
+  </Reveal>
+</Section>

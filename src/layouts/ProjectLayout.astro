@@ -58,7 +58,13 @@ const stackGroups = [
 ].filter((group) => group.items.length > 0);
 ---
 
-<BaseLayout title={`${p.title} — Darya`}>
+<BaseLayout
+  title={p.title}
+  description={p.summary}
+  image={p.hero ?? p.thumbnail}
+  imageAlt={p.heroAlt ?? p.thumbnailAlt}
+  type="article"
+>
   <Section as="div">
     <TextLink href="/projects" standalone class="text-body-sm">
       <Chevron direction="back" />

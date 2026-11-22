@@ -37,9 +37,14 @@ test.describe("with motion", () => {
     expect(await opacity(target)).toBe(1);
   });
 
-  test("the first screen is at full opacity on load", async ({ page }) => {
-    await page.goto(PAGE);
-    expect(await opacity(page.locator("h1"))).toBe(1);
+  test("the hero is at full opacity on load and never revealed", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const hero = page.getByRole("region", { name: /I build web applications/ });
+    await expect(hero.locator("[data-reveal]")).toHaveCount(0);
+    expect(await opacity(hero)).toBe(1);
+    expect(await opacity(page.getByRole("heading", { level: 1 }))).toBe(1);
   });
 });
 
