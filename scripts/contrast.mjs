@@ -51,6 +51,11 @@ const DOCUMENTED = [
   ["canvas", "#0077ed", 4.32], // apple.com's hover blue, rejected
   ["link", "canvas", 5.57],
   ["link", "section", 5.11],
+  ["ink-strong", "canvas", 21],
+  // Tinted button: the accent at 0.10 and 0.14 alpha composited over white.
+  ["link", "#e6f1fc", 4.86],
+  ["link", "#dbebfb", 4.58],
+  ["link", "#d6e8fb", 4.45], // 0.16, the first-draft hover, rejected
 ];
 
 const NORMAL_TEXT = 4.5;
