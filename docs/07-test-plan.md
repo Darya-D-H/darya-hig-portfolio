@@ -240,15 +240,15 @@ This script is how the `#0077ed` hover problem was found — a value copied stra
 
 ## 6. Visual regression
 
-`tests/e2e/visual.spec.ts`, Playwright screenshots at 1440, 1068, 734 and 375 widths, full page, for each of the six page types.
+`tests/e2e/visual.spec.ts`, Playwright screenshots at 1440, 1068, 734 and 375 widths, full page, for each of the six page types and the 404. Chromium only (`npm run test:visual`), and only on Linux, which is where the baselines are made.
 
-Baselines are committed. A diff fails the run and must be reviewed and either accepted (`--update-snapshots`) or fixed.
+Baselines are committed. A diff fails the run and must be reviewed and either accepted or fixed. To accept, regenerate them with `.github/workflows/visual-baselines.yml`: push a commit whose message contains `[update-visual-baselines]` (or start it from the Actions tab once the workflow is on `main`). It renders on Linux and commits the new images to the same branch, authored as Darya. Look at the images in that commit before merging, because an update accepts whatever the page looks like at that moment.
 
 **Flakiness controls**, because without them screenshot tests get deleted within a week:
 
 - Animations disabled for screenshot runs (`animations: "disabled"`).
-- Reveal elements forced to their revealed state, so a screenshot never catches a mid-transition frame.
-- Fixed placeholder images, never remote ones.
+- Reveal elements at their revealed state: the run uses reduced motion, so a screenshot never catches a mid-transition frame.
+- Fixed placeholder images, never remote ones, and masked in the screenshot: their boxes still show the layout, but the baselines stay small.
 - `maxDiffPixelRatio: 0.01` to absorb font-rendering noise between machines.
 - Baselines generated in CI, not locally, so the platform is consistent.
 
