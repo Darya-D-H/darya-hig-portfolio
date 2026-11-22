@@ -36,6 +36,7 @@ The state list is not boilerplate. The most common failure in a portfolio build 
 | `ProjectMeta`  | sections | no                  | project detail                 |
 | `ProjectPager` | sections | no                  | project detail                 |
 | `ErrorPage`    | sections | no                  | 404                            |
+| `PageHeader`   | sections | no                  | projects, skills, experience   |
 | `Gallery`      | sections | yes (lightbox)      | project detail                 |
 | `Lightbox`     | sections | yes                 | project detail                 |
 | `ContactPanel` | sections | no                  | contact                        |

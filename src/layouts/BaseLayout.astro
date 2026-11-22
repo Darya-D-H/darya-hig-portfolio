@@ -52,7 +52,7 @@ const { title, noindex = false } = Astro.props;
     <Nav />
     <MobileMenu />
     <!-- Grows so the footer sits at the bottom of a short page. -->
-    <main id="main" tabindex="-1" class="flex-1">
+    <main id="main" tabindex="-1" class="flex flex-1 flex-col">
       <slot />
     </main>
     <Footer />
