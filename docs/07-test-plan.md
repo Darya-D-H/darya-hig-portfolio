@@ -28,14 +28,14 @@ E2E, accessibility, visual and Lighthouse suites are separate because they need 
 
 ## 2. Static analysis
 
-| Check | Tool | Catches |
-|---|---|---|
-| Formatting | Prettier + `prettier-plugin-astro` | Inconsistent formatting, unsorted Tailwind classes |
-| Linting | ESLint + `eslint-plugin-astro` | Unused code, bad patterns |
-| Markup a11y | `eslint-plugin-jsx-a11y` via the Astro plugin | Missing `alt`, click handlers on non-interactive elements, bad ARIA |
-| Types | `astro check`, `tsc --noEmit` | Prop mismatches, content-schema violations |
-| Content schema | Zod, at build time | Missing or mistyped front-matter fields, bad image paths |
-| Dead links | `astro build` | Broken `getStaticPaths` references |
+| Check          | Tool                                          | Catches                                                             |
+| -------------- | --------------------------------------------- | ------------------------------------------------------------------- |
+| Formatting     | Prettier + `prettier-plugin-astro`            | Inconsistent formatting, unsorted Tailwind classes                  |
+| Linting        | ESLint + `eslint-plugin-astro`                | Unused code, bad patterns                                           |
+| Markup a11y    | `eslint-plugin-jsx-a11y` via the Astro plugin | Missing `alt`, click handlers on non-interactive elements, bad ARIA |
+| Types          | `astro check`, `tsc --noEmit`                 | Prop mismatches, content-schema violations                          |
+| Content schema | Zod, at build time                            | Missing or mistyped front-matter fields, bad image paths            |
+| Dead links     | `astro build`                                 | Broken `getStaticPaths` references                                  |
 
 ### Custom checks
 
@@ -51,12 +51,12 @@ Two small scripts, because these are project-specific rules that no off-the-shel
 
 Lives in `tests/unit/`. There are only a handful of pure functions, and each gets tests for its edge cases rather than its happy path.
 
-| Module | Cases |
-|---|---|
-| `lib/seo.ts` | Title composition; a title already ending in the suffix is not doubled; a description longer than 160 characters is truncated at a word boundary, not mid-word; special characters are escaped |
-| `lib/reveal.ts` | Stagger delay is `min(index, 4) * 80`; index 0 → 0ms; index 5 and index 9 both → 320ms (the cap) |
-| `lib/menu.ts` | Focus-trap index arithmetic: wrapping forward from the last element, wrapping backward from the first, behaviour with a single focusable element |
-| `lib/lightbox.ts` | Index clamping at both ends; `next` at the last index does not advance; the announcement string is 1-based (`Image 1 of 6`, never `Image 0 of 6`) |
+| Module            | Cases                                                                                                                                                                                                                                  |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lib/seo.ts`      | Title composition; a title already ending in the suffix is not doubled; a description longer than 160 characters is truncated at a word boundary, not mid-word; special characters are escaped                                         |
+| `lib/reveal.ts`   | Stagger delay is `min(index, 4) * 80`; index 0 → 0ms; index 5 and index 9 both → 320ms (the cap)                                                                                                                                       |
+| `lib/menu.ts`     | Focus-trap index arithmetic: wrapping forward from the last element, wrapping backward from the first, behaviour with a single focusable element                                                                                       |
+| `lib/lightbox.ts` | Index clamping at both ends; `next` at the last index does not advance; the announcement string is 1-based (`Image 1 of 6`, never `Image 0 of 6`)                                                                                      |
 | `lib/projects.ts` | `getAdjacent`: first project has no `prev`, last has no `next`, a middle one has both; a single-project list has neither; drafts are skipped as neighbours; an unknown slug throws. Duplicate `order` values throw and name both files |
 
 The off-by-one cases are listed explicitly because they are the bugs that actually occur in focus traps and carousels.
@@ -69,21 +69,22 @@ Lives in `tests/e2e/`. Run against the built site via `npm run preview`.
 
 ### Projects (browser × preference matrix)
 
-| Project | Browser | Viewport | Notes |
-|---|---|---|---|
-| `desktop-chromium` | Chromium | 1440 × 900 | |
-| `desktop-webkit` | WebKit | 1440 × 900 | Closest available proxy for Safari |
-| `desktop-firefox` | Firefox | 1440 × 900 | |
-| `tablet` | WebKit | 768 × 1024 | Lands between the 735 and 1069 breakpoints |
-| `mobile` | WebKit | 390 × 844 | iPhone-class |
-| `mobile-small` | WebKit | 320 × 568 | The Reflow floor |
-| `reduced-motion` | Chromium | 1440 × 900 | `reducedMotion: "reduce"` |
+| Project            | Browser  | Viewport   | Notes                                      |
+| ------------------ | -------- | ---------- | ------------------------------------------ |
+| `desktop-chromium` | Chromium | 1440 × 900 |                                            |
+| `desktop-webkit`   | WebKit   | 1440 × 900 | Closest available proxy for Safari         |
+| `desktop-firefox`  | Firefox  | 1440 × 900 |                                            |
+| `tablet`           | WebKit   | 768 × 1024 | Lands between the 735 and 1069 breakpoints |
+| `mobile`           | WebKit   | 390 × 844  | iPhone-class                               |
+| `mobile-small`     | WebKit   | 320 × 568  | The Reflow floor                           |
+| `reduced-motion`   | Chromium | 1440 × 900 | `reducedMotion: "reduce"`                  |
 
 Running reduced motion as a Playwright project rather than a manual toggle is what makes it get tested at all. It is otherwise the first thing forgotten.
 
 ### Specs
 
 **`navigation.spec.ts`**
+
 - Every nav link reaches the right page.
 - The wordmark returns to Home from every page.
 - The active page's nav link carries `aria-current="page"`.
@@ -92,6 +93,7 @@ Running reduced motion as a Playwright project rather than a manual toggle is wh
 - Contact and Footer social links point at exactly the URLs in `src/site.config.ts`, so neither page hardcodes them.
 
 **`mobile-menu.spec.ts`** — at 390px:
+
 - The trigger has `aria-expanded="false"` initially.
 - Clicking opens the panel and sets `aria-expanded="true"`.
 - Focus lands on the first link in the panel.
@@ -102,6 +104,7 @@ Running reduced motion as a Playwright project rather than a manual toggle is wh
 - Resizing above 735px while open closes the panel.
 
 **`lightbox.spec.ts`** — on a project page with a gallery:
+
 - Clicking a thumbnail opens the dialog at that index.
 - Focus moves to the close button.
 - `ArrowRight` / `ArrowLeft` move between images.
@@ -112,6 +115,7 @@ Running reduced motion as a Playwright project rather than a manual toggle is wh
 - A project with no gallery renders no gallery section and no empty band.
 
 **`reveal.spec.ts`**
+
 - Elements below the fold start at opacity 0 and reach opacity 1 after scrolling into view.
 - An element that has revealed does not re-animate when scrolled away from and back.
 - **Hero content is at full opacity on load**, never animated.
@@ -119,29 +123,34 @@ Running reduced motion as a Playwright project rather than a manual toggle is wh
 - With JavaScript disabled, all content is visible.
 
 **`view-transitions.spec.ts`**
+
 - Navigating Home → Projects → a project detail page and back leaves the nav and footer in place.
 - **Scroll reveal still works after a client-side navigation.** This is the specific bug that `astro:page-load` exists to prevent, and it is invisible on a hard reload.
 - The menu still opens after a client-side navigation (listeners re-bound, and not double-bound).
 
 **`targets.spec.ts`**
+
 - Every `a`, `button` and `[role="button"]` on every page has a bounding box of at least 44 × 44 px.
 - Adjacent interactive elements are at least 8px apart.
 
 **`content.spec.ts`**
+
 - All six projects have a detail page reachable from the grid.
 - Home renders exactly three featured projects.
 - A project without a live link renders no live link, and no stray separator.
 - A project without `designSystem` renders no design-system heading.
 - The sparse project (`cli-toolkit`) renders without a meta strip and without visual gaps.
-- Prev/next: the first project in grid order has only a *Next* link, the last only a *Previous* link, and following *Next* from the first project visits all six in grid order.
+- Prev/next: the first project in grid order has only a _Next_ link, the last only a _Previous_ link, and following _Next_ from the first project visits all six in grid order.
 - The pager sits inside `nav[aria-label="More projects"]`, and each link's text includes the neighbour's title.
 
 **`fonts.spec.ts`** — guards the rules in [docs/02-design-tokens.md](02-design-tokens.md) §2:
+
 - No page contains `<link rel="preload">` for a font.
 - In every engine in the matrix (all Linux, so none has SF), `document.fonts.check('16px Inter')` resolves true after load and `body`'s computed `font-family` is not a serif.
 - The computed `font-family` lists `-apple-system` before the Inter family, and the Inter family before `system-ui`.
 
 **`responsive.spec.ts`** — at each viewport in the matrix:
+
 - `document.scrollWidth` does not exceed the viewport width, on every page. This single assertion catches most horizontal-overflow bugs.
 - No element overflows its container.
 
@@ -157,13 +166,13 @@ Returning focus to the triggering element after closing a menu or dialog is the 
 
 axe-core via `@axe-core/playwright`, with `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` and `wcag22aa` rule tags, run against:
 
-| Target | Why |
-|---|---|
-| All six page types, desktop | Baseline |
-| All six page types, mobile | Different DOM: the menu trigger replaces the nav list |
-| Home with the mobile menu **open** | A closed menu tests nothing about the menu |
-| A project page with the lightbox **open** | Same reasoning |
-| The 404 page | Routinely forgotten |
+| Target                                    | Why                                                   |
+| ----------------------------------------- | ----------------------------------------------------- |
+| All six page types, desktop               | Baseline                                              |
+| All six page types, mobile                | Different DOM: the menu trigger replaces the nav list |
+| Home with the mobile menu **open**        | A closed menu tests nothing about the menu            |
+| A project page with the lightbox **open** | Same reasoning                                        |
+| The 404 page                              | Routinely forgotten                                   |
 
 Zero violations is the gate. Not "zero serious violations".
 
@@ -174,6 +183,7 @@ Zero violations is the gate. Not "zero serious violations".
 **Keyboard-only.** Mouse unplugged. Per page: `Tab` from the top through every element; confirm the focus ring is always visible and never clipped by the sticky nav (this is WCAG 2.4.11, new in 2.2, and the sticky nav is a direct threat to it); operate the menu with `Enter` and `Escape`; open the lightbox, navigate with arrows, close with `Escape`; confirm focus returns correctly each time; confirm no element becomes a trap.
 
 **Screen reader.** VoiceOver + Safari on macOS, and VoiceOver on iOS.
+
 - `VO+U` heading list reads as a sensible table of contents for each page.
 - The links list has no duplicates and no meaningless entries ("read more" ×6).
 - Images are described usefully, or correctly skipped.
@@ -184,6 +194,7 @@ Zero violations is the gate. Not "zero serious violations".
 **Reduced motion.** OS setting on. Every page: nothing moves on scroll, all content visible, hover and focus colour feedback still present.
 
 **Zoom and text size.**
+
 - 200% browser zoom, every page: no clipping, no overlap, no horizontal scroll.
 - 400% zoom at a 1280px window (WCAG 1.4.10 Reflow).
 - Browser default font size raised to 20px: layout holds. This is the test that `px` font sizes fail and `rem` passes, and it is the reason for that token decision.
@@ -247,17 +258,17 @@ The 1068px shot matters most: it is exactly the breakpoint named in the brief, a
 
 Lighthouse CI against the built site, mobile profile, three runs with the median taken.
 
-| Metric | Budget | Fails if |
-|---|---|---|
-| Performance | ≥ 95 | — |
-| Accessibility | 100 | any violation |
-| Best practices | ≥ 95 | — |
-| SEO | ≥ 95 | — |
-| LCP | < 2.0s | — |
-| CLS | < 0.05 | — |
-| TBT | < 150ms | — |
-| JS transferred (gzip) | < 15 KB | — |
-| Page weight | < 500 KB | any single page |
+| Metric                | Budget   | Fails if        |
+| --------------------- | -------- | --------------- |
+| Performance           | ≥ 95     | —               |
+| Accessibility         | 100      | any violation   |
+| Best practices        | ≥ 95     | —               |
+| SEO                   | ≥ 95     | —               |
+| LCP                   | < 2.0s   | —               |
+| CLS                   | < 0.05   | —               |
+| TBT                   | < 150ms  | —               |
+| JS transferred (gzip) | < 15 KB  | —               |
+| Page weight           | < 500 KB | any single page |
 
 ### Specific things to watch
 
@@ -270,16 +281,16 @@ Lighthouse CI against the built site, mobile profile, three runs with the median
 
 ## 8. Test matrix summary
 
-| Page | Types | Lint | Unit | E2E | a11y | Visual | Lighthouse | Manual |
-|---|---|---|---|---|---|---|---|---|
-| Home | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Projects | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Project detail | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Skills | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Experience | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Contact | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | ✓ |
-| 404 | ✓ | ✓ | — | ✓ | ✓ | ✓ | — | — |
-| `lib/*` | ✓ | ✓ | ✓ | ✓ | — | — | — | — |
+| Page           | Types | Lint | Unit | E2E | a11y | Visual | Lighthouse | Manual |
+| -------------- | ----- | ---- | ---- | --- | ---- | ------ | ---------- | ------ |
+| Home           | ✓     | ✓    | —    | ✓   | ✓    | ✓      | ✓          | ✓      |
+| Projects       | ✓     | ✓    | —    | ✓   | ✓    | ✓      | ✓          | ✓      |
+| Project detail | ✓     | ✓    | —    | ✓   | ✓    | ✓      | ✓          | ✓      |
+| Skills         | ✓     | ✓    | —    | ✓   | ✓    | ✓      | ✓          | ✓      |
+| Experience     | ✓     | ✓    | —    | ✓   | ✓    | ✓      | ✓          | ✓      |
+| Contact        | ✓     | ✓    | —    | ✓   | ✓    | ✓      | ✓          | ✓      |
+| 404            | ✓     | ✓    | —    | ✓   | ✓    | ✓      | —          | —      |
+| `lib/*`        | ✓     | ✓    | ✓    | ✓   | —    | —      | —          | —      |
 
 ---
 

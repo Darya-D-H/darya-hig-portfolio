@@ -14,7 +14,7 @@ The obvious move is to download SF Pro from Apple's developer site and serve it 
 
 ### The legal constraint
 
-Apple distributes SF Pro under the *License Agreement for the Apple San Francisco Font*, headed "For iOS, OS X and tvOS application uses only." Two provisions are decisive:
+Apple distributes SF Pro under the _License Agreement for the Apple San Francisco Font_, headed "For iOS, OS X and tvOS application uses only." Two provisions are decisive:
 
 - The grant is limited to creating mock-ups of user interfaces for software running on Apple's own operating systems.
 - The licence states that you <cite index="51-1">may not embed the Apple Font in any software programs or other products</cite>, and separately forbids using it to create, develop, display or distribute website content.
@@ -38,10 +38,11 @@ Even setting the licence aside, self-hosting would be the wrong call:
 Use one font stack for all text: the Apple system font first, then a self-hosted Inter for everyone else. Serve no Apple font file.
 
 ```css
---font-sans: -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui,
-             "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
---font-mono: ui-monospace, "SF Mono", Menlo, Consolas,
-             "Liberation Mono", monospace;
+--font-sans:
+  -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui, "Segoe UI",
+  Roboto, Helvetica, Arial, sans-serif;
+--font-mono:
+  ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 ```
 
 On Apple hardware this resolves to genuine SF Pro, selected by the OS, and Inter is never downloaded. On Windows, Android and Linux it resolves to Inter. Why the order is exactly this is set out in [docs/02-design-tokens.md](../02-design-tokens.md) §2.
@@ -55,13 +56,13 @@ import { defineConfig, fontProviders } from "astro/config";
 export default defineConfig({
   fonts: [
     {
-      provider: fontProviders.npm(),     // resolves @fontsource-variable/inter from package.json
+      provider: fontProviders.npm(), // resolves @fontsource-variable/inter from package.json
       name: "Inter",
       cssVariable: "--font-inter",
-      weights: ["100 900"],              // one variable file, not one file per weight
+      weights: ["100 900"], // one variable file, not one file per weight
       styles: ["normal"],
       subsets: ["latin"],
-      fallbacks: ["sans-serif"],         // Astro generates a metric-matched fallback from this
+      fallbacks: ["sans-serif"], // Astro generates a metric-matched fallback from this
     },
   ],
 });
@@ -74,7 +75,7 @@ export default defineConfig({
 
 Inter is licensed under the SIL Open Font License 1.1, which permits self-hosting; the licence text ships with the package and is kept in the build output.
 
-Design fidelity on non-Apple platforms is recovered not by shipping the typeface but by matching its *metrics*: the type scale, line heights and letter-spacing in [docs/02-design-tokens.md](../02-design-tokens.md) replicate apple.com's typographic rhythm regardless of which family renders it. Spacing and proportion carry more of the "Apple feel" than glyph shapes do.
+Design fidelity on non-Apple platforms is recovered not by shipping the typeface but by matching its _metrics_: the type scale, line heights and letter-spacing in [docs/02-design-tokens.md](../02-design-tokens.md) replicate apple.com's typographic rhythm regardless of which family renders it. Spacing and proportion carry more of the "Apple feel" than glyph shapes do.
 
 ### Why `"SF Pro Display"` is not in the stack
 
@@ -84,7 +85,7 @@ Naming `"SF Pro Display"` explicitly in a single shared stack would force displa
 
 ### `SF Mono` in the mono stack
 
-`"SF Mono"` *is* named in the monospace stack. This is not a contradiction: naming a font family in CSS asks the user's device for a font it may already have installed, which is ordinary CSS and involves no distribution by us. What the licence forbids is embedding and serving the file. We never do that for any Apple font.
+`"SF Mono"` _is_ named in the monospace stack. This is not a contradiction: naming a font family in CSS asks the user's device for a font it may already have installed, which is ordinary CSS and involves no distribution by us. What the licence forbids is embedding and serving the file. We never do that for any Apple font.
 
 ## Options considered
 
@@ -116,7 +117,7 @@ System font first, with Inter served only where the system stack would reach a w
 
 **Cons:** a font download and a brief swap on first visit — paid only by non-Apple visitors. Letter-spacing tuned for SF is an approximation on Inter.
 
-**Correction to the first draft of this ADR.** It claimed CSS cannot load a font "only if the earlier families are unavailable" without JavaScript. That was wrong. Browsers download a web font only when it is needed to render a character, so a family placed *after* `-apple-system` is never fetched on Apple devices. The condition is expressed by the stack order itself. Two things can break it, and both are rules now: putting `system-ui` before Inter (which makes Inter unreachable on Windows and Android), and preloading Inter (which forces the download everywhere).
+**Correction to the first draft of this ADR.** It claimed CSS cannot load a font "only if the earlier families are unavailable" without JavaScript. That was wrong. Browsers download a web font only when it is needed to render a character, so a family placed _after_ `-apple-system` is never fetched on Apple devices. The condition is expressed by the stack order itself. Two things can break it, and both are rules now: putting `system-ui` before Inter (which makes Inter unreachable on Windows and Android), and preloading Inter (which forces the download everywhere).
 
 ## Trade-off analysis
 

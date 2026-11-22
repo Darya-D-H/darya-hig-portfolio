@@ -38,7 +38,7 @@ Three mitigations, all applied:
 
 1. **Internal links never hardcode a path prefix.** They use root-relative hrefs, and Astro's `import.meta.env.BASE_URL` is used wherever a prefix must be composed. Setting `base` later then works without touching the links.
 2. **Asset URLs come from `astro:assets` and from imports**, not from hand-written strings, so they are rewritten by the build.
-3. **A note in the Phase 7 checklist**: if the host is GitHub Pages *without* a custom domain, `base` must be set and the whole site re-verified, because this is a class of bug that does not appear in local `npm run dev`.
+3. **A note in the Phase 7 checklist**: if the host is GitHub Pages _without_ a custom domain, `base` must be set and the whole site re-verified, because this is a class of bug that does not appear in local `npm run dev`.
 
 The cleanest way to avoid the trap entirely is a custom domain on any of the three hosts, or a `<user>.github.io` user-site repository, both of which serve from the root. That is a recommendation, not a decision.
 

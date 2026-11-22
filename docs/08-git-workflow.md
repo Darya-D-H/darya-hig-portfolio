@@ -47,17 +47,17 @@ Branches and pull requests on a one-person project are not bureaucracy. The PR i
 
 ### Types
 
-| Type | For |
-|---|---|
-| `feat` | A new feature or component |
-| `fix` | A bug fix |
-| `refactor` | Behaviour unchanged, structure improved |
-| `style` | Formatting only, no logic |
-| `docs` | Documentation |
-| `test` | Tests |
-| `chore` | Tooling, dependencies, config |
-| `perf` | A performance improvement |
-| `a11y` | An accessibility fix — not a standard Conventional Commits type, added deliberately because accessibility work is a first-class concern here and should be greppable in the log |
+| Type       | For                                                                                                                                                                             |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `feat`     | A new feature or component                                                                                                                                                      |
+| `fix`      | A bug fix                                                                                                                                                                       |
+| `refactor` | Behaviour unchanged, structure improved                                                                                                                                         |
+| `style`    | Formatting only, no logic                                                                                                                                                       |
+| `docs`     | Documentation                                                                                                                                                                   |
+| `test`     | Tests                                                                                                                                                                           |
+| `chore`    | Tooling, dependencies, config                                                                                                                                                   |
+| `perf`     | A performance improvement                                                                                                                                                       |
+| `a11y`     | An accessibility fix — not a standard Conventional Commits type, added deliberately because accessibility work is a first-class concern here and should be greppable in the log |
 
 ### Good and bad
 
@@ -93,11 +93,11 @@ fix stuff and add projects page and update deps
 
 ## 3. Commit size
 
-| Size | Assessment |
-|---|---|
-| ~100 lines | Ideal. Easy to review, easy to revert |
-| ~300 lines | Acceptable for one coherent change |
-| 1000+ lines | Split it |
+| Size        | Assessment                            |
+| ----------- | ------------------------------------- |
+| ~100 lines  | Ideal. Easy to review, easy to revert |
+| ~300 lines  | Acceptable for one coherent change    |
+| 1000+ lines | Split it                              |
 
 The exception is a genuinely atomic addition — the initial `@theme` token block is one commit even though it is long, because half a token system is not a reviewable state.
 
@@ -111,8 +111,8 @@ Automated with Husky and lint-staged:
 {
   "lint-staged": {
     "*.{ts,astro,js,mjs}": ["eslint --fix", "prettier --write"],
-    "*.{json,md,css}": ["prettier --write"]
-  }
+    "*.{json,md,css}": ["prettier --write"],
+  },
 }
 ```
 
@@ -134,18 +134,23 @@ The hook runs lint and format. It does **not** run the full build or the E2E sui
 
 ```markdown
 ## What
+
 One or two sentences.
 
 ## Why
+
 Which spec section or roadmap task this implements. Link it.
 
 ## Changes
+
 - `path/to/file`: what changed and why
 
 ## Deliberately not touched
+
 - Things in scope-adjacent territory left alone, and why
 
 ## Verification
+
 - [ ] `npm run verify` passes
 - [ ] `npm run test:e2e` passes (if UI changed)
 - [ ] `npm run test:a11y` passes (if markup changed)
@@ -155,6 +160,7 @@ Which spec section or roadmap task this implements. Link it.
 - [ ] Docs updated (if behaviour changed)
 
 ## Concerns
+
 Anything uncertain, or a trade-off a reviewer should weigh.
 ```
 
@@ -211,7 +217,7 @@ CONCERNS
   mockup. Worth a look before this lands.
 ```
 
-Stating what was *not* changed is as useful as stating what was. It prevents the review question "did you forget the footer?" and it records a decision instead of leaving a silence.
+Stating what was _not_ changed is as useful as stating what was. It prevents the review question "did you forget the footer?" and it records a decision instead of leaving a silence.
 
 ---
 

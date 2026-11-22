@@ -24,13 +24,13 @@ Images are declared with Astro's `image()` schema helper so they are processed b
 
 ### Option A — Content collection with a Zod schema (chosen)
 
-| Dimension | Assessment |
-|---|---|
-| Complexity | Low. One schema, one template, six Markdown files |
-| Type safety | Full. Fields are typed and validated at build time |
-| Adding a project | Create one Markdown file. Nothing else changes |
-| Image handling | `image()` resolves paths and supplies intrinsic dimensions |
-| Optional fields | Expressed directly as `.optional()` in the schema |
+| Dimension        | Assessment                                                 |
+| ---------------- | ---------------------------------------------------------- |
+| Complexity       | Low. One schema, one template, six Markdown files          |
+| Type safety      | Full. Fields are typed and validated at build time         |
+| Adding a project | Create one Markdown file. Nothing else changes             |
+| Image handling   | `image()` resolves paths and supplies intrinsic dimensions |
+| Optional fields  | Expressed directly as `.optional()` in the schema          |
 
 **Pros**
 

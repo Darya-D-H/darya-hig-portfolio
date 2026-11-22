@@ -12,20 +12,20 @@ Tailwind v4 reads its theme from a CSS-native `@theme` block, so these tokens ar
 
 ### Palette
 
-| Token | Value | Used for |
-|---|---|---|
-| `--color-canvas` | `#ffffff` | Page background, white bands, card surfaces |
-| `--color-section` | `#f5f5f7` | Alternating section bands, as specified |
-| `--color-card` | `#ffffff` | Card surfaces sitting on a grey band |
-| `--color-ink` | `#1d1d1f` | Primary text, headings |
-| `--color-ink-secondary` | `#6e6e73` | Body copy, captions, metadata |
-| `--color-ink-tertiary` | `#86868b` | De-emphasised labels, timestamps |
-| `--color-accent` | `#0071e3` | Filled buttons, focus ring |
-| `--color-accent-hover` | `#0068d1` | Filled button hover — **darker**, see note below |
-| `--color-link` | `#0066cc` | Text links |
-| `--color-divider` | `#d2d2d7` | Hairline rules, card borders, timeline line |
-| `--color-nav-bg` | `rgba(255,255,255,0.72)` | Translucent nav background |
-| `--color-overlay` | `rgba(0,0,0,0.48)` | Lightbox and mobile-menu scrim |
+| Token                   | Value                    | Used for                                         |
+| ----------------------- | ------------------------ | ------------------------------------------------ |
+| `--color-canvas`        | `#ffffff`                | Page background, white bands, card surfaces      |
+| `--color-section`       | `#f5f5f7`                | Alternating section bands, as specified          |
+| `--color-card`          | `#ffffff`                | Card surfaces sitting on a grey band             |
+| `--color-ink`           | `#1d1d1f`                | Primary text, headings                           |
+| `--color-ink-secondary` | `#6e6e73`                | Body copy, captions, metadata                    |
+| `--color-ink-tertiary`  | `#86868b`                | De-emphasised labels, timestamps                 |
+| `--color-accent`        | `#0071e3`                | Filled buttons, focus ring                       |
+| `--color-accent-hover`  | `#0068d1`                | Filled button hover — **darker**, see note below |
+| `--color-link`          | `#0066cc`                | Text links                                       |
+| `--color-divider`       | `#d2d2d7`                | Hairline rules, card borders, timeline line      |
+| `--color-nav-bg`        | `rgba(255,255,255,0.72)` | Translucent nav background                       |
+| `--color-overlay`       | `rgba(0,0,0,0.48)`       | Lightbox and mobile-menu scrim                   |
 
 ### Why two blues
 
@@ -33,21 +33,21 @@ Tailwind v4 reads its theme from a CSS-native `@theme` block, so these tokens ar
 
 Checked against WCAG 2.2 AA (4.5:1 for normal text, 3:1 for large text and UI components):
 
-| Foreground | Background | Ratio | Normal text | Verdict |
-|---|---|---|---|---|
-| `#1d1d1f` | `#ffffff` | 16.83:1 | pass | Primary text |
-| `#1d1d1f` | `#f5f5f7` | 15.46:1 | pass | Primary text on grey bands |
-| `#6e6e73` | `#ffffff` | 5.07:1 | pass | Body copy |
-| `#6e6e73` | `#f5f5f7` | 4.66:1 | pass | Body copy on grey bands |
-| `#86868b` | `#ffffff` | 3.62:1 | **fail** | Large text only, ≥ 24px or ≥ 19px bold |
-| `#86868b` | `#f5f5f7` | 3.33:1 | **fail** | Large text only |
-| `#ffffff` | `#0071e3` | 4.70:1 | pass | Filled button label |
-| `#0071e3` | `#ffffff` | 4.70:1 | pass | Accent text on white |
-| `#0071e3` | `#f5f5f7` | 4.31:1 | **fail** | Do not use for body-size text on grey |
-| `#ffffff` | `#0068d1` | 5.38:1 | pass | Filled button label, hover |
-| `#ffffff` | `#0077ed` | 4.32:1 | **fail** | Apple's hover blue — rejected, see below |
-| `#0066cc` | `#ffffff` | 5.57:1 | pass | Text links |
-| `#0066cc` | `#f5f5f7` | 5.11:1 | pass | Text links on grey bands |
+| Foreground | Background | Ratio   | Normal text | Verdict                                  |
+| ---------- | ---------- | ------- | ----------- | ---------------------------------------- |
+| `#1d1d1f`  | `#ffffff`  | 16.83:1 | pass        | Primary text                             |
+| `#1d1d1f`  | `#f5f5f7`  | 15.46:1 | pass        | Primary text on grey bands               |
+| `#6e6e73`  | `#ffffff`  | 5.07:1  | pass        | Body copy                                |
+| `#6e6e73`  | `#f5f5f7`  | 4.66:1  | pass        | Body copy on grey bands                  |
+| `#86868b`  | `#ffffff`  | 3.62:1  | **fail**    | Large text only, ≥ 24px or ≥ 19px bold   |
+| `#86868b`  | `#f5f5f7`  | 3.33:1  | **fail**    | Large text only                          |
+| `#ffffff`  | `#0071e3`  | 4.70:1  | pass        | Filled button label                      |
+| `#0071e3`  | `#ffffff`  | 4.70:1  | pass        | Accent text on white                     |
+| `#0071e3`  | `#f5f5f7`  | 4.31:1  | **fail**    | Do not use for body-size text on grey    |
+| `#ffffff`  | `#0068d1`  | 5.38:1  | pass        | Filled button label, hover               |
+| `#ffffff`  | `#0077ed`  | 4.32:1  | **fail**    | Apple's hover blue — rejected, see below |
+| `#0066cc`  | `#ffffff`  | 5.57:1  | pass        | Text links                               |
+| `#0066cc`  | `#f5f5f7`  | 5.11:1  | pass        | Text links on grey bands                 |
 
 Ratios computed with the WCAG 2.x relative-luminance formula; the script used is in [docs/07-test-plan.md](07-test-plan.md) so any new colour can be checked the same way.
 
@@ -55,7 +55,7 @@ Three rules follow, and they are enforced in review:
 
 1. **`--color-ink-tertiary` is never used below 24px** (or below 19px at weight 600). It is for the eyebrow and large labels only. If a small caption needs to be quiet, use `--color-ink-secondary`.
 2. **`--color-accent` is never used as text on a grey band.** Use `--color-link`. This is exactly the trap of specifying one accent colour and assuming it works everywhere.
-3. **The button hover goes darker, not lighter.** apple.com's hover blue is `#0077ed`, which is *lighter* than `#0071e3` and drops white-on-blue to 4.32:1 — below the 4.5:1 threshold for normal text. Apple can absorb that; a portfolio claiming AA conformance cannot. `--color-accent-hover` is therefore `#0068d1` (5.38:1), which also gives a more conventional "pressed/engaged" direction. This is the first deliberate divergence from apple.com's own CSS, and it is a case where the HIG's accessibility guidance and apple.com's marketing CSS disagree.
+3. **The button hover goes darker, not lighter.** apple.com's hover blue is `#0077ed`, which is _lighter_ than `#0071e3` and drops white-on-blue to 4.32:1 — below the 4.5:1 threshold for normal text. Apple can absorb that; a portfolio claiming AA conformance cannot. `--color-accent-hover` is therefore `#0068d1` (5.38:1), which also gives a more conventional "pressed/engaged" direction. This is the first deliberate divergence from apple.com's own CSS, and it is a case where the HIG's accessibility guidance and apple.com's marketing CSS disagree.
 
 ### A note on the divider colour
 
@@ -83,10 +83,11 @@ Components reference the semantic name, never the raw palette entry. This is wha
 ### Font stack
 
 ```css
---font-sans: -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui,
-             "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
---font-mono: ui-monospace, "SF Mono", Menlo, Consolas,
-             "Liberation Mono", monospace;
+--font-sans:
+  -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui, "Segoe UI",
+  Roboto, Helvetica, Arial, sans-serif;
+--font-mono:
+  ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 ```
 
 One stack, used for everything. On Apple hardware it resolves to genuine SF Pro through the system. Everywhere else it resolves to Inter, self-hosted. **No SF Pro file is ever served from this site** — see [ADR-0003](adr/ADR-0003-typography-and-sf-pro-licensing.md) for the licensing reason.
@@ -95,35 +96,35 @@ One stack, used for everything. On Apple hardware it resolves to genuine SF Pro 
 
 **The order of the first four families is load-bearing.** Three rules follow from it:
 
-1. **Inter must come before `system-ui`.** On Windows `system-ui` *is* Segoe UI and on Android it *is* Roboto, so anything after it is unreachable. (The first draft of this doc put `system-ui` first, which would have made Inter dead code.)
+1. **Inter must come before `system-ui`.** On Windows `system-ui` _is_ Segoe UI and on Android it _is_ Roboto, so anything after it is unreachable. (The first draft of this doc put `system-ui` first, which would have made Inter dead code.)
 2. **Apple visitors never download Inter.** Browsers fetch a web font only when it is actually needed to render a character. On macOS and iOS, `-apple-system` (Safari, Firefox) or `BlinkMacSystemFont` (Chrome) matches first and covers every glyph, so the Inter request is never made. No JavaScript is involved.
 3. **Inter is never preloaded.** A `<link rel="preload">` forces the download for every visitor, which would charge Apple visitors for a font they never render and undo rule 2. The `<Font />` component is used without its `preload` prop.
 
 **Tracking on Inter.** The letter-spacing values below are tuned to SF. Inter is close but not identical, so typography gets a visual check on a non-Apple platform before release ([docs/07-test-plan.md](07-test-plan.md) §9). Note that CI screenshots come from Linux, where all three engines render Inter — CI never shows SF, so SF rendering is checked by hand on a Mac and an iPhone.
 
-**Why `"SF Pro Display"` is deliberately *not* named in the stack.** SF has an optical-size threshold at 20pt: below it the system uses SF Pro Text, which has looser tracking tuned for body copy, and at or above it SF Pro Display, which is tighter and tuned for headings. `-apple-system` and `system-ui` select the correct optical variant automatically based on the rendered size. Naming `"SF Pro Display"` explicitly in a single shared stack would force display metrics onto 14px captions and 17px body text, which is precisely the mistake the threshold exists to prevent. Let the system choose.
+**Why `"SF Pro Display"` is deliberately _not_ named in the stack.** SF has an optical-size threshold at 20pt: below it the system uses SF Pro Text, which has looser tracking tuned for body copy, and at or above it SF Pro Display, which is tighter and tuned for headings. `-apple-system` and `system-ui` select the correct optical variant automatically based on the rendered size. Naming `"SF Pro Display"` explicitly in a single shared stack would force display metrics onto 14px captions and 17px body text, which is precisely the mistake the threshold exists to prevent. Let the system choose.
 
 ### Sizes are declared in `rem`, not `px`
 
 apple.com sets its type in `px`. We do not, and this is the second deliberate divergence.
 
-A `px` font size ignores the reader's browser font-size preference entirely. Someone who has set their default text size to 20px because 16px is uncomfortable gets no benefit from a site built in `px` — the text stays at whatever the stylesheet says. Browser *zoom* still works, but zoom and default-font-size are two different settings, and a reader who uses the latter is simply failed. On the web, honouring that preference is the closest equivalent to the HIG's Dynamic Type, which the guidelines treat as a hard requirement rather than a nicety.
+A `px` font size ignores the reader's browser font-size preference entirely. Someone who has set their default text size to 20px because 16px is uncomfortable gets no benefit from a site built in `px` — the text stays at whatever the stylesheet says. Browser _zoom_ still works, but zoom and default-font-size are two different settings, and a reader who uses the latter is simply failed. On the web, honouring that preference is the closest equivalent to the HIG's Dynamic Type, which the guidelines treat as a hard requirement rather than a nicety.
 
 So every size below is written as its `px` intent with the `rem` value that implements it, against a 16px root. The root `font-size` is never overridden.
 
-| px | rem |
-|---|---|
-| 12 | 0.75 |
-| 14 | 0.875 |
-| 17 | 1.0625 |
-| 19 | 1.1875 |
-| 21 | 1.3125 |
-| 24 | 1.5 |
-| 28 | 1.75 |
-| 32 | 2 |
-| 40 | 2.5 |
-| 48 | 3 |
-| 56 | 3.5 |
+| px  | rem    |
+| --- | ------ |
+| 12  | 0.75   |
+| 14  | 0.875  |
+| 17  | 1.0625 |
+| 19  | 1.1875 |
+| 21  | 1.3125 |
+| 24  | 1.5    |
+| 28  | 1.75   |
+| 32  | 2      |
+| 40  | 2.5    |
+| 48  | 3      |
+| 56  | 3.5    |
 
 Line heights stay unitless, which is correct — a unitless line height multiplies the element's own font size and inherits proportionally. Letter-spacing stays in `em` so it scales with the text. Spacing, radius and layout values stay in `px`, because a 28px corner radius should not grow when someone enlarges their text; only type scales.
 
@@ -131,18 +132,18 @@ Line heights stay unitless, which is correct — a unitless line height multipli
 
 Three columns because apple.com restyles type at each breakpoint rather than merely reflowing it. Every row is `size / line-height / weight / letter-spacing`, sizes shown in px for readability and implemented in rem per the table above.
 
-| Token | > 1068px | ≤ 1068px | ≤ 734px |
-|---|---|---|---|
-| `--text-hero` | 56 / 1.0714 / 600 / −0.005em | 48 / 1.0833 / 600 / −0.003em | 40 / 1.1 / 600 / 0 |
-| `--text-title` (h1) | 48 / 1.0833 / 600 / −0.003em | 40 / 1.1 / 600 / 0 | 32 / 1.125 / 600 / 0.004em |
-| `--text-headline` (h2) | 40 / 1.1 / 600 / 0 | 32 / 1.125 / 600 / 0.004em | 28 / 1.1428 / 600 / 0.007em |
-| `--text-subhead` (h3) | 28 / 1.1428 / 600 / 0.007em | **24 / 1.1667 / 600 / 0.009em** | 21 / 1.1905 / 600 / 0.011em |
-| `--text-card-title` | 24 / 1.1667 / 600 / 0.009em | 21 / 1.1905 / 600 / 0.011em | 19 / 1.2105 / 600 / 0.012em |
-| `--text-body-lg` | 21 / 1.381 / 400 / 0.011em | 19 / 1.4211 / 400 / 0.012em | 17 / 1.4706 / 400 / −0.022em |
-| `--text-body` | 17 / 1.4706 / 400 / −0.022em | 17 / 1.4706 / 400 / −0.022em | 17 / 1.4706 / 400 / −0.022em |
-| `--text-body-sm` | 14 / 1.4286 / 400 / −0.016em | 14 / 1.4286 / 400 / −0.016em | 14 / 1.4286 / 400 / −0.016em |
-| `--text-caption` | 12 / 1.3334 / 400 / −0.01em | 12 / 1.3334 / 400 / −0.01em | 12 / 1.3334 / 400 / −0.01em |
-| `--text-eyebrow` | 19 / 1.2105 / 600 / 0.012em | 17 / 1.2353 / 600 / 0.012em | 17 / 1.2353 / 600 / 0.012em |
+| Token                  | > 1068px                     | ≤ 1068px                        | ≤ 734px                      |
+| ---------------------- | ---------------------------- | ------------------------------- | ---------------------------- |
+| `--text-hero`          | 56 / 1.0714 / 600 / −0.005em | 48 / 1.0833 / 600 / −0.003em    | 40 / 1.1 / 600 / 0           |
+| `--text-title` (h1)    | 48 / 1.0833 / 600 / −0.003em | 40 / 1.1 / 600 / 0              | 32 / 1.125 / 600 / 0.004em   |
+| `--text-headline` (h2) | 40 / 1.1 / 600 / 0           | 32 / 1.125 / 600 / 0.004em      | 28 / 1.1428 / 600 / 0.007em  |
+| `--text-subhead` (h3)  | 28 / 1.1428 / 600 / 0.007em  | **24 / 1.1667 / 600 / 0.009em** | 21 / 1.1905 / 600 / 0.011em  |
+| `--text-card-title`    | 24 / 1.1667 / 600 / 0.009em  | 21 / 1.1905 / 600 / 0.011em     | 19 / 1.2105 / 600 / 0.012em  |
+| `--text-body-lg`       | 21 / 1.381 / 400 / 0.011em   | 19 / 1.4211 / 400 / 0.012em     | 17 / 1.4706 / 400 / −0.022em |
+| `--text-body`          | 17 / 1.4706 / 400 / −0.022em | 17 / 1.4706 / 400 / −0.022em    | 17 / 1.4706 / 400 / −0.022em |
+| `--text-body-sm`       | 14 / 1.4286 / 400 / −0.016em | 14 / 1.4286 / 400 / −0.016em    | 14 / 1.4286 / 400 / −0.016em |
+| `--text-caption`       | 12 / 1.3334 / 400 / −0.01em  | 12 / 1.3334 / 400 / −0.01em     | 12 / 1.3334 / 400 / −0.01em  |
+| `--text-eyebrow`       | 19 / 1.2105 / 600 / 0.012em  | 17 / 1.2353 / 600 / 0.012em     | 17 / 1.2353 / 600 / 0.012em  |
 
 The bolded cell is the exact rule from the brief (`.CopyLockup_header` at `max-width: 1068px`): 24px, line-height 1.1666666667, weight 600, letter-spacing .009em. It lands on `--text-subhead` at the 1068px breakpoint, which means that style is now a token used everywhere that size of heading appears, rather than a one-off.
 
@@ -167,29 +168,29 @@ A `clamp()` on `vw` means a user who zooms gets nothing, because the viewport wi
 
 Base unit 4px. The scale is the subset actually needed; adding an entry requires a reason.
 
-| Token | Value | Typical use |
-|---|---|---|
-| `--space-1` | 4px | Icon-to-label gap |
-| `--space-2` | 8px | Tag chip padding, tight stacks |
-| `--space-3` | 12px | Inside small components |
-| `--space-4` | 16px | Default gap in a stack |
-| `--space-5` | 20px | — |
-| `--space-6` | 24px | Card inner padding, mobile |
-| `--space-8` | 32px | Card inner padding, desktop; grid gutter |
-| `--space-10` | 40px | Heading to content |
-| `--space-12` | 48px | Sub-section spacing |
-| `--space-16` | 64px | Section padding, mobile |
-| `--space-20` | 80px | Section padding, tablet |
-| `--space-25` | 100px | Section padding, desktop |
-| `--space-32` | 128px | Hero padding, desktop |
+| Token        | Value | Typical use                              |
+| ------------ | ----- | ---------------------------------------- |
+| `--space-1`  | 4px   | Icon-to-label gap                        |
+| `--space-2`  | 8px   | Tag chip padding, tight stacks           |
+| `--space-3`  | 12px  | Inside small components                  |
+| `--space-4`  | 16px  | Default gap in a stack                   |
+| `--space-5`  | 20px  | —                                        |
+| `--space-6`  | 24px  | Card inner padding, mobile               |
+| `--space-8`  | 32px  | Card inner padding, desktop; grid gutter |
+| `--space-10` | 40px  | Heading to content                       |
+| `--space-12` | 48px  | Sub-section spacing                      |
+| `--space-16` | 64px  | Section padding, mobile                  |
+| `--space-20` | 80px  | Section padding, tablet                  |
+| `--space-25` | 100px | Section padding, desktop                 |
+| `--space-32` | 128px | Hero padding, desktop                    |
 
 ### Section vertical rhythm
 
-| Viewport | Section padding (top and bottom) | Hero padding |
-|---|---|---|
-| > 1068px | 100px | 128px |
-| 735–1068px | 80px | 96px |
-| ≤ 734px | 64px | 72px |
+| Viewport   | Section padding (top and bottom) | Hero padding |
+| ---------- | -------------------------------- | ------------ |
+| > 1068px   | 100px                            | 128px        |
+| 735–1068px | 80px                             | 96px         |
+| ≤ 734px    | 64px                             | 72px         |
 
 Consecutive bands do **not** double their padding at the seam. A `Section` component owns its own vertical padding and two adjacent sections produce 200px of space on desktop, which is correct and is how Apple's slabs breathe. Do not "fix" this by halving it.
 
@@ -205,21 +206,21 @@ Consecutive bands do **not** double their padding at the seam. A `Section` compo
 
 Modelled directly on apple.com's content column.
 
-| Viewport | Max content width | Side gutter |
-|---|---|---|
-| > 1068px | 980px | 22px |
-| 735–1068px | 692px | 22px |
-| ≤ 734px | 100% | 22px |
+| Viewport   | Max content width | Side gutter |
+| ---------- | ----------------- | ----------- |
+| > 1068px   | 980px             | 22px        |
+| 735–1068px | 692px             | 22px        |
+| ≤ 734px    | 100%              | 22px        |
 
 A `--container-wide` of 1280px exists for the project gallery and the hero image, which are allowed to exceed the text column.
 
 ### Breakpoints
 
 ```css
---breakpoint-sm: 480px;   /* small phone adjustments */
---breakpoint-md: 735px;   /* tablet: apple.com's lower breakpoint + 1 */
---breakpoint-lg: 1069px;  /* desktop: apple.com's 1068px breakpoint + 1 */
---breakpoint-xl: 1441px;  /* large desktop */
+--breakpoint-sm: 480px; /* small phone adjustments */
+--breakpoint-md: 735px; /* tablet: apple.com's lower breakpoint + 1 */
+--breakpoint-lg: 1069px; /* desktop: apple.com's 1068px breakpoint + 1 */
+--breakpoint-xl: 1441px; /* large desktop */
 ```
 
 Tailwind's breakpoints are `min-width`, while the brief's CSS is `max-width: 1068px`. These describe the same boundary from opposite sides: `max-width: 1068px` is the complement of `min-width: 1069px`. The implementation is mobile-first, so styles are written for small screens and `lg:` adds the desktop treatment. The one `max-width` query we keep is the `≤734px` mobile menu, where expressing it as a max-width reads more clearly.
@@ -228,25 +229,25 @@ Tailwind's breakpoints are `min-width`, while the brief's CSS is `max-width: 106
 
 A named ladder, so no component invents `z-index: 9999`.
 
-| Token | Value | Layer |
-|---|---|---|
-| `--z-base` | 0 | Page content |
-| `--z-sticky` | 100 | Sticky nav |
-| `--z-menu` | 200 | Mobile menu panel |
-| `--z-overlay` | 300 | Scrim |
-| `--z-lightbox` | 400 | Lightbox |
-| `--z-skip-link` | 500 | Skip-to-content link, must sit above everything |
+| Token           | Value | Layer                                           |
+| --------------- | ----- | ----------------------------------------------- |
+| `--z-base`      | 0     | Page content                                    |
+| `--z-sticky`    | 100   | Sticky nav                                      |
+| `--z-menu`      | 200   | Mobile menu panel                               |
+| `--z-overlay`   | 300   | Scrim                                           |
+| `--z-lightbox`  | 400   | Lightbox                                        |
+| `--z-skip-link` | 500   | Skip-to-content link, must sit above everything |
 
 ---
 
 ## 5. Radius
 
-| Token | Value | Applies to |
-|---|---|---|
-| `--radius-card` | 28px | Cards, hero images, gallery items, as specified |
-| `--radius-md` | 18px | Elements nested inside a card, so they do not fight the 28px parent |
-| `--radius-sm` | 12px | Thumbnails, code blocks |
-| `--radius-xs` | 8px | Tag chips |
+| Token           | Value | Applies to                                                                                             |
+| --------------- | ----- | ------------------------------------------------------------------------------------------------------ |
+| `--radius-card` | 28px  | Cards, hero images, gallery items, as specified                                                        |
+| `--radius-md`   | 18px  | Elements nested inside a card, so they do not fight the 28px parent                                    |
+| `--radius-sm`   | 12px  | Thumbnails, code blocks                                                                                |
+| `--radius-xs`   | 8px   | Tag chips                                                                                              |
 | `--radius-pill` | 980px | Buttons. The large value guarantees a full semicircle at any height, which is the trick apple.com uses |
 
 **Nesting rule:** a child's radius should be roughly the parent's radius minus the padding between them. A 28px card with 24px padding wants an inner radius near 12–18px, not another 28px. Concentric radii are what make the corners look drawn rather than defaulted.
@@ -257,12 +258,12 @@ A named ladder, so no component invents `z-index: 9999`.
 
 Apple leans on the white-card-on-grey-band contrast rather than drop shadows, so shadows here are restrained and exist mainly as hover feedback.
 
-| Token | Value | Use |
-|---|---|---|
-| `--shadow-none` | `none` | Default card state on a grey band |
-| `--shadow-card-hover` | `0 4px 24px rgba(0,0,0,0.08)` | Card hover and focus-visible |
-| `--shadow-nav` | `0 1px 0 rgba(0,0,0,0.06)` | Hairline under the sticky nav once scrolled |
-| `--shadow-lightbox` | `0 24px 64px rgba(0,0,0,0.24)` | Lightbox panel |
+| Token                 | Value                          | Use                                         |
+| --------------------- | ------------------------------ | ------------------------------------------- |
+| `--shadow-none`       | `none`                         | Default card state on a grey band           |
+| `--shadow-card-hover` | `0 4px 24px rgba(0,0,0,0.08)`  | Card hover and focus-visible                |
+| `--shadow-nav`        | `0 1px 0 rgba(0,0,0,0.06)`     | Hairline under the sticky nav once scrolled |
+| `--shadow-lightbox`   | `0 24px 64px rgba(0,0,0,0.24)` | Lightbox panel                              |
 
 Cards on a **white** band get a `1px` `--color-divider` border instead of a shadow, since a white card on a white background has nothing to separate it otherwise.
 
@@ -287,8 +288,12 @@ Applied with the prefix first, which is not optional:
   backdrop-filter: var(--blur-nav);
 }
 
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .nav { background-color: var(--color-nav-bg-fallback); }
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .nav {
+    background-color: var(--color-nav-bg-fallback);
+  }
 }
 ```
 
@@ -323,30 +328,30 @@ Where an icon is genuinely needed (the menu glyph, the close glyph, the chevron,
 
 Values and rationale in [docs/04-motion.md](04-motion.md). Listed here because they are tokens.
 
-| Token | Value |
-|---|---|
-| `--duration-instant` | 100ms |
-| `--duration-fast` | 200ms |
-| `--duration-base` | 300ms |
-| `--duration-menu` | 400ms |
-| `--duration-reveal` | 600ms |
-| `--ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` |
-| `--ease-in-out` | `cubic-bezier(0.4, 0, 0.2, 1)` |
-| `--ease-nav` | `cubic-bezier(0.32, 0.08, 0.24, 1)` |
-| `--reveal-distance` | 24px |
-| `--reveal-stagger` | 80ms |
+| Token                | Value                               |
+| -------------------- | ----------------------------------- |
+| `--duration-instant` | 100ms                               |
+| `--duration-fast`    | 200ms                               |
+| `--duration-base`    | 300ms                               |
+| `--duration-menu`    | 400ms                               |
+| `--duration-reveal`  | 600ms                               |
+| `--ease-out`         | `cubic-bezier(0.16, 1, 0.3, 1)`     |
+| `--ease-in-out`      | `cubic-bezier(0.4, 0, 0.2, 1)`      |
+| `--ease-nav`         | `cubic-bezier(0.32, 0.08, 0.24, 1)` |
+| `--reveal-distance`  | 24px                                |
+| `--reveal-stagger`   | 80ms                                |
 
 ---
 
 ## 9. Sizing
 
-| Token | Value | Use |
-|---|---|---|
-| `--size-nav-height` | 44px | Nav bar height; also the HIG minimum touch target |
-| `--size-touch-min` | 44px | Minimum hit area on every interactive element |
-| `--size-focus-ring` | 2px | Focus outline width |
-| `--size-focus-offset` | 2px | Focus outline offset |
-| `--size-hairline` | 1px | Dividers |
+| Token                 | Value | Use                                               |
+| --------------------- | ----- | ------------------------------------------------- |
+| `--size-nav-height`   | 44px  | Nav bar height; also the HIG minimum touch target |
+| `--size-touch-min`    | 44px  | Minimum hit area on every interactive element     |
+| `--size-focus-ring`   | 2px   | Focus outline width                               |
+| `--size-focus-offset` | 2px   | Focus outline offset                              |
+| `--size-hairline`     | 1px   | Dividers                                          |
 
 The 44px nav height is not a coincidence: it is the HIG's minimum comfortable touch target, and apple.com's global nav is the same height. Where a link's text is shorter than 44px tall, padding brings the hit area up to 44px even though the visible text is smaller.
 
@@ -375,8 +380,9 @@ This is the implementation target. `src/styles/global.css` begins:
 
   /* ---- type ---- */
   /* --font-inter is injected by Astro's <Font /> component — see §2 */
-  --font-sans: -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui,
-    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* mobile-first values; breakpoint overrides live in the base layer */

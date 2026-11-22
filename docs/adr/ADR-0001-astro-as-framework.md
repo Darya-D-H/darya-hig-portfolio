@@ -29,16 +29,16 @@ Use **Astro 7** with static output (`output: "static"`, which is the default), n
 
 ### Option A — Astro (chosen)
 
-| Dimension | Assessment |
-|---|---|
-| Complexity | Low. `.astro` components are HTML with a frontmatter script block |
-| Cost | Free; static hosting |
-| JS shipped | Zero by default. Only what we explicitly add |
-| Content handling | Content collections with Zod schemas, built in |
-| Detail routes | `[slug].astro` + `getStaticPaths()`, built in |
-| Page transitions | `<ClientRouter />`, built in |
-| Image optimisation | `astro:assets` with intrinsic sizing, built in |
-| Team familiarity | New, but the component model is close to PHP templating — markup with a logic block above it |
+| Dimension          | Assessment                                                                                   |
+| ------------------ | -------------------------------------------------------------------------------------------- |
+| Complexity         | Low. `.astro` components are HTML with a frontmatter script block                            |
+| Cost               | Free; static hosting                                                                         |
+| JS shipped         | Zero by default. Only what we explicitly add                                                 |
+| Content handling   | Content collections with Zod schemas, built in                                               |
+| Detail routes      | `[slug].astro` + `getStaticPaths()`, built in                                                |
+| Page transitions   | `<ClientRouter />`, built in                                                                 |
+| Image optimisation | `astro:assets` with intrinsic sizing, built in                                               |
+| Team familiarity   | New, but the component model is close to PHP templating — markup with a logic block above it |
 
 **Pros**
 
@@ -58,12 +58,12 @@ Use **Astro 7** with static output (`output: "static"`, which is the default), n
 
 ### Option B — Next.js
 
-| Dimension | Assessment |
-|---|---|
-| Complexity | Medium-high. App Router, server vs client components, caching semantics |
-| JS shipped | A React runtime baseline even on a fully static page |
-| Content handling | Needs `contentlayer` or hand-rolled `fs` reading plus Zod |
-| Familiarity | React knowledge required |
+| Dimension        | Assessment                                                              |
+| ---------------- | ----------------------------------------------------------------------- |
+| Complexity       | Medium-high. App Router, server vs client components, caching semantics |
+| JS shipped       | A React runtime baseline even on a fully static page                    |
+| Content handling | Needs `contentlayer` or hand-rolled `fs` reading plus Zod               |
+| Familiarity      | React knowledge required                                                |
 
 **Pros:** largest ecosystem; the default answer most tutorials assume; trivial to add dynamic features later.
 
