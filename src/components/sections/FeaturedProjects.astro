@@ -30,7 +30,7 @@ const featured = selectFeatured(Astro.props.projects);
   </h2>
   <div class="mt-12">
     {/* Home's third band, below the fold: nothing here loads eagerly. */}
-    <ProjectGrid projects={featured} eagerFirstRow={false} />
+    <ProjectGrid projects={featured} prioritiseFirst={false} />
   </div>
   <TextLink href="/projects" standalone chevron class="mt-8 text-body-lg">
     See all projects
