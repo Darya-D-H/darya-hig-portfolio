@@ -20,7 +20,7 @@ Read in this order:
 | [docs/07-test-plan.md](docs/07-test-plan.md)                               | How each thing gets verified, including browser and device testing                               |
 | [docs/08-git-workflow.md](docs/08-git-workflow.md)                         | Branching, commit conventions, PR flow                                                           |
 | [docs/09-build-roadmap.md](docs/09-build-roadmap.md)                       | Phased task breakdown with acceptance criteria                                                   |
-| [docs/accessibility-report.md](docs/accessibility-report.md)               | What was checked against WCAG 2.2 AA, how, what was fixed, and what is still pending             |
+| [docs/accessibility-report.md](docs/accessibility-report.md)               | What was checked against WCAG 2.2 AA, how, what was fixed, and the exceptions                    |
 | [docs/adr/](docs/adr/)                                                     | Architecture decision records                                                                    |
 
 ## Stack
