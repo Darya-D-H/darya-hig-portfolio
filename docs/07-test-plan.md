@@ -264,6 +264,12 @@ Lighthouse CI against the built site, mobile profile, three runs with the median
 
 The JS budget is checked against what is actually transferred (`resource-summary:script:size`), and the page-weight budget against everything a page loads (`resource-summary:total:size`). Lazy images below the fold do not count until they load, which is the point of making them lazy.
 
+After every run, `scripts/lighthouse-summary.mjs` posts one annotation per page with its median LCP, each run's value, the LCP element and the time split into server response, load delay, load time and render delay. Annotations are public on the run page; the report and log need a GitHub sign-in.
+
+**Margins on 2026-11-23** (median of three, mobile): Projects 1.81s on its first card image, the slowest page; Invoice Tracker 1.66s; Home 1.58s; every other page under 1.6s. On every page about 0.9 to 1.1s of LCP is render delay, waiting on render-blocking CSS and the font before first paint, not image download. That is the lever to pull first if a budget gets tight, for example once real screenshots replace the placeholders.
+
+Two findings from getting Projects under budget: content above the fold must not be revealed (an element at opacity 0 does not count as painted), and card images need a candidate near what a phone needs, because a 412px phone at 1.75x wants about 644px and was being sent 960w.
+
 | Metric                | Budget   | Fails if        |
 | --------------------- | -------- | --------------- |
 | Performance           | ≥ 95     | —               |
