@@ -1,9 +1,9 @@
 # Accessibility Report
 
 **Standard:** WCAG 2.2 Level AA
-**Date of this pass:** 2026-11-23
+**Date of this pass:** 2026-11-23, including the Apple device passes
 **Scope:** every public page of the site (Home, Projects, all six project pages, Skills, Experience, Contact) and the 404, at every width in the test matrix, plus the mobile menu open and the lightbox open
-**Status:** automated and browser-based checks complete and passing. Two release-gate passes need real Apple hardware and are **pending** (see [Pending](#pending)).
+**Status:** automated, browser-based and Apple device passes complete and passing (see [Device passes](#device-passes)). An optional look on a non-Apple device is still open.
 
 This report records what was checked, how, what was found and fixed, and the exceptions. It is a record of a point in time: any change to markup, tokens or behaviour after this date needs the relevant checks run again. The continuous checks below run on every pull request, so they stay current; the manual sections do not.
 
@@ -72,15 +72,16 @@ Checked on Windows 11 in Chromium and in the Linux renders behind the visual bas
 
 ## 4. Found and fixed during the build
 
-| Finding                                                                                                               | WCAG / rule             | Fix                                                     |
-| --------------------------------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------- |
-| The tinted button's hover (0.16 accent tint) measured 4.45:1                                                          | 1.4.3                   | Hover tint 0.14 (4.58:1), decided with Darya            |
-| The blue focus ring measured about 1.2:1 against the lightbox scrim                                                   | 1.4.11, 2.4.7           | White ring on the lightbox controls (about 3.7:1)       |
-| The skip link was 20px tall when focused: `not-sr-only` reset its padding                                             | 2.5.8, HIG 44pt         | Padding and 44px height applied on focus                |
-| Footer nav links were as narrow as 33px                                                                               | 2.5.8, HIG 44pt         | 44px minimum width, label centred                       |
-| Under reduced motion the menu's first link was briefly unfocusable on open                                            | 2.4.3                   | Nothing in the menu transitions under reduced motion    |
-| After a client-side navigation, the router restored `no-js`, and WebKit briefly showed then hid reveal content        | Motion spec             | `no-js` stripped from the incoming page before the swap |
-| The Projects grid's first row, above the fold, was revealed, so its LCP image counted as unpainted until a fade began | Motion spec, LCP budget | The first row is never revealed                         |
+| Finding                                                                                                                                                           | WCAG / rule             | Fix                                                                                                              |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| The tinted button's hover (0.16 accent tint) measured 4.45:1                                                                                                      | 1.4.3                   | Hover tint 0.14 (4.58:1), decided with Darya                                                                     |
+| The blue focus ring measured about 1.2:1 against the lightbox scrim                                                                                               | 1.4.11, 2.4.7           | White ring on the lightbox controls (about 3.7:1)                                                                |
+| The skip link was 20px tall when focused: `not-sr-only` reset its padding                                                                                         | 2.5.8, HIG 44pt         | Padding and 44px height applied on focus                                                                         |
+| Footer nav links were as narrow as 33px                                                                                                                           | 2.5.8, HIG 44pt         | 44px minimum width, label centred                                                                                |
+| Under reduced motion the menu's first link was briefly unfocusable on open                                                                                        | 2.4.3                   | Nothing in the menu transitions under reduced motion                                                             |
+| After a client-side navigation, the router restored `no-js`, and WebKit briefly showed then hid reveal content                                                    | Motion spec             | `no-js` stripped from the incoming page before the swap                                                          |
+| The Projects grid's first row, above the fold, was revealed, so its LCP image counted as unpainted until a fade began                                             | Motion spec, LCP budget | The first row is never revealed                                                                                  |
+| On a screen taller than the page (Skills at 2560 × 1440; Projects and Experience at 4K), a strip of page white sat between the last grey band and the grey footer | Layout                  | The page's last band takes the spare height, so its background meets the footer. Covered by `responsive.spec.ts` |
 
 ---
 
@@ -95,13 +96,13 @@ Checked on Windows 11 in Chromium and in the Linux renders behind the visual bas
 
 ---
 
-## Pending
+## Device passes
 
-These are release gates in [docs/07-test-plan.md](07-test-plan.md) §9 that need Darya and real Apple hardware. Until they are done, this report does not claim them.
+Release gates from [docs/07-test-plan.md](07-test-plan.md) §5 that need real Apple hardware, done by Darya on 2026-11-23 and recorded here as she reported them.
 
 ### VoiceOver, macOS Safari and iOS (roadmap 6.7)
 
-On each page, check that:
+**Pass on both.** VoiceOver worked as expected on macOS and on iOS. The checklist the pass worked from:
 
 - the heading list (`VO + U`, then Headings) reads as a sensible outline: one h1, then h2 sections, then h3 cards and roles;
 - the links list has no duplicate or meaningless entries, and external links say they open a new tab;
@@ -112,10 +113,15 @@ On each page, check that:
 
 ### Physical iPhone, Safari (roadmap 6.11)
 
-- Safe areas: nothing hidden under the notch or home indicator, in portrait and landscape.
-- The nav's translucent blur scrolls smoothly; the menu feels right under a thumb.
-- No `100vh` jump when the Safari toolbar collapses.
-- In the Network panel (Safari's Web Inspector, from a Mac), **no request for an Inter font file**: on Apple devices the system's SF Pro should render and Inter should never download (ADR-0003).
+**Pass.** Layout, menu and animations behaved as expected, and with iOS Reduce Motion on, motion was removed as specified.
+
+### Fonts on Apple devices (ADR-0003)
+
+**Pass.** On both the Mac and the iPhone the system's SF Pro rendered, not Inter. The release checklist in the test plan §9 repeats the Network-panel check (no Inter request at all) on the live site once it is deployed.
+
+### Also found on real hardware
+
+On a 2560 × 1440 monitor, the Skills page showed a white strip between its grey band and the grey footer. Fixed; see §4.
 
 ### Optional: a non-Apple device
 
