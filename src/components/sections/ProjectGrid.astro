@@ -5,7 +5,10 @@
  * Project cards in three columns above 1068px, two from 735px and one
  * below. Cards reveal row by row: the stagger runs across a row and starts
  * again on the next, so a long grid never reads as one slow cascade
- * (docs/01-information-architecture.md §3). The first row loads eagerly.
+ * (docs/01-information-architecture.md §3). When the grid is near the top
+ * of its page, the first card loads eagerly at high priority, because on a
+ * phone it is the LCP element; every other card is lazy, and a lazy image
+ * already in view still loads promptly. Below the fold, all are lazy.
  *
  * @example
  * <ProjectGrid projects={sorted} />
@@ -19,19 +22,27 @@ interface Props {
   /** Already in grid order. */
   projects: CollectionEntry<"projects">[];
   headingLevel?: "h2" | "h3";
+  /** Prioritise the first card's image. Off when the grid is below the fold. */
+  prioritiseFirst?: boolean;
 }
 
-const { projects, headingLevel = "h3" } = Astro.props;
+const { projects, headingLevel = "h3", prioritiseFirst = true } = Astro.props;
 const COLUMNS = 3;
 ---
 
 <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
   {projects.map((project, index) => (
     <li>
-      <Reveal delay={staggerDelay(index % COLUMNS)} class="h-full">
+      {/* Near the top of the page the first row is above the fold, so it
+          renders at its final state, like the hero: it holds the LCP image. */}
+      <Reveal
+        delay={staggerDelay(index % COLUMNS)}
+        enabled={!(prioritiseFirst && index < COLUMNS)}
+        class="h-full"
+      >
         <ProjectCard
           project={project}
-          eager={index < COLUMNS}
+          priority={prioritiseFirst && index === 0}
           headingLevel={headingLevel}
         />
       </Reveal>

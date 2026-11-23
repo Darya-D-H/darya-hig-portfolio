@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { settle } from "./helpers";
 import { PAGES } from "./pages";
 
 // docs/07-test-plan.md §5: every page at every width in the matrix, plus
@@ -13,13 +14,7 @@ const scan = (page: Page) =>
 for (const path of [...PAGES, "/no-such-page"]) {
   test(`${path} has no axe violations`, { tag: "@a11y" }, async ({ page }) => {
     await page.goto(path);
-    // Scan the settled page: with motion, reveal content starts transparent.
-    await page.evaluate(() =>
-      document
-        .querySelectorAll<HTMLElement>("[data-reveal]")
-        .forEach((el) => (el.dataset.revealed = "true")),
-    );
-    await page.waitForTimeout(700);
+    await settle(page);
     expect((await scan(page)).violations).toEqual([]);
   });
 }
@@ -34,7 +29,7 @@ test.describe("on a phone", () => {
       await page.goto("/");
       await page.getByRole("button", { name: "Menu", exact: true }).click();
       await expect(page.locator("#mobile-menu")).toBeVisible();
-      await page.waitForTimeout(500);
+      await settle(page);
       expect((await scan(page)).violations).toEqual([]);
     },
   );
@@ -54,7 +49,7 @@ test(
     await expect(
       page.getByRole("dialog", { name: "Image viewer" }),
     ).toBeVisible();
-    await page.waitForTimeout(500);
+    await settle(page);
     expect((await scan(page)).violations).toEqual([]);
   },
 );

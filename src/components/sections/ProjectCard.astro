@@ -8,7 +8,7 @@
  * two lines, and up to three tags. See docs/03-components.md §4.1.
  *
  * @example
- * <ProjectCard project={entry} eager={index < 3} />
+ * <ProjectCard project={entry} priority={index === 0} />
  */
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
@@ -17,13 +17,17 @@ import Tag from "@/components/ui/Tag.astro";
 
 interface Props {
   project: CollectionEntry<"projects">;
-  /** Load at once: the first row is usually in view on arrival. */
-  eager?: boolean;
+  /**
+   * Load at once and fetch first: the card most likely to be the page's
+   * LCP element. Every other card is lazy, so it does not compete for the
+   * bandwidth that image needs.
+   */
+  priority?: boolean;
   /** The h-level of the title within the page outline. */
   headingLevel?: "h2" | "h3";
 }
 
-const { project, eager = false, headingLevel: Heading = "h3" } = Astro.props;
+const { project, priority = false, headingLevel: Heading = "h3" } = Astro.props;
 const { title, summary, thumbnail, thumbnailAlt, tags } = project.data;
 ---
 
@@ -33,7 +37,8 @@ const { title, summary, thumbnail, thumbnailAlt, tags } = project.data;
     alt={thumbnailAlt}
     widths={[400, 640, 960, 1280]}
     sizes="(min-width: 1069px) 300px, (min-width: 735px) 330px, calc(100vw - 44px)"
-    loading={eager ? "eager" : "lazy"}
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : undefined}
     class="aspect-16/10 w-full object-cover"
   />
   <div class="flex flex-1 flex-col p-6">

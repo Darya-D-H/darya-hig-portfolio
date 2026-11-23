@@ -20,16 +20,28 @@ interface Props extends Omit<HTMLAttributes<"div">, "style"> {
   delay?: number;
   as?: HTMLTag;
   class?: string;
+  /**
+   * False renders the same element with no reveal, for content that may be
+   * above the fold: what is already visible never animates, and a hidden
+   * element cannot be the LCP.
+   */
+  enabled?: boolean;
 }
 
-const { delay = 0, as: Tag = "div", class: className, ...rest } = Astro.props;
+const {
+  delay = 0,
+  as: Tag = "div",
+  class: className,
+  enabled = true,
+  ...rest
+} = Astro.props;
 ---
 
 <Tag
-  data-reveal
+  data-reveal={enabled ? "" : undefined}
   class={className}
   {...rest}
-  style={delay > 0 ? `--reveal-delay: ${delay}ms` : undefined}
+  style={enabled && delay > 0 ? `--reveal-delay: ${delay}ms` : undefined}
 >
   <slot />
 </Tag>

@@ -238,12 +238,12 @@ Wrapper that fades and lifts its children when they scroll into view. Full spec 
 
 ### 4.1 `ProjectCard`
 
-| Element   | Token                              | Notes                                                                                            |
-| --------- | ---------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Thumbnail | `--radius-card` top corners, 16:10 | `astro:assets` with explicit width/height; `loading="lazy"` except the first row, which is eager |
-| Title     | `--text-card-title`                | The `<a>`, per the whole-card pattern above                                                      |
-| Summary   | `--text-body-sm`, secondary ink    | Clamped to 2 lines with `line-clamp-2`                                                           |
-| Tags      | `Tag`                              | Maximum 3; a 4th becomes `+2`                                                                    |
+| Element   | Token                              | Notes                                                                                                                                                                                       |
+| --------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Thumbnail | `--radius-card` top corners, 16:10 | `astro:assets` with explicit width/height; `loading="lazy"` except the first card on the Projects page, which is eager with `fetchpriority="high"` because it is the LCP element on a phone |
+| Title     | `--text-card-title`                | The `<a>`, per the whole-card pattern above                                                                                                                                                 |
+| Summary   | `--text-body-sm`, secondary ink    | Clamped to 2 lines with `line-clamp-2`                                                                                                                                                      |
+| Tags      | `Tag`                              | Maximum 3; a 4th becomes `+2`                                                                                                                                                               |
 
 **Empty/missing states:** the schema requires a thumbnail, its alt text and a summary, so a card can never be missing one; a project without them fails the build. Tags are optional: with none, the tag row is omitted rather than left as an empty gap.
 

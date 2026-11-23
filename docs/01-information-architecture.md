@@ -100,7 +100,7 @@ This is the one piece of duplication across pages, and it is intentional: a recr
 | 735–1068px | 2       |
 | ≤ 734px    | 1       |
 
-Cards reveal on scroll in a staggered sequence, 80ms apart, row by row rather than one long cascade — a six-item cascade at 80ms each takes 480ms to finish and starts to feel like a loading spinner.
+Cards reveal on scroll in a staggered sequence, 80ms apart, row by row rather than one long cascade — a six-item cascade at 80ms each takes 480ms to finish and starts to feel like a loading spinner. The first row is the exception: it sits above the fold on arrival, so it renders at its final state, like the hero. Its first image is the page's LCP element on a phone, and a revealed element cannot count as painted until its fade begins.
 
 ### Card anatomy
 

@@ -1,0 +1,56 @@
+name: Visual baselines
+
+# Regenerates the visual-regression baselines on Linux, where CI compares
+# them (docs/07-test-plan.md §6), and commits them to the same branch.
+#
+# Run it by pushing a commit whose message contains [update-visual-baselines],
+# or from the Actions tab once this file is on main. Review the new images in
+# the resulting commit before merging: a baseline update accepts whatever
+# the page looks like now.
+on:
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: visual-baselines-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.head_commit.message, '[update-visual-baselines]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium
+
+      - run: npx playwright test --grep @visual --project=desktop-chromium --update-snapshots=all
+
+      # Every commit in this repository is authored as Darya
+      # (docs/08-git-workflow.md), including this automated one.
+      - name: Commit the baselines
+        run: |
+          git config user.name "Darya"
+          git config user.email "darya01.auto@gmail.com"
+          git add tests/e2e/visual.spec.ts-snapshots
+          if git diff --cached --quiet; then
+            echo "Baselines unchanged."
+            exit 0
+          fi
+          git commit -m "test: update visual baselines" \
+            -m "Generated on Linux by the visual-baselines workflow from ${GITHUB_SHA}."
+          git push
