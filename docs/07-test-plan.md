@@ -182,6 +182,8 @@ Zero violations is the gate. Not "zero serious violations".
 
 ### Manual passes — each one a release gate
 
+Two of these have automated stand-ins that run in CI on every pull request: `keyboard.spec.ts` (every Tab stop has a visible ring, clear of the sticky nav, with no trap; Chromium and Firefox) and `resilience.spec.ts` (200% and 400% zoom, a 20px default font and the text-spacing overrides, on every page). They catch regressions; they do not replace the manual passes, which judge things a script cannot, such as whether an order or a label makes sense. Results are recorded in [docs/accessibility-report.md](accessibility-report.md).
+
 **Keyboard-only.** Mouse unplugged. Per page: `Tab` from the top through every element; confirm the focus ring is always visible and never clipped by the sticky nav (this is WCAG 2.4.11, new in 2.2, and the sticky nav is a direct threat to it); operate the menu with `Enter` and `Escape`; open the lightbox, navigate with arrows, close with `Escape`; confirm focus returns correctly each time; confirm no element becomes a trap.
 
 **Screen reader.** VoiceOver + Safari on macOS, and VoiceOver on iOS.
