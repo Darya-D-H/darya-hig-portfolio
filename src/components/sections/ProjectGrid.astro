@@ -33,7 +33,13 @@ const COLUMNS = 3;
 <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
   {projects.map((project, index) => (
     <li>
-      <Reveal delay={staggerDelay(index % COLUMNS)} class="h-full">
+      {/* Near the top of the page the first row is above the fold, so it
+          renders at its final state, like the hero: it holds the LCP image. */}
+      <Reveal
+        delay={staggerDelay(index % COLUMNS)}
+        enabled={!(prioritiseFirst && index < COLUMNS)}
+        class="h-full"
+      >
         <ProjectCard
           project={project}
           priority={prioritiseFirst && index === 0}

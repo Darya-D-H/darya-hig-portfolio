@@ -37,6 +37,21 @@ test.describe("with motion", () => {
     expect(await opacity(target)).toBe(1);
   });
 
+  test("the Projects grid's first row is never revealed", async ({ page }) => {
+    await page.goto("/projects");
+    const cards = page.locator("[data-card-link]");
+    for (let i = 0; i < 3; i += 1) {
+      const card = cards.nth(i);
+      await expect(card.locator("xpath=ancestor::*[@data-reveal]")).toHaveCount(
+        0,
+      );
+    }
+    // Later rows still reveal.
+    await expect(
+      cards.nth(3).locator("xpath=ancestor::*[@data-reveal]"),
+    ).toHaveCount(1);
+  });
+
   test("the hero is at full opacity on load and never revealed", async ({
     page,
   }) => {
