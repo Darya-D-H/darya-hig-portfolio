@@ -84,4 +84,10 @@ jobs:
           uploadArtifacts: true
           temporaryPublicStorage: false
 
+      # Annotations are readable on the run page without signing in, unlike
+      # the log: one per page with its LCP element and phases.
+      - name: Summarise LCP
+        if: ${{ !cancelled() }}
+        run: node scripts/lighthouse-summary.mjs
+
   # No deploy step until a host is chosen in Phase 7 (ADR-0005).

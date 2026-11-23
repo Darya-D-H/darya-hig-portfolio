@@ -35,7 +35,7 @@ const { title, summary, thumbnail, thumbnailAlt, tags } = project.data;
   <Image
     src={thumbnail}
     alt={thumbnailAlt}
-    widths={[400, 640, 960, 1280]}
+    widths={[400, 640, 720, 960, 1280]}
     sizes="(min-width: 1069px) 300px, (min-width: 735px) 330px, calc(100vw - 44px)"
     loading={priority ? "eager" : "lazy"}
     fetchpriority={priority ? "high" : undefined}

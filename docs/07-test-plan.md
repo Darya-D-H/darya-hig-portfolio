@@ -182,6 +182,8 @@ Zero violations is the gate. Not "zero serious violations".
 
 ### Manual passes — each one a release gate
 
+Two of these have automated stand-ins that run in CI on every pull request: `keyboard.spec.ts` (every Tab stop has a visible ring, clear of the sticky nav, with no trap; Chromium and Firefox) and `resilience.spec.ts` (200% and 400% zoom, a 20px default font and the text-spacing overrides, on every page). They catch regressions; they do not replace the manual passes, which judge things a script cannot, such as whether an order or a label makes sense. Results are recorded in [docs/accessibility-report.md](accessibility-report.md).
+
 **Keyboard-only.** Mouse unplugged. Per page: `Tab` from the top through every element; confirm the focus ring is always visible and never clipped by the sticky nav (this is WCAG 2.4.11, new in 2.2, and the sticky nav is a direct threat to it); operate the menu with `Enter` and `Escape`; open the lightbox, navigate with arrows, close with `Escape`; confirm focus returns correctly each time; confirm no element becomes a trap.
 
 **Screen reader.** VoiceOver + Safari on macOS, and VoiceOver on iOS.
@@ -261,6 +263,12 @@ The 1068px shot matters most: it is exactly the breakpoint named in the brief, a
 Lighthouse CI against the built site, mobile profile, three runs with the median taken. The `lighthouse` CI job runs it on every pull request and push to `main` with `lighthouserc.json`, over seven representative pages: Home, Projects, a full and a sparse project, Skills, Experience and Contact. Reports are kept as a CI artifact, never uploaded to public storage. It cannot run on the Windows development machine, where the browser it needs is blocked, so CI is where it is measured.
 
 The JS budget is checked against what is actually transferred (`resource-summary:script:size`), and the page-weight budget against everything a page loads (`resource-summary:total:size`). Lazy images below the fold do not count until they load, which is the point of making them lazy.
+
+After every run, `scripts/lighthouse-summary.mjs` posts one annotation per page with its median LCP, each run's value, the LCP element and the time split into server response, load delay, load time and render delay. Annotations are public on the run page; the report and log need a GitHub sign-in.
+
+**Margins on 2026-11-23** (median of three, mobile): Projects 1.81s on its first card image, the slowest page; Invoice Tracker 1.66s; Home 1.58s; every other page under 1.6s. On every page about 0.9 to 1.1s of LCP is render delay, waiting on render-blocking CSS and the font before first paint, not image download. That is the lever to pull first if a budget gets tight, for example once real screenshots replace the placeholders.
+
+Two findings from getting Projects under budget: content above the fold must not be revealed (an element at opacity 0 does not count as painted), and card images need a candidate near what a phone needs, because a 412px phone at 1.75x wants about 644px and was being sent 960w.
 
 | Metric                | Budget   | Fails if        |
 | --------------------- | -------- | --------------- |
