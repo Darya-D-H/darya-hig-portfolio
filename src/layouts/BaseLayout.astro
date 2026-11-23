@@ -107,8 +107,12 @@ const socialAlt = image
     <SkipLink />
     <Nav />
     <MobileMenu />
-    <!-- Grows so the footer sits at the bottom of a short page. -->
-    <main id="main" tabindex="-1" class="flex flex-1 flex-col">
+    <!--
+      Grows so the footer sits at the bottom of a short page. The page's last
+      band takes up that extra height, so on a tall screen its own background
+      meets the footer instead of a strip of page white.
+    -->
+    <main id="main" tabindex="-1" class="flex flex-1 flex-col *:last:flex-1">
       <slot />
     </main>
     <Footer />
