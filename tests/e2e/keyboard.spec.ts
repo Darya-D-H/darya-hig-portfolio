@@ -30,7 +30,7 @@ for (const width of [1280, 390]) {
         const problems: string[] = [];
         for (let i = 0; i < MAX_STOPS; i += 1) {
           await page.keyboard.press("Tab");
-          const stop = await page.evaluate(() => {
+          const stop = await page.evaluate(async () => {
             const el = document.activeElement as HTMLElement | null;
             if (!el || el === document.body) return null;
             const label = (
@@ -45,22 +45,39 @@ for (const width of [1280, 390]) {
             const ringOn = el.matches("[data-card-link]")
               ? (el.closest(".card") as HTMLElement)
               : el;
-            const style = getComputedStyle(ringOn);
-            const box = ringOn.getBoundingClientRect();
-            const nav = document
-              .querySelector("header")!
-              .getBoundingClientRect();
             const isSkip =
               el.getAttribute("href") === "#main" &&
               !el.closest("main, footer");
+            const place = () => {
+              const box = ringOn.getBoundingClientRect();
+              const nav = document
+                .querySelector("header")!
+                .getBoundingClientRect();
+              return {
+                underNav:
+                  !el.closest("header") && !isSkip && box.top < nav.bottom - 1,
+                offScreen: box.bottom < 0 || box.top > window.innerHeight,
+              };
+            };
+            // Firefox can scroll a newly focused element into view a frame
+            // or two after the Tab, so a stop is judged once the scroll has
+            // had up to ten frames to land. One that stays hidden fails.
+            let where = place();
+            for (
+              let frame = 0;
+              frame < 10 && (where.offScreen || where.underNav);
+              frame += 1
+            ) {
+              await new Promise(requestAnimationFrame);
+              where = place();
+            }
+            const style = getComputedStyle(ringOn);
             return {
               key: `${el.tagName}:${label}`,
               ring:
                 style.outlineStyle !== "none" &&
                 parseFloat(style.outlineWidth) >= 2,
-              underNav:
-                !el.closest("header") && !isSkip && box.top < nav.bottom - 1,
-              offScreen: box.bottom < 0 || box.top > window.innerHeight,
+              ...where,
             };
           });
           if (!stop) break;
