@@ -44,13 +44,13 @@ Four sections, in this order. Bands alternate between white and `#f5f5f7` so eac
 
 Full-width, generous vertical padding, centred text. No image, no illustration. The restraint is the point; an Apple product page opens with one enormous sentence. The one drawn element is Darya's signature, which is handwriting rather than illustration.
 
-| Element       | Token                               | Placeholder content                                                                                                                                                                                   |
-| ------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Eyebrow       | `text-eyebrow`, accent colour       | `Software Developer`                                                                                                                                                                                  |
-| Headline      | `text-hero`                         | `Quality is the part nobody asked for.` _(TODO: Darya's own line, a placeholder until she settles it)_                                                                                                |
-| Signature     | Inline SVG, one stroke, primary ink | `darya`, in Darya's own hand. Replaces the subhead, and with it the stack and location line, once she supplies the SVG. Until then the subhead reads `TODO: Darya's Signature`, marking where it goes |
-| Primary CTA   | Button, filled pill                 | `View projects` → `/projects`                                                                                                                                                                         |
-| Secondary CTA | Button, text link with chevron      | `Get in touch ›` → `/contact`                                                                                                                                                                         |
+| Element       | Token                                            | Placeholder content                                                                                                               |
+| ------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| Eyebrow       | `text-eyebrow`, accent colour                    | `Software Developer`                                                                                                              |
+| Headline      | `text-hero`                                      | `Quality is the part nobody asked for.` _(TODO: Darya's own line, a placeholder until she settles it)_                            |
+| Signature     | Inline SVG, primary ink, `--size-signature` wide | `darya`, set in Yellowtail and converted to shapes (Darya's choice, 2026-11-24), in place of a subhead. No stack or location line |
+| Primary CTA   | Button, filled pill                              | `View projects` → `/projects`                                                                                                     |
+| Secondary CTA | Button, text link with chevron                   | `Get in touch ›` → `/contact`                                                                                                     |
 
 **Behaviour:** the hero does not animate in on load. Content above the fold appears immediately — a fade-in on the first thing a visitor sees reads as slowness, and it hurts LCP. Everything below the fold reveals on scroll. This is a deliberate exception to the motion spec and is recorded in [docs/04-motion.md](04-motion.md).
 

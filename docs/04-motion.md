@@ -22,18 +22,19 @@ Motion on apple.com works because it is uniform, short, and never repeats. Every
 
 ## 2. Motion tokens
 
-| Token                | Value                               | Applies to                               |
-| -------------------- | ----------------------------------- | ---------------------------------------- |
-| `--duration-instant` | 100ms                               | Button press (`scale`)                   |
-| `--duration-fast`    | 200ms                               | Hover, focus ring, colour transitions    |
-| `--duration-base`    | 300ms                               | Lightbox open/close, small panels        |
-| `--duration-menu`    | 400ms                               | Mobile menu panel                        |
-| `--duration-reveal`  | 600ms                               | Scroll reveal                            |
-| `--ease-out`         | `cubic-bezier(0.16, 1, 0.3, 1)`     | Reveals and entrances                    |
-| `--ease-in-out`      | `cubic-bezier(0.4, 0, 0.2, 1)`      | Reversible transitions: hover in and out |
-| `--ease-nav`         | `cubic-bezier(0.32, 0.08, 0.24, 1)` | Mobile menu                              |
-| `--reveal-distance`  | 24px                                | Vertical travel on reveal                |
-| `--reveal-stagger`   | 80ms                                | Delay between siblings                   |
+| Token                  | Value                               | Applies to                                  |
+| ---------------------- | ----------------------------------- | ------------------------------------------- |
+| `--duration-instant`   | 100ms                               | Button press (`scale`)                      |
+| `--duration-fast`      | 200ms                               | Hover, focus ring, colour transitions       |
+| `--duration-base`      | 300ms                               | Lightbox open/close, small panels           |
+| `--duration-menu`      | 400ms                               | Mobile menu panel                           |
+| `--duration-reveal`    | 600ms                               | Scroll reveal                               |
+| `--duration-signature` | 2200ms                              | The hero signature writing itself, in total |
+| `--ease-out`           | `cubic-bezier(0.16, 1, 0.3, 1)`     | Reveals and entrances                       |
+| `--ease-in-out`        | `cubic-bezier(0.4, 0, 0.2, 1)`      | Reversible transitions: hover in and out    |
+| `--ease-nav`           | `cubic-bezier(0.32, 0.08, 0.24, 1)` | Mobile menu                                 |
+| `--reveal-distance`    | 24px                                | Vertical travel on reveal                   |
+| `--reveal-stagger`     | 80ms                                | Delay between siblings                      |
 
 ### On the easing curves
 
@@ -81,7 +82,7 @@ A six-card grid at 80ms each takes 480ms for the last card to begin, and nearly 
 | Images                                     | Yes, but see the LCP note below        |
 | Anything inside an open lightbox           | No                                     |
 
-**The signature is the one thing above the fold that moves** (decided with Darya, 2026-11-24). It writes itself once, as if being signed, by animating `stroke-dashoffset` on paths with `pathLength="1"`: CSS only, no script, so it adds nothing to the three client modules. Several strokes run one after another, like a pen lifting. It costs nothing against LCP because an inline SVG is not an LCP candidate, and the headline beside it is already final. Duration and easing are set with the SVG, as a motion token. Under reduced motion it is drawn from the start, and with scripts off it is drawn too, because the animation is CSS.
+**The signature is the one thing above the fold that moves** (decided with Darya, 2026-11-24). It writes itself once, as if being signed: a mask of pen strokes, each animating `stroke-dashoffset`, reveals the letters stroke by stroke (details in [docs/03-components.md](03-components.md) §4.2a). CSS only, no script, so it adds nothing to the three client modules. Seven strokes run one after another, with a short pause for each pen lift, over `--duration-signature` (2.2s) after a `--duration-base` pause, each stroke eased with `--ease-in-out` so the pen speeds up and settles like a hand. It replays when Home is reached by a client-side navigation, because the page is new each time. It costs nothing against LCP because an inline SVG is not an LCP candidate, and the headline beside it is already final. Under reduced motion it is drawn from the start, and with scripts off it is drawn too, because the animation is CSS.
 
 **Per section, not per paragraph.** Revealing individual paragraphs makes reading feel like a slideshow, because the next paragraph is still invisible when you reach it.
 

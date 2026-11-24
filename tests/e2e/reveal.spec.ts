@@ -63,10 +63,53 @@ test.describe("with motion", () => {
     expect(await opacity(hero)).toBe(1);
     expect(await opacity(page.getByRole("heading", { level: 1 }))).toBe(1);
   });
+
+  test("the signature writes itself, one stroke after another", async ({
+    page,
+  }) => {
+    await page.goto(PAGE);
+    const timings = await page.evaluate(() =>
+      document
+        .getAnimations()
+        .filter((a) => (a as CSSAnimation).animationName === "sign")
+        .map((a) => {
+          const { delay, duration } = a.effect!.getTiming();
+          return { delay: Number(delay), duration: Number(duration) };
+        }),
+    );
+    expect(timings).toHaveLength(7);
+    // Each stroke starts after the one before it has finished.
+    for (let i = 1; i < timings.length; i += 1) {
+      const previous = timings[i - 1]!;
+      expect(timings[i]!.delay).toBeGreaterThanOrEqual(
+        previous.delay + previous.duration,
+      );
+    }
+  });
 });
 
 test.describe("with reduced motion", () => {
   test.use({ contextOptions: { reducedMotion: "reduce" } });
+
+  test("the signature is already written and nothing animates", async ({
+    page,
+  }) => {
+    await page.goto(PAGE);
+    const running = await page.evaluate(
+      () =>
+        document
+          .getAnimations()
+          .filter((a) => (a as CSSAnimation).animationName === "sign").length,
+    );
+    expect(running).toBe(0);
+    const offsets = await page
+      .locator("svg.signature .pen")
+      .evaluateAll((pens) =>
+        pens.map((p) => getComputedStyle(p).strokeDashoffset),
+      );
+    expect(offsets).toHaveLength(7);
+    for (const offset of offsets) expect(parseFloat(offset)).toBe(0);
+  });
 
   test("every reveal element is visible without scrolling", async ({
     page,

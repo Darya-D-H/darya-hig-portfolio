@@ -346,32 +346,34 @@ Where an icon is genuinely needed (the menu glyph, the close glyph, the chevron,
 
 Values and rationale in [docs/04-motion.md](04-motion.md). Listed here because they are tokens.
 
-| Token                | Value                               |
-| -------------------- | ----------------------------------- |
-| `--duration-instant` | 100ms                               |
-| `--duration-fast`    | 200ms                               |
-| `--duration-base`    | 300ms                               |
-| `--duration-menu`    | 400ms                               |
-| `--duration-reveal`  | 600ms                               |
-| `--ease-out`         | `cubic-bezier(0.16, 1, 0.3, 1)`     |
-| `--ease-in-out`      | `cubic-bezier(0.4, 0, 0.2, 1)`      |
-| `--ease-nav`         | `cubic-bezier(0.32, 0.08, 0.24, 1)` |
-| `--reveal-distance`  | 24px                                |
-| `--reveal-stagger`   | 80ms                                |
+| Token                  | Value                               |
+| ---------------------- | ----------------------------------- |
+| `--duration-instant`   | 100ms                               |
+| `--duration-fast`      | 200ms                               |
+| `--duration-base`      | 300ms                               |
+| `--duration-menu`      | 400ms                               |
+| `--duration-reveal`    | 600ms                               |
+| `--duration-signature` | 2200ms                              |
+| `--ease-out`           | `cubic-bezier(0.16, 1, 0.3, 1)`     |
+| `--ease-in-out`        | `cubic-bezier(0.4, 0, 0.2, 1)`      |
+| `--ease-nav`           | `cubic-bezier(0.32, 0.08, 0.24, 1)` |
+| `--reveal-distance`    | 24px                                |
+| `--reveal-stagger`     | 80ms                                |
 
 ---
 
 ## 9. Sizing
 
-| Token                    | Value | Use                                               |
-| ------------------------ | ----- | ------------------------------------------------- |
-| `--size-nav-height`      | 44px  | Nav bar height; also the HIG minimum touch target |
-| `--size-touch-min`       | 44px  | Minimum hit area on every interactive element     |
-| `--size-focus-ring`      | 2px   | Focus outline width                               |
-| `--size-focus-offset`    | 2px   | Focus outline offset                              |
-| `--size-hairline`        | 1px   | Dividers                                          |
-| `--size-timeline-dot`    | 9px   | Timeline node dot, from 735px                     |
-| `--size-timeline-dot-sm` | 7px   | Timeline node dot, below 735px                    |
+| Token                    | Value | Use                                                                                                  |
+| ------------------------ | ----- | ---------------------------------------------------------------------------------------------------- |
+| `--size-nav-height`      | 44px  | Nav bar height; also the HIG minimum touch target                                                    |
+| `--size-touch-min`       | 44px  | Minimum hit area on every interactive element                                                        |
+| `--size-focus-ring`      | 2px   | Focus outline width                                                                                  |
+| `--size-focus-offset`    | 2px   | Focus outline offset                                                                                 |
+| `--size-hairline`        | 1px   | Dividers                                                                                             |
+| `--size-timeline-dot`    | 9px   | Timeline node dot, from 735px                                                                        |
+| `--size-timeline-dot-sm` | 7px   | Timeline node dot, below 735px                                                                       |
+| `--size-signature`       | 7rem  | Width of the hero signature, smaller than the headline at every width; in rem so it scales with text |
 
 The 44px nav height is not a coincidence: it is the HIG's minimum comfortable touch target, and apple.com's global nav is the same height. Where a link's text is shorter than 44px tall, padding brings the hit area up to 44px even though the visible text is smaller.
 
@@ -442,6 +444,7 @@ This is the implementation target. `src/styles/global.css` begins:
   --duration-base: 300ms;
   --duration-menu: 400ms;
   --duration-reveal: 600ms;
+  --duration-signature: 2200ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-nav: cubic-bezier(0.32, 0.08, 0.24, 1);
