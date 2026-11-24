@@ -3,16 +3,29 @@ import { getCollection } from "astro:content";
 import PageHeader from "@/components/sections/PageHeader.astro";
 import Timeline from "@/components/sections/Timeline.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { fromEducation, fromRole } from "@/lib/timeline";
 
 const roles = await getCollection("experience");
+const education = await getCollection("education");
 ---
 
 <BaseLayout
   title="Experience"
-  description="TODO: Darya's roles so far, newest first, with what each one achieved."
+  description="TODO: Darya's roles so far, newest first, with what each one achieved, and her education."
 >
   <PageHeader eyebrow="Career" title="Experience">
     TODO: One line on the kind of teams and products you have worked on.
   </PageHeader>
-  <Timeline roles={roles} />
+  <Timeline
+    id="roles"
+    heading="Roles"
+    headingHidden
+    entries={roles.map(({ data }) => fromRole(data))}
+  />
+  <Timeline
+    id="education"
+    heading="Education"
+    tone="white"
+    entries={education.map(({ data }) => fromEducation(data))}
+  />
 </BaseLayout>

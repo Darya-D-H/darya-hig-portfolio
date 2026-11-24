@@ -1,6 +1,6 @@
 ---
 # No endDate: this is the current role.
-role: "TODO: Software Engineer"
+role: "TODO: Software Developer"
 company: "TODO: Company Name"
 startDate: "2024-03"
 location: "TODO: Remote"

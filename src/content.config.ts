@@ -93,6 +93,21 @@ const experience = defineCollection({
   }),
 });
 
+/** Shown on the Experience page, below the roles. */
+const education = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/education" }),
+  schema: z.object({
+    qualification: z.string(), // "BSc Computer Science"
+    institution: z.string(),
+    institutionUrl: z.url().optional(),
+    startDate: yearMonth,
+    endDate: yearMonth.optional(), // absent means in progress
+    location: z.string().optional(),
+    details: z.array(z.string()).max(3).default([]),
+    order: z.number().int().positive(),
+  }),
+});
+
 const skills = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/skills" }),
   schema: z.object({
@@ -104,4 +119,4 @@ const skills = defineCollection({
   }),
 });
 
-export const collections = { projects, experience, skills };
+export const collections = { projects, experience, education, skills };

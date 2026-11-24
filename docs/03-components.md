@@ -34,6 +34,7 @@ The state list is not boilerplate. The most common failure in a portfolio build 
 | `SkillsGrid`       | sections | no                  | home, skills                                     |
 | `Timeline`         | sections | no                  | experience                                       |
 | `TimelineNode`     | sections | no                  | experience                                       |
+| `Signature`        | ui       | no (CSS animation)  | home hero                                        |
 | `ProjectMeta`      | sections | no                  | project detail                                   |
 | `ProjectPager`     | sections | no                  | project detail                                   |
 | `ErrorPage`        | sections | no                  | 404                                              |
@@ -257,6 +258,12 @@ Wrapper that fades and lifts its children when they scroll into view. Full spec 
 | ≤ 734px    | Line at 8px from left, dots 7px                            | Card offset 28px, full remaining width |
 
 Each node: `<article>` containing `<h3>` (role), `<p>` with company and a `<time datetime="YYYY-MM">` range, and a `<ul>` of bullets.
+
+Both timelines on the Experience page, roles and education, are this one component. Each collection is mapped to a shared `TimelineEntry` (title, organisation, optional URL, dates, optional location, points) in `src/lib/timeline.ts`, and `Timeline` takes `id`, `heading`, `headingHidden` and `tone`. The roles band is grey with its h2 visually hidden, because the page's h1 names it; the education band is white with a visible h2 "Education". On white, the cards take the hairline border (`Card` `onWhite`). A node with no points renders no list. Dates are formatted by `src/lib/dates.ts`.
+
+### 4.2a `Signature` (pending Darya's SVG)
+
+Darya's signature, `darya`, in the Home hero below the headline. An inline `<svg role="img" aria-label="Darya's signature">` holding one or more stroked paths (`fill: none`, stroke in primary ink, round caps and joins), each with `pathLength="1"`, so the draw is a CSS `stroke-dashoffset` animation from 1 to 0 with no measuring script. Inline, not an `<img>`, so it takes the text colour and is never an LCP candidate. Motion in [docs/04-motion.md](04-motion.md) §3. Its source must be a single-line (centre-line) drawing; a filled outline cannot be drawn this way.
 
 ### 4.3 `Gallery` and `Lightbox`
 

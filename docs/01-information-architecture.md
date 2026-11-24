@@ -42,28 +42,32 @@ Four sections, in this order. Bands alternate between white and `#f5f5f7` so eac
 
 ### 2.1 Hero — white band
 
-Full-width, generous vertical padding, centred text. No image, no illustration. The restraint is the point; an Apple product page opens with one enormous sentence.
+Full-width, generous vertical padding, centred text. No image, no illustration. The restraint is the point; an Apple product page opens with one enormous sentence. The one drawn element is Darya's signature, which is handwriting rather than illustration.
 
-| Element       | Token                          | Placeholder content                                                                                                              |
-| ------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| Eyebrow       | `text-eyebrow`, accent colour  | `Software Engineer`                                                                                                              |
-| Headline      | `text-hero`                    | `I build web applications that feel considered.`                                                                                 |
-| Subhead       | `text-body-lg`, secondary ink  | `PHP on the back end, modern JavaScript and CSS on the front. Currently based in Baghdad.` _(TODO: confirm location, or remove)_ |
-| Primary CTA   | Button, filled pill            | `View projects` → `/projects`                                                                                                    |
-| Secondary CTA | Button, text link with chevron | `Get in touch ›` → `/contact`                                                                                                    |
+| Element       | Token                               | Placeholder content                                                                                                                                                                                   |
+| ------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Eyebrow       | `text-eyebrow`, accent colour       | `Software Developer`                                                                                                                                                                                  |
+| Headline      | `text-hero`                         | `Quality is the part nobody asked for.` _(TODO: Darya's own line, a placeholder until she settles it)_                                                                                                |
+| Signature     | Inline SVG, one stroke, primary ink | `darya`, in Darya's own hand. Replaces the subhead, and with it the stack and location line, once she supplies the SVG. Until then the subhead reads `TODO: Darya's Signature`, marking where it goes |
+| Primary CTA   | Button, filled pill                 | `View projects` → `/projects`                                                                                                                                                                         |
+| Secondary CTA | Button, text link with chevron      | `Get in touch ›` → `/contact`                                                                                                                                                                         |
 
 **Behaviour:** the hero does not animate in on load. Content above the fold appears immediately — a fade-in on the first thing a visitor sees reads as slowness, and it hurts LCP. Everything below the fold reveals on scroll. This is a deliberate exception to the motion spec and is recorded in [docs/04-motion.md](04-motion.md).
+
+**The signature is the one exception** (decided with Darya, 2026-11-24): it writes itself once on load, as if signed. An inline SVG is not an LCP candidate, so the draw costs nothing against the 2.0s budget, and the headline beside it still renders final. Under reduced motion it appears already written. Details in [docs/04-motion.md](04-motion.md) §3.
+
+**The headline** is Darya's own line on quality (2026-11-24), so it carries no attribution: the signature below it signs it.
 
 ### 2.2 About — `#f5f5f7` band
 
 A short self-introduction. Two columns on desktop, stacked on mobile: a section heading on the left, two or three paragraphs on the right. No portrait photo in v1 (adding one is a content decision, not a layout one — the layout reserves space for it should Darya want it later).
 
-| Element                                      | Placeholder content                                                                                                                                           |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Heading (h2)                                 | `About`                                                                                                                                                       |
-| Body, para 1                                 | `TODO: I'm a software engineer focused on web applications. I work mostly in PHP, and I care about the part of the stack where the interface meets the data.` |
-| Body, para 2                                 | `TODO: Two or three sentences on how you work, what you're drawn to, and what you're looking for.`                                                            |
-| Inline stat row _(optional, off by default)_ | Reserved. Not rendered in v1.                                                                                                                                 |
+| Element                                      | Placeholder content                                                                                                                                            |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Heading (h2)                                 | `About`                                                                                                                                                        |
+| Body, para 1                                 | `TODO: I'm a software developer focused on web applications. I work mostly in PHP, and I care about the part of the stack where the interface meets the data.` |
+| Body, para 2                                 | `TODO: Two or three sentences on how you work, what you're drawn to, and what you're looking for.`                                                             |
+| Inline stat row _(optional, off by default)_ | Reserved. Not rendered in v1.                                                                                                                                  |
 
 ### 2.3 Featured projects — white band
 
@@ -180,10 +184,13 @@ Cards reveal on scroll, 80ms stagger.
 
 ## 6. Experience — `/experience`
 
-| Element                  | Content                                           |
-| ------------------------ | ------------------------------------------------- |
-| Page header, white band  | Eyebrow `Career`; h1 `Experience`; one-line intro |
-| Timeline, `#f5f5f7` band | One node per role, newest first                   |
+| Element                  | Content                                                                             |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| Page header, white band  | Eyebrow `Career`; h1 `Experience`; one-line intro                                   |
+| Timeline, `#f5f5f7` band | One node per role, newest first                                                     |
+| Education, white band    | Visible h2 `Education`; the same timeline, one node per qualification, newest first |
+
+Education lives here rather than on a page of its own (decided with Darya, 2026-11-24): a recruiter reads it beside the work history, and one or two entries would make a thin page. The roles band keeps its visually hidden h2, because the page's h1 already names it.
 
 ### Desktop timeline (> 1068px)
 
@@ -215,11 +222,23 @@ The timeline is an ordered list (`<ol>`), one `<li>` per role. The line and dots
 
 | Field           | Placeholder                                                                             |
 | --------------- | --------------------------------------------------------------------------------------- |
-| Role            | `TODO: Software Engineer`                                                               |
+| Role            | `TODO: Software Developer`                                                              |
 | Company         | `TODO: Company name`                                                                    |
 | Dates           | `TODO: 2024 — Present`                                                                  |
 | Location / mode | `TODO: Remote` _(optional)_                                                             |
 | Bullets         | 2–4 achievement lines, each starting with a verb and, where possible, carrying a number |
+
+### Education
+
+The same timeline as the roles, on a white band: the hairline, a dot per entry, and a card per qualification, newest first (Darya's call, 2026-11-24, so the two halves of the page read as one history). The semantics match a role: an `<li>` holding an `<article>` with an `<h3>` naming the qualification, and the institution and dates in a `<p>`, each date in a `<time>`.
+
+| Field         | Placeholder                                                               |
+| ------------- | ------------------------------------------------------------------------- |
+| Qualification | `TODO: BSc Computer Science`                                              |
+| Institution   | `TODO: University Name`                                                   |
+| Dates         | `2017 — 2021`; no end date reads as Present                               |
+| Location      | `TODO: City` _(optional)_                                                 |
+| Details       | 0–3 lines: a final project, honours, coursework worth naming _(optional)_ |
 
 ---
 
@@ -279,7 +298,7 @@ Every page except Home and 404 opens with the same block: eyebrow, h1, one-line 
 | Projects       | white → grey                          |
 | Project detail | white throughout → grey (closing CTA) |
 | Skills         | white → grey                          |
-| Experience     | white → grey                          |
+| Experience     | white → grey → white                  |
 | Contact        | white                                 |
 
 A page never opens on grey. The nav is translucent white, and a grey band immediately beneath it muddies the blur.
@@ -290,7 +309,7 @@ Exactly one `h1` per page. Section headings are `h2`. Card and node titles are `
 
 ### SEO per page
 
-Each page sets its own `<title>` (`Page — Darya`; Home is `Darya — Software Engineer`), a unique meta description, a canonical URL, and Open Graph plus Twitter card tags. Project pages derive all of these from front matter, and use their hero (or thumbnail) as the preview image. Every other page shares `og-image.png` in `public/`: the name and role on white, in the site's type. Designed per-project preview images are a later enhancement.
+Each page sets its own `<title>` (`Page — Darya`; Home is `Darya — Software Developer`), a unique meta description, a canonical URL, and Open Graph plus Twitter card tags. Project pages derive all of these from front matter, and use their hero (or thumbnail) as the preview image. Every other page shares `og-image.png` in `public/`: the name and role on white, in the site's type. Designed per-project preview images are a later enhancement.
 
 - **Canonical URLs end in a slash** (`/skills/`), because Astro builds each page as a folder with an `index.html` and the sitemap lists that form. The 404 has no canonical: it is served at every unknown URL and is `noindex`.
 - **`robots.txt` is generated** by `src/pages/robots.txt.ts` from the configured `site`, so it can never point at an old origin.

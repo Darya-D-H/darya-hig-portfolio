@@ -6,7 +6,7 @@
 export const site = {
   name: "Darya",
   /** The Home page title and the eyebrow on the hero and preview image. */
-  role: "Software Engineer",
+  role: "Software Developer",
   email: "darya.dler.contact@gmail.com",
   github: "https://github.com/Darya-D-H",
   linkedin: "https://www.linkedin.com/in/darya-dler-hussein",

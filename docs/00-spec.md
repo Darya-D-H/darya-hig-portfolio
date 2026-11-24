@@ -8,7 +8,7 @@
 
 ## 1. Objective
 
-Build a static personal portfolio that presents Darya — a software engineer working in PHP and web development — to recruiters and hiring managers, using Apple's Human Interface Guidelines and the visual language of apple.com as the design reference.
+Build a static personal portfolio that presents Darya — a software developer working in PHP and web development — to recruiters and hiring managers, using Apple's Human Interface Guidelines and the visual language of apple.com as the design reference.
 
 **Primary user:** a recruiter or engineering manager, on a phone or laptop, who has somewhere between 30 seconds and 3 minutes. They want to know, in order: what Darya does, whether the work looks competent, what the tech stack is, and how to get in touch.
 
