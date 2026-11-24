@@ -130,3 +130,45 @@ test("Home renders exactly three featured projects", async ({ page }) => {
   const featured = page.getByRole("region", { name: "Featured projects" });
   await expect(featured.locator("[data-card-link]")).toHaveCount(3);
 });
+
+test.describe("Experience", () => {
+  test("roles come first, then Education as its own named band", async ({
+    page,
+  }) => {
+    await page.goto("/experience");
+    const h2s = await page.locator("main h2").allTextContents();
+    expect(h2s.map((t) => t.trim())).toEqual(["Roles", "Education"]);
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Education" }),
+    ).toBeVisible();
+  });
+
+  test("each qualification is an article with an h3 and machine-readable dates", async ({
+    page,
+  }) => {
+    await page.goto("/experience");
+    const items = page.locator(
+      'section[aria-labelledby="education-heading"] ol > li',
+    );
+    await expect(items).toHaveCount(2);
+    for (const item of await items.all()) {
+      await expect(item.locator("article h3")).toHaveCount(1);
+      for (const time of await item.locator("time").all()) {
+        expect(await time.getAttribute("datetime")).toMatch(/^\d{4}-\d{2}$/);
+      }
+    }
+  });
+
+  test("an entry without details or location leaves nothing behind", async ({
+    page,
+  }) => {
+    await page.goto("/experience");
+    const minimal = page
+      .locator('section[aria-labelledby="education-heading"] article')
+      .filter({ hasText: "Certificate or course name" });
+    await expect(minimal.locator("ul")).toHaveCount(0);
+    await expect(minimal.locator("p")).toHaveText(
+      /^TODO: Provider · Jan 2022 — Apr 2022$/,
+    );
+  });
+});

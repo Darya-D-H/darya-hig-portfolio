@@ -2,75 +2,59 @@
 /**
  * TimelineNode
  *
- * One role on the Experience timeline: an <article> with the role as h3,
- * company and dates in a <p> (each date in a <time> with its YYYY-MM
- * value), and the achievement bullets. Its dot is drawn by Timeline and is
+ * One node on an Experience timeline, a role or a qualification: an
+ * <article> with its title as h3, the company or institution and the dates
+ * in a <p> (each date in a <time> with its YYYY-MM value), then its points
+ * as a list when it has any. Its dot is drawn by Timeline and is
  * invisible to assistive tech. See docs/03-components.md §4.2.
  *
  * @example
- * <TimelineNode role={entry.data} />
+ * <TimelineNode entry={fromRole(role)} tone="onGrey" />
  */
-import type { CollectionEntry } from "astro:content";
 import Card from "@/components/ui/Card.astro";
+import { formatYearMonth as display } from "@/lib/dates";
+import type { TimelineEntry } from "@/lib/timeline";
 
 interface Props {
-  role: CollectionEntry<"experience">["data"];
+  entry: TimelineEntry;
+  tone?: "onGrey" | "onWhite";
 }
 
-const { role } = Astro.props;
-
-// "2024-03" → "Mar 2024". Built from the parts, never from a Date, so no
-// timezone can shift a role into the previous month.
-const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-const display = (yearMonth: string) => {
-  const [year, month] = yearMonth.split("-");
-  return `${MONTHS[Number(month) - 1]} ${year}`;
-};
+const { entry, tone = "onGrey" } = Astro.props;
 ---
 
 <article>
-  <Card>
-    <h3 class="text-card-title">{role.role}</h3>
+  <Card tone={tone}>
+    <h3 class="text-card-title">{entry.title}</h3>
     <p class="mt-1 text-body-sm text-text-secondary">
-      {role.companyUrl ? (
-        <a href={role.companyUrl} class="text-link underline">
-          {role.company}
+      {entry.organisationUrl ? (
+        <a href={entry.organisationUrl} class="text-link underline">
+          {entry.organisation}
         </a>
       ) : (
-        role.company
+        entry.organisation
       )}
       <span aria-hidden="true"> · </span>
-      <time datetime={role.startDate}>{display(role.startDate)}</time>
+      <time datetime={entry.startDate}>{display(entry.startDate)}</time>
       {" — "}
-      {role.endDate ? (
-        <time datetime={role.endDate}>{display(role.endDate)}</time>
+      {entry.endDate ? (
+        <time datetime={entry.endDate}>{display(entry.endDate)}</time>
       ) : (
         "Present"
       )}
-      {role.location && (
+      {entry.location && (
         <>
           <span aria-hidden="true"> · </span>
-          {role.location}
+          {entry.location}
         </>
       )}
     </p>
-    <ul class="mt-4 flex list-disc flex-col gap-2 pl-5 text-body">
-      {role.bullets.map((bullet) => (
-        <li>{bullet}</li>
-      ))}
-    </ul>
+    {entry.points.length > 0 && (
+      <ul class="mt-4 flex list-disc flex-col gap-2 pl-5 text-body">
+        {entry.points.map((point) => (
+          <li>{point}</li>
+        ))}
+      </ul>
+    )}
   </Card>
 </article>

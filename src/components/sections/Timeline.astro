@@ -2,7 +2,9 @@
 /**
  * Timeline
  *
- * The Experience roles as an ordered list, newest first. One vertical
+ * One of the Experience page's two timelines, roles or education, as an
+ * ordered list, newest first. Each collection is mapped to a TimelineEntry
+ * first (src/lib/timeline.ts), so this never knows which it shows. One vertical
  * hairline on the <ol> and a dot on each <li>, both CSS pseudo-elements and
  * so invisible to assistive tech. The same component at every width: below
  * 735px the line moves in to 8px and the cards take the full width. Not a
@@ -10,37 +12,59 @@
  * docs/01-information-architecture.md §6.
  *
  * @example
- * <Timeline roles={experience} />
+ * <Timeline id="roles" heading="Roles" headingHidden
+ *   entries={roles.map(({ data }) => fromRole(data))} />
  */
-import type { CollectionEntry } from "astro:content";
 import Section from "@/components/layout/Section.astro";
 import TimelineNode from "@/components/sections/TimelineNode.astro";
 import Reveal from "@/components/ui/Reveal.astro";
 import { staggerDelay } from "@/lib/reveal";
+import { byOrder, type TimelineEntry } from "@/lib/timeline";
 
 interface Props {
-  roles: CollectionEntry<"experience">[];
+  /** Prefix for the id of the heading that names the band. */
+  id: string;
+  heading: string;
+  /** Keeps the h2 for the outline but hides it visually. */
+  headingHidden?: boolean;
+  tone?: "grey" | "white";
+  entries: TimelineEntry[];
 }
 
-const sorted = [...Astro.props.roles].sort(
-  (a, b) => a.data.order - b.data.order,
-);
+const { id, heading, headingHidden = false, tone = "grey" } = Astro.props;
+const entries = byOrder(Astro.props.entries);
+const headingId = `${id}-heading`;
 ---
 
-<Section tone="grey" labelledBy="roles-heading">
-  <h2 id="roles-heading" class="sr-only">
-    Roles
-  </h2>
-  <ol class="timeline flex flex-col gap-8">
-    {sorted.map(({ data }, index) => (
-      <li class="node">
-        <Reveal delay={staggerDelay(index)}>
-          <TimelineNode role={data} />
-        </Reveal>
-      </li>
-    ))}
-  </ol>
-</Section>
+{entries.length > 0 && (
+  <Section tone={tone} labelledBy={headingId}>
+    {headingHidden ? (
+      <h2 id={headingId} class="sr-only">
+        {heading}
+      </h2>
+    ) : (
+      <Reveal>
+        <h2 id={headingId} class="text-headline">
+          {heading}
+        </h2>
+      </Reveal>
+    )}
+    <ol
+      class:list={["timeline flex flex-col gap-8", !headingHidden && "mt-12"]}
+    >
+      {entries.map((entry, index) => (
+        <li class="node">
+          <Reveal delay={staggerDelay(index)}>
+            <TimelineNode
+              entry={entry}
+              tone={tone === "grey" ? "onGrey" : "onWhite"}
+            />
+          </Reveal>
+        </li>
+      ))}
+    </ol>
+  </Section>
+)}
 
 <style>
   /* Lets @variant read the breakpoint tokens, so no width is repeated. */
