@@ -246,19 +246,20 @@ The same timeline as the roles, on a white band: the hairline, a dot per entry, 
 
 Short page, no form. One white band, vertically centred, generous padding.
 
-| Element      | Content                                                                                                                                                                            |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Eyebrow      | `Contact`                                                                                                                                                                          |
-| Heading (h1) | `Let's talk.`                                                                                                                                                                      |
-| Body         | `TODO: The best way to reach me is email. I usually reply within a day.`                                                                                                           |
-| Primary CTA  | Filled pill button, `Email me` → `mailto:darya.dler.contact@gmail.com`                                                                                                             |
-| Social links | `GitHub ›` → `https://github.com/Darya-D-H`, `LinkedIn ›` → `https://www.linkedin.com/in/darya-dler-hussein` — text links with chevrons, `rel="me noopener"`, opening in a new tab |
+| Element         | Content                                                                                                                                                                                            |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Eyebrow         | `Contact`                                                                                                                                                                                          |
+| Heading (h1)    | `Let's talk.`                                                                                                                                                                                      |
+| Body            | `TODO: The best way to reach me is email. I usually reply within a day.`                                                                                                                           |
+| Primary CTA     | Filled pill button, `Email me` → `mailto:darya.dler.contact@gmail.com`                                                                                                                             |
+| Phone, location | In an `<address>` under the button: `+964 751 463 2525` as a standalone `tel:` link (its name starts "Phone:" for screen readers), then `Based in Erbil, Iraq` in secondary ink (added 2026-11-24) |
+| Social links    | `GitHub ›` → `https://github.com/Darya-D-H`, `LinkedIn ›` → `https://www.linkedin.com/in/darya-dler-hussein` — text links with chevrons, `rel="me noopener"`, opening in a new tab                 |
 
-**On the mailto link:** a plain `mailto:` href is visible to scrapers. The alternatives are worse — assembling the address in JavaScript breaks it for anyone without JS and for a crawler that should find it, and a form adds a third-party dependency for a site that has none. The address ships in plain text, and modern mail providers filter the resulting spam adequately. Recorded here so the trade-off is explicit.
+**On the mailto link:** a plain `mailto:` href is visible to scrapers. The alternatives are worse — assembling the address in JavaScript breaks it for anyone without JS and for a crawler that should find it, and a form adds a third-party dependency for a site that has none. The address ships in plain text, and modern mail providers filter the resulting spam adequately. Recorded here so the trade-off is explicit. The phone number is in plain text for the same reason, and the same trade-off applies: it is public and can be scraped, which Darya accepted when she added it.
 
 Links that open a new tab announce that they do, via visually hidden text, so the behaviour is not a surprise to a screen reader user.
 
-**One source for contact details.** The email address and both social URLs live in `src/site.config.ts` and nowhere else. Contact and Footer both read from it, so a changed URL is changed once and the two can never drift.
+**One source for contact details.** The email address, phone number, location and both social URLs live in `src/site.config.ts` and nowhere else. Contact and Footer both read from it, so a changed URL is changed once and the two can never drift.
 
 ---
 

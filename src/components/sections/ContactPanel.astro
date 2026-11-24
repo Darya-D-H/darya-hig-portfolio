@@ -3,8 +3,9 @@
  * ContactPanel
  *
  * The whole Contact page: eyebrow, h1, a line of body copy, one filled
- * button to the mailto address, and the social links. Every address comes
- * from site.config, never from here. Centred in a 680px column.
+ * button to the mailto address, the phone number and location in an
+ * <address>, and the social links. Every detail comes from site.config,
+ * never from here. Centred in a 680px column.
  * See docs/03-components.md §4.4 and docs/01-information-architecture.md §7.
  *
  * @example
@@ -15,6 +16,9 @@ import Button from "@/components/ui/Button.astro";
 import Eyebrow from "@/components/ui/Eyebrow.astro";
 import TextLink from "@/components/ui/TextLink.astro";
 import { site } from "@/site.config";
+
+// tel: wants the number without spaces; the page shows it with them.
+const tel = `tel:${site.phone.replace(/\s+/g, "")}`;
 ---
 
 <Section
@@ -33,6 +37,13 @@ import { site } from "@/site.config";
     <div class="mt-8">
       <Button href={`mailto:${site.email}`}>Email me</Button>
     </div>
+    <address class="mt-6 flex flex-col items-center not-italic">
+      <TextLink href={tel} standalone>
+        <span class="sr-only">Phone: </span>
+        {site.phone}
+      </TextLink>
+      <p class="text-body text-text-secondary">Based in {site.location}</p>
+    </address>
     <ul
       class="mt-6 flex flex-wrap justify-center gap-x-8"
       aria-label="Elsewhere"

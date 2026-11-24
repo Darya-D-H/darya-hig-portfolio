@@ -198,12 +198,26 @@ test.describe("the signature", () => {
   test("loads no font of its own", async ({ page }) => {
     const fonts: string[] = [];
     page.on("request", (request) => {
-      if (/yellowtail|fonts.googleapis|fonts.gstatic/i.test(request.url())) {
+      if (/yellowtail|fonts\.googleapis|fonts\.gstatic/i.test(request.url())) {
         fonts.push(request.url());
       }
     });
     await page.goto("/");
     await page.waitForLoadState("networkidle");
     expect(fonts).toEqual([]);
+  });
+});
+
+test.describe("Contact", () => {
+  test("shows the phone number as a tel: link and the location", async ({
+    page,
+  }) => {
+    await page.goto("/contact");
+    const address = page.locator("main address");
+    const phone = address.getByRole("link", {
+      name: "Phone: +964 751 463 2525",
+    });
+    await expect(phone).toHaveAttribute("href", "tel:+9647514632525");
+    await expect(address).toContainText("Based in Erbil, Iraq");
   });
 });
