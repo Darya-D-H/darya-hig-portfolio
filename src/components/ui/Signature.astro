@@ -3,23 +3,20 @@
  * Signature
  *
  * Darya's signature, "darya", in the Home hero below the headline. It
- * writes itself once on load: the letters are filled shapes, revealed
- * through a mask of thick strokes that follow the order a pen would take,
- * each drawn with stroke-dashoffset. CSS only, so no client script. Under
- * reduced motion, or wherever the animation does not run, it is simply
- * drawn.
- *
- * One mask path per stroke, because browsers restart a dash pattern at
- * every pen lift inside a single path. Each stroke has its share of the
- * duration (--span) and its start (--start), both fractions of
- * --duration-signature, in proportion to its length, with a short pause
- * for each lift.
+ * writes itself once on load, in one continuous cursive stroke: the
+ * letters are filled shapes, revealed through a mask holding a single
+ * thick pen stroke that never lifts. It runs through every letter in the
+ * order a hand would, along the joins from one letter into the next, and
+ * doubles back over its own line where a pen would (up the bowl of each
+ * "a", back up the tail of the "y"). Drawn with stroke-dashoffset. CSS
+ * only, so no client script. Under reduced motion, or wherever the
+ * animation does not run, it is simply drawn.
  *
  * Inline, not an <img>, so it takes the text colour and is never an LCP
  * candidate. The letter shapes are "darya" set in Yellowtail (Astigmatic,
  * Apache License 2.0) and converted to paths, so no font is loaded; the pen
- * strokes were traced over them by hand. See docs/03-components.md §4.2a
- * and docs/04-motion.md §3.
+ * stroke was traced over them by hand. See docs/03-components.md §4.2a and
+ * docs/04-motion.md §3.
  *
  * @example
  * <Signature class="mx-auto mt-6" />
@@ -48,45 +45,8 @@ const { class: className } = Astro.props;
     >
       <path
         class="pen"
-        style="--start: 0; --span: 0.213"
         pathLength="1"
-        d="M 33 -36 C 23 -36 14 -30 10 -22 C 6 -14 5 -5 9 -1 C 15 1 25 -13 33 -27 L 37 -33 L 63 -74 L 48 -48 C 40 -33 32 -19 30 -9 C 29 -1 37 1 43 -4 L 48 -12"
-      />
-      <path
-        class="pen"
-        style="--start: 0.248; --span: 0.14"
-        pathLength="1"
-        d="M 75 -34 C 65 -36 57 -31 52 -23 C 47 -15 46 -5 50 -1 C 57 -1 66 -16 74 -28 L 84 -36 C 79 -25 73 -13 71 -5 C 71 2 81 0 86 -5 L 90 -12"
-      />
-      <path
-        class="pen"
-        style="--start: 0.423; --span: 0.079"
-        pathLength="1"
-        d="M 82 -2 L 101 -38 L 98 -28 C 104 -35 111 -40 116 -38 C 119 -35 116 -28 112 -21"
-      />
-      <path
-        class="pen"
-        style="--start: 0.537; --span: 0.038"
-        pathLength="1"
-        d="M 86 -2 L 113 -36"
-      />
-      <path
-        class="pen"
-        style="--start: 0.61; --span: 0.155"
-        pathLength="1"
-        d="M 124 -38 L 134 -37 C 130 -28 124 -16 121 -8 C 120 1 126 0 132 -5 C 142 -15 151 -27 158 -36 L 145 -10 C 139 2 130 14 124 21 C 120 26 120 31 123 30"
-      />
-      <path
-        class="pen"
-        style="--start: 0.8; --span: 0.025"
-        pathLength="1"
-        d="M 138 4 L 161 -13"
-      />
-      <path
-        class="pen"
-        style="--start: 0.86; --span: 0.14"
-        pathLength="1"
-        d="M 189 -34 C 179 -36 171 -31 166 -23 C 161 -15 160 -5 164 -1 C 171 -1 180 -16 188 -28 L 198 -36 C 193 -25 187 -13 185 -5 C 185 2 195 0 200 -5 L 204 -12"
+        d="M 33 -36 C 23 -36 14 -30 10 -22 C 6 -14 5 -5 9 -1 C 15 1 25 -13 33 -27 L 37 -33 L 63 -74 L 48 -48 C 40 -33 32 -19 30 -9 C 29 -1 37 1 43 -4 L 48 -12 C 50 -20 56 -30 64 -34 C 69 -36 73 -35 75 -34 C 65 -36 57 -31 52 -23 C 47 -15 46 -5 50 -1 C 57 -1 66 -16 74 -28 L 84 -36 C 79 -25 73 -13 71 -5 C 71 2 81 0 86 -5 L 90 -12 L 101 -38 L 83 -1 L 113 -36 C 115 -39 119 -37 118 -34 C 117 -30 114 -25 112 -21 L 124 -38 L 134 -37 C 130 -28 124 -16 121 -8 C 120 1 126 0 132 -5 C 142 -15 151 -27 158 -36 L 145 -10 C 139 2 130 14 124 21 C 120 26 120 31 123 30 L 130 13 L 138 4 L 161 -13 C 163 -20 169 -30 178 -34 C 183 -36 187 -35 189 -34 C 179 -36 171 -31 166 -23 C 161 -15 160 -5 164 -1 C 171 -1 180 -16 188 -28 L 198 -36 C 193 -25 187 -13 185 -5 C 185 2 195 0 200 -5 L 204 -12"
       />
     </mask>
   </defs>
@@ -105,7 +65,7 @@ const { class: className } = Astro.props;
   }
 
   /*
-   * The pen: white strokes wide enough to cover each letter's thickest
+   * The pen: one white stroke wide enough to cover each letter's thickest
    * part. Drawn in full by default, so the signature is complete with
    * reduced motion and wherever the animation does not run.
    */
@@ -115,18 +75,16 @@ const { class: className } = Astro.props;
     stroke-width: 14;
     stroke-linecap: round;
     stroke-linejoin: round;
-    /* A dash the length of the stroke, then a longer gap, so that before a
-       stroke starts nothing of it is drawn, not even a round cap. */
+    /* A dash the length of the stroke, then a longer gap, so that before
+       the pen starts nothing is drawn, not even a round cap. */
     stroke-dasharray: 1 2;
     stroke-dashoffset: 0;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .pen {
-      animation: sign calc(var(--duration-signature) * var(--span))
-        var(--ease-in-out)
-        calc(var(--duration-base) + var(--duration-signature) * var(--start))
-        both;
+      animation: sign var(--duration-signature) var(--ease-in-out)
+        var(--duration-base) both;
     }
   }
 

@@ -266,11 +266,11 @@ Both timelines on the Experience page, roles and education, are this one compone
 Darya's signature, `darya`, in the Home hero below the headline: an inline `<svg role="img" aria-label="Darya's signature">`, `--size-signature` wide, in primary ink (`currentColor`).
 
 - **The letters** are "darya" set in Yellowtail (Astigmatic, Apache License 2.0) and converted once to filled paths, so no font file is requested. Darya chose this over a hand-drawn SVG (2026-11-24).
-- **The writing** is a mask: seven thick white strokes, traced by hand over the letters in the order a pen would take, reveal the filled letters as each is drawn with `stroke-dashoffset` (`pathLength="1"`, dash `1 2`, so nothing shows before a stroke starts, not even a round cap).
-- **One path per stroke.** Browsers restart a dash pattern at every pen lift inside a single path, which would draw every stroke at once. Each path carries `--start` and `--span`, fractions of `--duration-signature` in proportion to its length, with a short pause per pen lift.
+- **The writing** is a mask holding **one continuous pen stroke**, traced by hand over the letters, that never lifts (Darya's call, 2026-11-24: a signature is one cursive stroke, not letters drawn one at a time). It runs through the letters in the order a hand would, along the joins from one letter into the next, and doubles back over its own line where a pen would: up the bowl of each "a" and back down it, back up the tail of the "y" into the final "a". Drawn with `stroke-dashoffset` (`pathLength="1"`, dash `1 2`, so nothing shows before the pen starts, not even a round cap).
+- **It must stay one subpath.** A second `M` would be a pen lift, and browsers restart a dash pattern at every subpath, so the two parts would draw at the same time.
 - **Inline, not an `<img>`**, so it takes the text colour and is never an LCP candidate.
 
-To change the word or the font, the letter shapes and the strokes are regenerated together, and the strokes re-checked for coverage: a stroke that misses part of a letter leaves that part permanently hidden. Motion in [docs/04-motion.md](04-motion.md) §3.
+To change the word or the font, the letter shapes and the strokes are regenerated together, and the stroke re-checked for coverage: a stroke that misses part of a letter leaves that part permanently hidden. Motion in [docs/04-motion.md](04-motion.md) §3.
 
 ### 4.3 `Gallery` and `Lightbox`
 

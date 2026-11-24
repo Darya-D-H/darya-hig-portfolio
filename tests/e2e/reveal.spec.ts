@@ -64,27 +64,23 @@ test.describe("with motion", () => {
     expect(await opacity(page.getByRole("heading", { level: 1 }))).toBe(1);
   });
 
-  test("the signature writes itself, one stroke after another", async ({
+  test("the signature writes itself in one continuous stroke", async ({
     page,
   }) => {
     await page.goto(PAGE);
-    const timings = await page.evaluate(() =>
-      document
-        .getAnimations()
-        .filter((a) => (a as CSSAnimation).animationName === "sign")
-        .map((a) => {
-          const { delay, duration } = a.effect!.getTiming();
-          return { delay: Number(delay), duration: Number(duration) };
-        }),
+    const pens = page.locator("svg.signature .pen");
+    await expect(pens).toHaveCount(1);
+    // One subpath: a second M would be a pen lift, and would draw at the
+    // same time as the first.
+    const d = (await pens.getAttribute("d")) ?? "";
+    expect(d.match(/M/gi)).toHaveLength(1);
+    const running = await page.evaluate(
+      () =>
+        document
+          .getAnimations()
+          .filter((a) => (a as CSSAnimation).animationName === "sign").length,
     );
-    expect(timings).toHaveLength(7);
-    // Each stroke starts after the one before it has finished.
-    for (let i = 1; i < timings.length; i += 1) {
-      const previous = timings[i - 1]!;
-      expect(timings[i]!.delay).toBeGreaterThanOrEqual(
-        previous.delay + previous.duration,
-      );
-    }
+    expect(running).toBe(1);
   });
 });
 
@@ -107,7 +103,7 @@ test.describe("with reduced motion", () => {
       .evaluateAll((pens) =>
         pens.map((p) => getComputedStyle(p).strokeDashoffset),
       );
-    expect(offsets).toHaveLength(7);
+    expect(offsets).toHaveLength(1);
     for (const offset of offsets) expect(parseFloat(offset)).toBe(0);
   });
 
