@@ -8,6 +8,10 @@ export const site = {
   /** The Home page title and the eyebrow on the hero and preview image. */
   role: "Software Developer",
   email: "darya.dler.contact@gmail.com",
+  /** As displayed; the tel: link is built from it with the spaces removed. */
+  phone: "+964 751 463 2525",
+  /** City, then country. */
+  location: "Erbil, Iraq",
   github: "https://github.com/Darya-D-H",
   linkedin: "https://www.linkedin.com/in/darya-dler-hussein",
 } as const;

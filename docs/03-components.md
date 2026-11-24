@@ -298,7 +298,7 @@ The gallery is a grid of 2–6 thumbnails; each is a `<button>` that opens the l
 
 ### 4.4 `ContactPanel`
 
-Eyebrow, `h1`, body, one `filled` Button to the `mailto:`, and a row of `plain` links for social. Centred, `max-width: 680px`.
+Eyebrow, `h1`, body, one `filled` Button to the `mailto:`, then an `<address>` with the phone number as a standalone `tel:` TextLink and the location as secondary text, and a row of `plain` links for social. Every detail comes from `src/site.config.ts`. Centred, `max-width: 680px`.
 
 ### 4.5 `ProjectPager`
 

@@ -183,3 +183,17 @@ test("Home's headline is Darya's line on quality, with nothing above the eyebrow
   );
   await expect(hero.locator("blockquote")).toHaveCount(0);
 });
+
+test.describe("Contact", () => {
+  test("shows the phone number as a tel: link and the location", async ({
+    page,
+  }) => {
+    await page.goto("/contact");
+    const address = page.locator("main address");
+    const phone = address.getByRole("link", {
+      name: "Phone: +964 751 463 2525",
+    });
+    await expect(phone).toHaveAttribute("href", "tel:+9647514632525");
+    await expect(address).toContainText("Based in Erbil, Iraq");
+  });
+});
