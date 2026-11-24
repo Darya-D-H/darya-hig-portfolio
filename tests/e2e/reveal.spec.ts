@@ -56,7 +56,9 @@ test.describe("with motion", () => {
     page,
   }) => {
     await page.goto("/");
-    const hero = page.getByRole("region", { name: /I build web applications/ });
+    const hero = page.getByRole("region", {
+      name: /Quality is the part nobody asked for/,
+    });
     await expect(hero.locator("[data-reveal]")).toHaveCount(0);
     expect(await opacity(hero)).toBe(1);
     expect(await opacity(page.getByRole("heading", { level: 1 }))).toBe(1);

@@ -44,20 +44,19 @@ Four sections, in this order. Bands alternate between white and `#f5f5f7` so eac
 
 Full-width, generous vertical padding, centred text. No image, no illustration. The restraint is the point; an Apple product page opens with one enormous sentence. The one drawn element is Darya's signature, which is handwriting rather than illustration.
 
-| Element       | Token                                          | Placeholder content                                                                                                                                               |
-| ------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Quote         | `text-body-lg`, secondary ink, in curly quotes | `Quality is the part nobody asked for.` _(TODO: Darya's own line, a placeholder until she settles it)_                                                            |
-| Eyebrow       | `text-eyebrow`, accent colour                  | `Software Engineer`                                                                                                                                               |
-| Headline      | `text-hero`                                    | `I build web applications that feel considered.`                                                                                                                  |
-| Signature     | Inline SVG, one stroke, primary ink            | `darya`, in Darya's own hand. Replaces the subhead, and with it the stack and location line, once she supplies the SVG. Until then the subhead stays as a `TODO:` |
-| Primary CTA   | Button, filled pill                            | `View projects` → `/projects`                                                                                                                                     |
-| Secondary CTA | Button, text link with chevron                 | `Get in touch ›` → `/contact`                                                                                                                                     |
+| Element       | Token                               | Placeholder content                                                                                                                                                                                   |
+| ------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Eyebrow       | `text-eyebrow`, accent colour       | `Software Engineer`                                                                                                                                                                                   |
+| Headline      | `text-hero`                         | `Quality is the part nobody asked for.` _(TODO: Darya's own line, a placeholder until she settles it)_                                                                                                |
+| Signature     | Inline SVG, one stroke, primary ink | `darya`, in Darya's own hand. Replaces the subhead, and with it the stack and location line, once she supplies the SVG. Until then the subhead reads `TODO: Darya's Signature`, marking where it goes |
+| Primary CTA   | Button, filled pill                 | `View projects` → `/projects`                                                                                                                                                                         |
+| Secondary CTA | Button, text link with chevron      | `Get in touch ›` → `/contact`                                                                                                                                                                         |
 
 **Behaviour:** the hero does not animate in on load. Content above the fold appears immediately — a fade-in on the first thing a visitor sees reads as slowness, and it hurts LCP. Everything below the fold reveals on scroll. This is a deliberate exception to the motion spec and is recorded in [docs/04-motion.md](04-motion.md).
 
 **The signature is the one exception** (decided with Darya, 2026-11-24): it writes itself once on load, as if signed. An inline SVG is not an LCP candidate, so the draw costs nothing against the 2.0s budget, and the headline beside it still renders final. Under reduced motion it appears already written. Details in [docs/04-motion.md](04-motion.md) §3.
 
-**The quote** is Darya's own line, so it carries no attribution: the signature below the headline signs it.
+**The headline** is Darya's own line on quality (2026-11-24), so it carries no attribution: the signature below it signs it.
 
 ### 2.2 About — `#f5f5f7` band
 

@@ -72,7 +72,7 @@ A six-card grid at 80ms each takes 480ms for the last card to begin, and nearly 
 
 | Element                                    | Reveals?                               |
 | ------------------------------------------ | -------------------------------------- |
-| Hero quote, eyebrow, headline, CTAs        | **No** — above the fold, renders final |
+| Hero eyebrow, headline, subhead, CTAs      | **No** — above the fold, renders final |
 | Hero signature                             | **Draws once on load**; see below      |
 | Nav, footer                                | No                                     |
 | Section headings below the fold            | Yes                                    |
