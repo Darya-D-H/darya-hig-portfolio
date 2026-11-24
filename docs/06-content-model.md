@@ -216,7 +216,7 @@ const experience = defineCollection({
 
 ```markdown
 ---
-role: "TODO: Software Engineer"
+role: "TODO: Software Developer"
 company: "TODO: Company Name"
 startDate: "2024-03"
 location: "TODO: Remote"

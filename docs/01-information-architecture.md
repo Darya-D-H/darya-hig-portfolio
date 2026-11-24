@@ -46,7 +46,7 @@ Full-width, generous vertical padding, centred text. No image, no illustration. 
 
 | Element       | Token                               | Placeholder content                                                                                                                                                                                   |
 | ------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Eyebrow       | `text-eyebrow`, accent colour       | `Software Engineer`                                                                                                                                                                                   |
+| Eyebrow       | `text-eyebrow`, accent colour       | `Software Developer`                                                                                                                                                                                  |
 | Headline      | `text-hero`                         | `Quality is the part nobody asked for.` _(TODO: Darya's own line, a placeholder until she settles it)_                                                                                                |
 | Signature     | Inline SVG, one stroke, primary ink | `darya`, in Darya's own hand. Replaces the subhead, and with it the stack and location line, once she supplies the SVG. Until then the subhead reads `TODO: Darya's Signature`, marking where it goes |
 | Primary CTA   | Button, filled pill                 | `View projects` → `/projects`                                                                                                                                                                         |
@@ -62,12 +62,12 @@ Full-width, generous vertical padding, centred text. No image, no illustration. 
 
 A short self-introduction. Two columns on desktop, stacked on mobile: a section heading on the left, two or three paragraphs on the right. No portrait photo in v1 (adding one is a content decision, not a layout one — the layout reserves space for it should Darya want it later).
 
-| Element                                      | Placeholder content                                                                                                                                           |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Heading (h2)                                 | `About`                                                                                                                                                       |
-| Body, para 1                                 | `TODO: I'm a software engineer focused on web applications. I work mostly in PHP, and I care about the part of the stack where the interface meets the data.` |
-| Body, para 2                                 | `TODO: Two or three sentences on how you work, what you're drawn to, and what you're looking for.`                                                            |
-| Inline stat row _(optional, off by default)_ | Reserved. Not rendered in v1.                                                                                                                                 |
+| Element                                      | Placeholder content                                                                                                                                            |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Heading (h2)                                 | `About`                                                                                                                                                        |
+| Body, para 1                                 | `TODO: I'm a software developer focused on web applications. I work mostly in PHP, and I care about the part of the stack where the interface meets the data.` |
+| Body, para 2                                 | `TODO: Two or three sentences on how you work, what you're drawn to, and what you're looking for.`                                                             |
+| Inline stat row _(optional, off by default)_ | Reserved. Not rendered in v1.                                                                                                                                  |
 
 ### 2.3 Featured projects — white band
 
@@ -222,7 +222,7 @@ The timeline is an ordered list (`<ol>`), one `<li>` per role. The line and dots
 
 | Field           | Placeholder                                                                             |
 | --------------- | --------------------------------------------------------------------------------------- |
-| Role            | `TODO: Software Engineer`                                                               |
+| Role            | `TODO: Software Developer`                                                              |
 | Company         | `TODO: Company name`                                                                    |
 | Dates           | `TODO: 2024 — Present`                                                                  |
 | Location / mode | `TODO: Remote` _(optional)_                                                             |
@@ -309,7 +309,7 @@ Exactly one `h1` per page. Section headings are `h2`. Card and node titles are `
 
 ### SEO per page
 
-Each page sets its own `<title>` (`Page — Darya`; Home is `Darya — Software Engineer`), a unique meta description, a canonical URL, and Open Graph plus Twitter card tags. Project pages derive all of these from front matter, and use their hero (or thumbnail) as the preview image. Every other page shares `og-image.png` in `public/`: the name and role on white, in the site's type. Designed per-project preview images are a later enhancement.
+Each page sets its own `<title>` (`Page — Darya`; Home is `Darya — Software Developer`), a unique meta description, a canonical URL, and Open Graph plus Twitter card tags. Project pages derive all of these from front matter, and use their hero (or thumbnail) as the preview image. Every other page shares `og-image.png` in `public/`: the name and role on white, in the site's type. Designed per-project preview images are a later enhancement.
 
 - **Canonical URLs end in a slash** (`/skills/`), because Astro builds each page as a folder with an `index.html` and the sitemap lists that form. The 404 has no canonical: it is served at every unknown URL and is `noindex`.
 - **`robots.txt` is generated** by `src/pages/robots.txt.ts` from the configured `site`, so it can never point at an old origin.

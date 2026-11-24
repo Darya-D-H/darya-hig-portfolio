@@ -11,8 +11,8 @@ describe("pageTitle", () => {
   });
 
   it("gives Home the name and role", () => {
-    expect(pageTitle()).toBe("Darya — Software Engineer");
-    expect(pageTitle("   ")).toBe("Darya — Software Engineer");
+    expect(pageTitle()).toBe("Darya — Software Developer");
+    expect(pageTitle("   ")).toBe("Darya — Software Developer");
   });
 
   it("collapses stray whitespace", () => {
