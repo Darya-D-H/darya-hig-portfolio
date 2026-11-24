@@ -261,9 +261,16 @@ Each node: `<article>` containing `<h3>` (role), `<p>` with company and a `<time
 
 Both timelines on the Experience page, roles and education, are this one component. Each collection is mapped to a shared `TimelineEntry` (title, organisation, optional URL, dates, optional location, points) in `src/lib/timeline.ts`, and `Timeline` takes `id`, `heading`, `headingHidden` and `tone`. The roles band is grey with its h2 visually hidden, because the page's h1 names it; the education band is white with a visible h2 "Education". On white, the cards take the hairline border (`Card` `onWhite`). A node with no points renders no list. Dates are formatted by `src/lib/dates.ts`.
 
-### 4.2a `Signature` (pending Darya's SVG)
+### 4.2a `Signature`
 
-Darya's signature, `darya`, in the Home hero below the headline. An inline `<svg role="img" aria-label="Darya's signature">` holding one or more stroked paths (`fill: none`, stroke in primary ink, round caps and joins), each with `pathLength="1"`, so the draw is a CSS `stroke-dashoffset` animation from 1 to 0 with no measuring script. Inline, not an `<img>`, so it takes the text colour and is never an LCP candidate. Motion in [docs/04-motion.md](04-motion.md) §3. Its source must be a single-line (centre-line) drawing; a filled outline cannot be drawn this way.
+Darya's signature, `darya`, in the Home hero below the headline: an inline `<svg role="img" aria-label="Darya's signature">`, `--size-signature` wide, in primary ink (`currentColor`).
+
+- **The letters** are "darya" set in Yellowtail (Astigmatic, Apache License 2.0) and converted once to filled paths, so no font file is requested. Darya chose this over a hand-drawn SVG (2026-11-24).
+- **The writing** is a mask holding **one continuous pen stroke**, traced by hand over the letters, that never lifts (Darya's call, 2026-11-24: a signature is one cursive stroke, not letters drawn one at a time). It runs through the letters in the order a hand would, along the joins from one letter into the next, and doubles back over its own line where a pen would: up the bowl of each "a" and back down it, back up the tail of the "y" into the final "a". Drawn with `stroke-dashoffset` (`pathLength="1"`, dash `1 2`, so nothing shows before the pen starts, not even a round cap).
+- **It must stay one subpath.** A second `M` would be a pen lift, and browsers restart a dash pattern at every subpath, so the two parts would draw at the same time.
+- **Inline, not an `<img>`**, so it takes the text colour and is never an LCP candidate.
+
+To change the word or the font, the letter shapes and the strokes are regenerated together, and the stroke re-checked for coverage: a stroke that misses part of a letter leaves that part permanently hidden. Motion in [docs/04-motion.md](04-motion.md) §3.
 
 ### 4.3 `Gallery` and `Lightbox`
 

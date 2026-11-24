@@ -209,6 +209,7 @@
   --duration-base: 300ms;
   --duration-menu: 400ms;
   --duration-reveal: 600ms;
+  --duration-signature: 2200ms;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
@@ -235,6 +236,7 @@
   --size-hairline: 1px;
   --size-timeline-dot: 9px;
   --size-timeline-dot-sm: 7px;
+  --size-signature: 7rem;
 }
 
 @layer base {

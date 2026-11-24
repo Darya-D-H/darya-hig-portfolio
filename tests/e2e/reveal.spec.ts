@@ -63,10 +63,49 @@ test.describe("with motion", () => {
     expect(await opacity(hero)).toBe(1);
     expect(await opacity(page.getByRole("heading", { level: 1 }))).toBe(1);
   });
+
+  test("the signature writes itself in one continuous stroke", async ({
+    page,
+  }) => {
+    await page.goto(PAGE);
+    const pens = page.locator("svg.signature .pen");
+    await expect(pens).toHaveCount(1);
+    // One subpath: a second M would be a pen lift, and would draw at the
+    // same time as the first.
+    const d = (await pens.getAttribute("d")) ?? "";
+    expect(d.match(/M/gi)).toHaveLength(1);
+    const running = await page.evaluate(
+      () =>
+        document
+          .getAnimations()
+          .filter((a) => (a as CSSAnimation).animationName === "sign").length,
+    );
+    expect(running).toBe(1);
+  });
 });
 
 test.describe("with reduced motion", () => {
   test.use({ contextOptions: { reducedMotion: "reduce" } });
+
+  test("the signature is already written and nothing animates", async ({
+    page,
+  }) => {
+    await page.goto(PAGE);
+    const running = await page.evaluate(
+      () =>
+        document
+          .getAnimations()
+          .filter((a) => (a as CSSAnimation).animationName === "sign").length,
+    );
+    expect(running).toBe(0);
+    const offsets = await page
+      .locator("svg.signature .pen")
+      .evaluateAll((pens) =>
+        pens.map((p) => getComputedStyle(p).strokeDashoffset),
+      );
+    expect(offsets).toHaveLength(1);
+    for (const offset of offsets) expect(parseFloat(offset)).toBe(0);
+  });
 
   test("every reveal element is visible without scrolling", async ({
     page,

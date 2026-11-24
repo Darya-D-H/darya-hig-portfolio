@@ -47,6 +47,7 @@ The build is a plain static `dist/` folder with no host-specific configuration, 
 - **Code** — everything under `src/` except `src/content/` and `src/assets/`, plus config, scripts and tests — is released under the [MIT licence](LICENSE).
 - **Content** — the written copy in `src/content/`, and the images in `src/assets/` and `public/` — is © Darya, all rights reserved. It is not covered by the MIT licence and may not be reused without permission.
 - **Inter** is © The Inter Project Authors, used under the SIL Open Font License 1.1.
+- **The signature's letter shapes** are drawn from the Yellowtail typeface by Astigmatic, used under the Apache License 2.0. The font itself is not served.
 
 ## Font licensing note
 

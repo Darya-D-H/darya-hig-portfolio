@@ -183,3 +183,27 @@ test("Home's headline is Darya's line on quality, with nothing above the eyebrow
   );
   await expect(hero.locator("blockquote")).toHaveCount(0);
 });
+
+test.describe("the signature", () => {
+  test("sits under the headline as a named image", async ({ page }) => {
+    await page.goto("/");
+    const hero = page.locator('section[aria-labelledby="hero-title"]');
+    const signature = hero.getByRole("img", { name: "Darya's signature" });
+    await expect(signature).toBeVisible();
+    const h1 = await hero.locator("h1").boundingBox();
+    const sig = await signature.boundingBox();
+    expect(sig!.y).toBeGreaterThan(h1!.y + h1!.height);
+  });
+
+  test("loads no font of its own", async ({ page }) => {
+    const fonts: string[] = [];
+    page.on("request", (request) => {
+      if (/yellowtail|fonts.googleapis|fonts.gstatic/i.test(request.url())) {
+        fonts.push(request.url());
+      }
+    });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    expect(fonts).toEqual([]);
+  });
+});
