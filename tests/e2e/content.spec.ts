@@ -172,3 +172,13 @@ test.describe("Experience", () => {
     );
   });
 });
+
+test("Home opens with Darya's quote above the headline", async ({ page }) => {
+  await page.goto("/");
+  const hero = page.locator('section[aria-labelledby="hero-title"]');
+  const quote = hero.locator("blockquote");
+  await expect(quote).toHaveText(/^“.+”$/);
+  const quoteBox = await quote.boundingBox();
+  const h1Box = await hero.locator("h1").boundingBox();
+  expect(quoteBox!.y + quoteBox!.height).toBeLessThan(h1Box!.y);
+});
