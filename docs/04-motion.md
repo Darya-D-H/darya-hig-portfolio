@@ -72,13 +72,16 @@ A six-card grid at 80ms each takes 480ms for the last card to begin, and nearly 
 
 | Element                                    | Reveals?                               |
 | ------------------------------------------ | -------------------------------------- |
-| Hero eyebrow, headline, subhead, CTAs      | **No** — above the fold, renders final |
+| Hero quote, eyebrow, headline, CTAs        | **No** — above the fold, renders final |
+| Hero signature                             | **Draws once on load**; see below      |
 | Nav, footer                                | No                                     |
 | Section headings below the fold            | Yes                                    |
 | Project cards, skill cards, timeline nodes | Yes, staggered within their group      |
 | Project detail prose sections              | Yes, per section, not per paragraph    |
 | Images                                     | Yes, but see the LCP note below        |
 | Anything inside an open lightbox           | No                                     |
+
+**The signature is the one thing above the fold that moves** (decided with Darya, 2026-11-24). It writes itself once, as if being signed, by animating `stroke-dashoffset` on paths with `pathLength="1"`: CSS only, no script, so it adds nothing to the three client modules. Several strokes run one after another, like a pen lifting. It costs nothing against LCP because an inline SVG is not an LCP candidate, and the headline beside it is already final. Duration and easing are set with the SVG, as a motion token. Under reduced motion it is drawn from the start, and with scripts off it is drawn too, because the animation is CSS.
 
 **Per section, not per paragraph.** Revealing individual paragraphs makes reading feel like a slideshow, because the next paragraph is still invisible when you reach it.
 
@@ -220,6 +223,7 @@ This is the one place `!important` is permitted, and the reason is in the spec's
 | Button press    | `scale(0.97)`    | No scale; colour change only                 |
 | Card hover      | Lift + shadow    | Shadow only, no movement                     |
 | `BackToTop`     | Smooth scroll    | Instant jump                                 |
+| Hero signature  | Draws once       | Already written                              |
 
 Note that hover and focus **colour** changes are kept. Reduced motion means less movement, not less feedback — removing the hover state entirely would make the interface feel broken, and `prefers-reduced-motion` is specifically about motion, not about contrast or state indication.
 
@@ -235,14 +239,15 @@ Reduced motion is not an edge case; it is a system setting that a meaningful sha
 
 Recorded so these do not get added later without a decision:
 
-| Effect                              | Why not                                                                                       |
-| ----------------------------------- | --------------------------------------------------------------------------------------------- |
-| Parallax backgrounds                | Scroll-linked, so it janks on low-end devices, and it is a common trigger for motion sickness |
-| Scroll-hijacking / pinned sections  | Takes control of scrolling away from the user, breaks keyboard paging and `Find in page`      |
-| Scale-on-scroll images              | Continuous scroll-linked transform on a large image; expensive and distracting on a portfolio |
-| Text that animates in word by word  | Slows reading and plays badly with screen readers                                             |
-| Marquee / auto-scrolling tech logos | Auto-moving content needs a pause control under WCAG 2.2.2, and it adds nothing               |
-| Custom cursor                       | Breaks pointer affordances and accessibility expectations                                     |
-| Loading spinners or skeletons       | A static site has nothing to wait for; a spinner would be theatre                             |
+| Effect                              | Why not                                                                                                                                                                                                                                                                                                        |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Parallax backgrounds                | Scroll-linked, so it janks on low-end devices, and it is a common trigger for motion sickness                                                                                                                                                                                                                  |
+| Scroll-hijacking / pinned sections  | Takes control of scrolling away from the user, breaks keyboard paging and `Find in page`                                                                                                                                                                                                                       |
+| Scale-on-scroll images              | Continuous scroll-linked transform on a large image; expensive and distracting on a portfolio                                                                                                                                                                                                                  |
+| Text that animates in word by word  | Slows reading and plays badly with screen readers                                                                                                                                                                                                                                                              |
+| Marquee / auto-scrolling tech logos | Auto-moving content needs a pause control under WCAG 2.2.2, and it adds nothing                                                                                                                                                                                                                                |
+| Custom cursor                       | Breaks pointer affordances and accessibility expectations                                                                                                                                                                                                                                                      |
+| Loading spinners or skeletons       | A static site has nothing to wait for; a spinner would be theatre                                                                                                                                                                                                                                              |
+| Preloader or whole-page blur-in     | Considered with Darya, 2026-11-24. Every page's text is in the first response, and hiding it until a script decides would delay LCP on every page. If real screenshots load slowly after Phase 8, the candidate is a build-time blurred placeholder per image that sharpens on load and is skipped when cached |
 
 The brief chose "subtle Apple-style", and this table is what that choice excludes.

@@ -230,6 +230,32 @@ order: 1
 
 ---
 
+## 2a. `education`
+
+One file per qualification at `src/content/education/<slug>.md`, shown on the Experience page below the roles (added 2026-11-24).
+
+```ts
+const education = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/education" }),
+  schema: z.object({
+    qualification: z.string(), // "BSc Computer Science"
+    institution: z.string(),
+    institutionUrl: z.url().optional(),
+    startDate: yearMonth,
+    endDate: yearMonth.optional(), // absent means in progress
+    location: z.string().optional(),
+    details: z.array(z.string()).max(3).default([]),
+    order: z.number().int().positive(),
+  }),
+});
+```
+
+Dates follow the `experience` rules: `YYYY-MM` strings, and an absent `endDate` means in progress. `details` is optional and capped at three, because education on a portfolio is a line, not a transcript.
+
+Two placeholder entries, so both shapes are tested: `degree.md` with every field and one detail line, and `course.md` with no location and no details.
+
+---
+
 ## 3. `skills`
 
 One file per category at `src/content/skills/<slug>.md`. A data collection could be a single YAML file, but one file per category keeps the diff clean when a single category changes.
